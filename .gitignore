@@ -1,3 +1,11 @@
+#For Mac developers
+# Unity generated #
+# =============== #
+ICS168/Temp
+ICS168/obj
+ICS168/Build
+ICS168/Library
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
