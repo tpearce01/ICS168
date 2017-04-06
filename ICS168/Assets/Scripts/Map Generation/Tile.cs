@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public int x;
-    public int y;
+    public int x;   //X coordinate
+    public int y;   //Y coordinate
     public TileType type;
 
+    //Set the tiles location to it's specified coordinate
     public void SetLocation()
     {
         gameObject.transform.position = new Vector2(x, y);
@@ -17,6 +18,5 @@ public class Tile : MonoBehaviour
 public enum TileType
 {
     Wall = 0,
-    StartLocation = 1,
-    Basic = 2,
+    Basic = 1,
 }
