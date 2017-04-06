@@ -5,9 +5,17 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
+    public static MapGenerator i;
     public List<GameObject> tileTypes;  //List of tile prefabs
+    public Tile[,] tileMap;             //Stores all tiles
 
-	void Start () {
+    void Awake()
+    {
+        i = this;
+    }
+
+	void Start ()
+	{
 		GenerateMap("TestMap");     //Generates the map. "TestMap" should be a variable based on map selection
         Destroy(gameObject);        //Destroy this game object once it's functions are complete
 	}
@@ -17,8 +25,10 @@ public class MapGenerator : MonoBehaviour
     {
         TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
 
-        string[] data = txt.text.Split('\n');   //Split text file by line
-        Tile temp;                              //Used to store tile temporarily
+        string[] data = txt.text.Split('\n');           //Split text file by line
+        Tile temp;                                      //Used to store tile temporarily
+
+        tileMap = new Tile[data[0].Length,data.Length]; //Allocate tileMap
 
         //Generate each tile specified by the text file
         for (int y = 0; y < data.Length; y++)
@@ -32,6 +42,8 @@ public class MapGenerator : MonoBehaviour
                 temp.x = x;
                 temp.y = y;
                 temp.SetLocation();
+
+                tileMap[x, y] = temp.GetComponent<Tile>();
             }
         }
 

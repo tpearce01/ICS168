@@ -11,7 +11,12 @@ public class Tile : MonoBehaviour
     //Set the tiles location to it's specified coordinate
     public void SetLocation()
     {
-        gameObject.transform.position = new Vector2(x, y);
+        gameObject.transform.position = new Vector3(x, y, 1);
+    }
+
+    public void SetLocation(int z)
+    {
+        gameObject.transform.position = new Vector3(x, y, z);
     }
 }
 
@@ -19,4 +24,5 @@ public enum TileType
 {
     Wall = 0,
     Basic = 1,
+    Destructable = 2
 }

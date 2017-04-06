@@ -6,6 +6,9 @@ TagManager:
   tags:
   - InputManager
   - WindowManager
+  - Wall
+  - Floor
+  - Destructable
   layers:
   - Default
   - TransparentFX
