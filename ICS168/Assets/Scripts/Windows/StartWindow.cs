@@ -1,12 +1,27 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StartWindow : GenericWindow {
 
     private WindowIDs _toClose = WindowIDs.StartWindow;
+    private Button[] _buttons;  // used to store the buttons in a window
 
-    // ***Still need to add a Play function that opens another scene for the game
+    public override void Open() {
+        base.Open();
+
+        // This block of code does the resizing of the buttons when selected and de-selected
+        _buttons = GetComponentsInChildren<Button>();
+        float defaultWidth = _buttons[0].GetComponent<LayoutElement>().minWidth;
+
+        for (int i = 0; i < _buttons.Length; ++i) {
+            _buttons[i].GetComponent<LayoutElement>().preferredWidth = defaultWidth;
+        }
+    }
+
+    public void PlayOnline() {
+        ToggleWindows(WindowIDs.StartWindow, WindowIDs.Login);
+    }
 
     // Closes StartWindow, and opens ControlsWindow
     public void Controls() {
