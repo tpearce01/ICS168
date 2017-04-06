@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* This script, when attached to an object, allows that object to be controlled using user input. */
+
 // Class which keeps track of whether or not a button has been pressed and for the duration it has been pressed.
 public class ButtonState {
 
@@ -51,6 +53,7 @@ public class ControllableObject : MonoBehaviour {
         _buttonStates[button].isPressed = isPressed;
     }
 
+    // Returns true if the button being passed in is pressed, false otherwise
     public bool GetButtonPress(ButtonEnum button) {
         if (_buttonStates.ContainsKey(button)) {
             return _buttonStates[button].isPressed;
@@ -59,6 +62,7 @@ public class ControllableObject : MonoBehaviour {
         return false;
     }
 
+    // Returns the duration of how long the button being passed in has been pressed, 0.0 if not pressed
     public float GetButtonPressTime(ButtonEnum button) {
         if (_buttonStates.ContainsKey(button)) {
             return _buttonStates[button].pressTime;

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* This script manages all user input */
+
+// An enum for buttons/keys users can press for action
 public enum ButtonEnum {
     MoveRight,
     MoveLeft,
@@ -10,6 +13,7 @@ public enum ButtonEnum {
     DeployBomb
 }
 
+// An enum to check if we should continue or stop reading input
 public enum ConditionEnum {
     GreaterThanOffValue,
     LessThanOffValue
@@ -22,7 +26,7 @@ public class InputAxisState {
     private string _axisName;           // Which axis will this input be looking for.
     [SerializeField]
     private ButtonEnum _button;         // Which button will be mapped to the assigned axis
-    public ButtonEnum Button {
+    public ButtonEnum Button {          // Returns this _button
         get { return _button; }
     }
 
