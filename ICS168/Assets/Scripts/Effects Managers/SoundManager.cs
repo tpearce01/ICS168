@@ -14,26 +14,28 @@ public class SoundManager : MonoBehaviour {
 	List<AudioSource> clipsPlaying = new List<AudioSource>();
 	public AudioClip[] clips;
 
-	// Use this for initialization
 	void Awake () {
+		//Destroy this object if one already exists
 	    if (GameObject.FindGameObjectsWithTag("GameManager").Length > 1)
 	    {
 	        Destroy(gameObject);
 	    }
 	    else
 	    {
-	        i = this;
-	        target = null;
-	        duration = 0;
-            volume = 0.5f;
-            //DontDestroyOnLoad(gameObject);
+			Initialize ();
         }
 	}
 
-	// Update is called once per frame
-	void Update () {
-		
+	void Initialize(){
+		i = this;
+		target = null;
+		duration = 0;
+		volume = 0.5f;
+		DontDestroyOnLoad(gameObject);
+	}
 
+	void Update () {
+		//Check for clips which have finished playing
 		for (int i = 0; i < clipsPlaying.Count; i++) {
 			AudioSource source = clipsPlaying [i];
 			if (!source.isPlaying) {
@@ -45,6 +47,7 @@ public class SoundManager : MonoBehaviour {
 			}
 		}
 
+		//Fade the target clip if one exists
 		if (target != null) {
 			target.volume -= (1/duration) * Time.deltaTime;
 			if (target.volume <= 0) {
@@ -55,23 +58,26 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 
-	public void PlaySound(Sound clipNumber, float volume){
+	//Plays a sound
+	public void PlaySound(Sound clipNumber, float v){
 		AudioSource source = gameObject.AddComponent<AudioSource> ();
 		source.clip = clips [(int)clipNumber];
-		source.volume = volume;
+		source.volume = volume * v;
 		source.Play ();
 		clipsPlaying.Add (source);
 	}
 
-	public void PlaySoundLoop(Sound clipNumber, float volume){
+	//Plays a sound on loop
+	public void PlaySoundLoop(Sound clipNumber, float v){
 		AudioSource source = gameObject.AddComponent<AudioSource> ();
 		source.clip = clips [(int)clipNumber];
-		source.volume = volume;
+		source.volume = volume * v;
 		source.Play ();
 		source.loop = true;
 		clipsPlaying.Add (source);
 	}
 
+	//Ends a sound immediately
 	public void EndSoundAbrupt(string soundName){
 		AudioSource[] sources = gameObject.GetComponents<AudioSource>();
 		for (int i = 0; i < sources.Length; i++) {
@@ -83,6 +89,7 @@ public class SoundManager : MonoBehaviour {
 		}
 	}
 
+	//Fades a sound out over a duration
 	public void EndSoundFade(string soundName, float d){
 		AudioSource[] sources = gameObject.GetComponents<AudioSource>();
 		for (int i = 0; i < sources.Length; i++) {
@@ -94,6 +101,7 @@ public class SoundManager : MonoBehaviour {
 		duration = d;
 	}
 
+	//Ends all sounds immediately
     public void EndAllSound()
     {
         AudioSource[] sources = gameObject.GetComponents<AudioSource>();
@@ -102,6 +110,8 @@ public class SoundManager : MonoBehaviour {
                 EndSoundAbrupt(sources[i].clip.name);
         }
     }
+
+	//Ends all sounds of the specified name
     public void EndAllSound(string soundName)
     {
         AudioSource[] sources = gameObject.GetComponents<AudioSource>();

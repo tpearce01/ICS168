@@ -11,7 +11,6 @@ public class Explosion : MonoBehaviour {
         //Check if explosion is out of bounds
         int x = (int)gameObject.transform.position.x;
         int y = (int)gameObject.transform.position.y;
-
         if (x < 0 || x >= MapGenerator.i.tileMap.GetLength(0) || y < 0 || y >= MapGenerator.i.tileMap.GetLength(1))
         {
             Destroy(gameObject);
@@ -36,11 +35,15 @@ public class Explosion : MonoBehaviour {
 			Destroy (other.gameObject);
             if (other.CompareTag("Destructable"))
             {
-                Tile temp = Instantiate(MapGenerator.i.tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
-                temp.x = (int)gameObject.transform.position.x;
-                temp.y = (int)gameObject.transform.position.y;
-                temp.SetLocation();
+				ReplaceWithBasicTile ();
             }
         }
+	}
+
+	void ReplaceWithBasicTile(){
+		Tile temp = Instantiate(MapGenerator.i.tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
+		temp.x = (int)gameObject.transform.position.x;
+		temp.y = (int)gameObject.transform.position.y;
+		temp.SetLocation();
 	}
 }
