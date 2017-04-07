@@ -52,9 +52,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _numOfPlayers: 4
-  _roundTime: 120
+  _roundTime: 60
   _players:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  _victoryText: {fileID: 0}
+  _timeToShowVictory: 0
