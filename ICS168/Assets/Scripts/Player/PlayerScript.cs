@@ -14,6 +14,12 @@ public class PlayerScript : MonoBehaviour {
     //This attribute tracks whether or not the player is alive or not.
     private bool _isAlive;
 
+    /// <summary>
+    /// The username of the player.
+    /// </summary>
+    public string playerName;
+
+
 	// Use this for initialization
 	void Start () {
         _isAlive = true;
@@ -31,12 +37,19 @@ public class PlayerScript : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Explosion")
+        if (_isAlive)
         {
-            _isAlive = false;
+            if (collision.gameObject.name == "Explosion")
+            {
+                _isAlive = false;
+                GetComponent<GameManager>().decAlivePlayers();
+            }
         }
     }
-    //Sets the color of the player based on the player number.
+    /// <summary>
+    /// Sets the color of the player based on the player number. Doesn't return any value.
+    /// </summary>
+    /// <param name="sr">The sprite renderer that is attached to the player's game object.</param>
     void setPlayerColor(SpriteRenderer sr)
     {
         switch (playerNumber)
@@ -56,12 +69,19 @@ public class PlayerScript : MonoBehaviour {
         }
     }
 
-    //Returns if the player is alive.
+    /// <summary>
+    /// Returns a bool that represents whether or not the player is alive.
+    /// </summary>
+    /// <returns>bool</returns>
     public bool isAlive()
     {
         return _isAlive;
     }
 
+    /// <summary>
+    /// Returns the player's number, it is a value between 1 and 4.
+    /// </summary>
+    /// <returns>int</returns>
     public int getPlayerNumber()
     {
         return playerNumber;

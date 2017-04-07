@@ -10,6 +10,7 @@ public enum WindowIDs {
     Credits = 2,
     Login = 3,
     NewAccount = 4,
+    Victory = 5,
     None = -1
 }
 

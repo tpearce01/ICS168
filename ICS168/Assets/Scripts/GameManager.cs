@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -34,7 +36,16 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private GameObject[] _players;
 
-    private int winner = 0;
+    private int _winner = 0;
+
+    [SerializeField]
+    private Text _victoryText;
+
+    /// <summary>
+    /// Time that the victory screen will be shown.
+    /// </summary>
+    [SerializeField]
+    private float _timeToShowVictory;
 
 	// Use this for initialization
 	void Start () {
@@ -49,19 +60,28 @@ public class GameManager : MonoBehaviour {
         //Count down the timer
         _currTime -= Time.deltaTime;
 
-        if (_currTime < 0.0f)
+        if (_currTime < 0.0f || _numOfAlivePlayers == 1)
         {
             _isGameOver = true;
         }
 
         if (_isGameOver)
         {
+            _timeToShowVictory -= Time.deltaTime;
             //Do whatever you need to do once the game is over. 
-            winner = findWinner();
+            _winner = findWinner();
+            displayVictor();
+            //After a few seconds, go to the next scene.
+            if (_timeToShowVictory < 0.0f)
+            {
+                SceneManager.LoadScene("UI and Controls Testing");
+            }
         }
 	}
 
-    //Call this function to decrement the number of alive players by 1.
+    /// <summary>
+    /// Call this function to decrement the number of alive players by 1.
+    /// </summary>
     public void decAlivePlayers()
     {
         _numOfAlivePlayers -= 1;
@@ -71,37 +91,55 @@ public class GameManager : MonoBehaviour {
      * Getters
     */
 
-    //Returns the number of players in the game.
+    /// <summary>
+    /// Returns the number of players in the game.
+    /// </summary>
+    /// <returns>int</returns>
     public int getNumOfPlayers()
     {
         return _numOfPlayers;
     }
 
-    //Returns the number of players that are still alive in this game.
+    /// <summary>
+    /// Returns the number of players that are still alive in this game.
+    /// </summary>
+    /// <returns>int</returns>
     public int getNumOfAlivePlayers()
     {
         return _numOfAlivePlayers;
     }
 
-    //Returns the round time set.
+    /// <summary>
+    /// Returns the round time set.
+    /// </summary>
+    /// <returns>float</returns>
     public float getRoundTime()
     {
         return _roundTime;
     }
 
-    //Returns the current time in the match.
+    /// <summary>
+    /// Returns the current time in the match.
+    /// </summary>
+    /// <returns>float</returns>
     public float getCurrentTime()
     {
         return _currTime;
     }
 
-    //Returns a bool stating whether or not the game is over.
+    /// <summary>
+    /// Returns a bool stating whether or not the game is over.
+    /// </summary>
+    /// <returns>bool</returns>
     public bool getIsGameOver()
     {
         return _isGameOver;
     }
 
-    //Returns the player number of the winner, 0 if there is a draw.
+    /// <summary>
+    /// Returns the player number of the winner, 0 if there is a draw.
+    /// </summary>
+    /// <returns>int</returns>
     int findWinner()
     {
         int numOfWinners = 0;
@@ -121,5 +159,12 @@ public class GameManager : MonoBehaviour {
         }
         return winnerNumber;
     }
+    /// <summary>
+    /// Displays the victory text.
+    /// </summary>
+    void displayVictor()
+    { 
+        _victoryText.enabled = true;
+        _victoryText.text = _winner.ToString() + " wins!";
+    }
 }
-
