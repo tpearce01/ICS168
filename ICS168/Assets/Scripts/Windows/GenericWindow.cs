@@ -16,7 +16,7 @@ public enum WindowIDs {
 }
 
 // This class is a base template for all windows, all windows are derived from this class
-public class GenericWindow : MonoBehaviour {
+public abstract class GenericWindow : MonoBehaviour {
 
     public delegate void GenericWindowEvent(WindowIDs close, WindowIDs open);
     public static event GenericWindowEvent OnToggleWindows;
