@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
 
     //Player Tracking Attributes
     //This attribute signifies the maximum amount of players that are playing in the scene.
@@ -146,10 +146,10 @@ public class GameManager : MonoBehaviour {
         int winnerNumber = 0;
         for (int i = 0; i < _players.Length; i++)
         {
-            if (_players[i].GetComponent<PlayerScript>().isAlive())
+            if (_players[i].GetComponent<PlayerScript>().IsAlive)
             {
                 ++numOfWinners;
-                winnerNumber = _players[i].GetComponent<PlayerScript>().getPlayerNumber();
+                winnerNumber = _players[i].GetComponent<PlayerScript>().PlayerNumber;
             }
             if (numOfWinners > 1)
             {

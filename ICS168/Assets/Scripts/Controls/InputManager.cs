@@ -30,6 +30,7 @@ public class Player {
 
     public ControllableObject controllableObject;
     public SOInputList inputList;
+    public bool canTakeInput = true;
 }
 
 [System.Serializable]
@@ -81,13 +82,29 @@ public class InputManager : Singleton<InputManager> {
         int length = _players.Count;
 
         for (int i = 0; i < length; ++i) {
-            foreach (InputAxisState input in _players[i].inputList.inputs) {
-                _players[i].controllableObject.SetButtonStates(input.Button, input.IsPressed);
+            if (_players[i].canTakeInput) {
+                foreach (InputAxisState input in _players[i].inputList.inputs) {
+                    _players[i].controllableObject.SetButtonStates(input.Button, input.IsPressed);
+                }
             }
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="inputList"></param>
     public void AddPlayer(ControllableObject player, SOInputList inputList) {
         _players.Add(new Player(player, inputList));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="playerNum"></param>
+    /// <param name="value"></param>
+    public void TogglePlayerInput(int playerNum, bool value) {
+        _players[playerNum].canTakeInput = value;
     }
 }

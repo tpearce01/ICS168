@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Floor
   - Destructable
+  - GameManager
   layers:
   - Default
   - TransparentFX

@@ -28,5 +28,8 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
             _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name);
             DontDestroyOnLoad(gameObject);
         }
+        else {
+            Destroy(gameObject);
+        }
     }
 }
