@@ -6,13 +6,26 @@ public class PlayerScript : MonoBehaviour {
 
     // Based on the player's number, it will color the sprite differently!
     // Player's number should be between 1 and 4.
+    [SerializeField]
     [Range(1,4)]
-    public int playerNumber;
+    private int _playerNumber;
+    public int PlayerNumber {
+        get { return _playerNumber; }
+    }
 
     private SpriteRenderer _sr;
 
     //This attribute tracks whether or not the player is alive or not.
     private bool _isAlive;
+    public bool IsAlive {
+        get { return _isAlive; }
+    }
+
+    /// <summary>
+    /// The username of the player.
+    /// </summary>
+    public string playerName;
+
 
 	// Use this for initialization
 	void Start () {
@@ -31,15 +44,22 @@ public class PlayerScript : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Explosion")
+        if (_isAlive)
         {
-            _isAlive = false;
+            if (collision.gameObject.name == "Explosion")
+            {
+                _isAlive = false;
+                GetComponent<GameManager>().decAlivePlayers();
+            }
         }
     }
-    //Sets the color of the player based on the player number.
+    /// <summary>
+    /// Sets the color of the player based on the player number. Doesn't return any value.
+    /// </summary>
+    /// <param name="sr">The sprite renderer that is attached to the player's game object.</param>
     void setPlayerColor(SpriteRenderer sr)
     {
-        switch (playerNumber)
+        switch (_playerNumber)
         {
             case 1:
                 sr.material.SetColor("_Color", Color.red);
@@ -56,14 +76,21 @@ public class PlayerScript : MonoBehaviour {
         }
     }
 
-    //Returns if the player is alive.
-    public bool isAlive()
-    {
-        return _isAlive;
-    }
+    ///// <summary>
+    ///// Returns a bool that represents whether or not the player is alive.
+    ///// </summary>
+    ///// <returns>bool</returns>
+    //public bool isAlive()
+    //{
+    //    return _isAlive;
+    //}
 
-    public int getPlayerNumber()
-    {
-        return playerNumber;
-    }
+    ///// <summary>
+    ///// Returns the player's number, it is a value between 1 and 4.
+    ///// </summary>
+    ///// <returns>int</returns>
+    //public int getPlayerNumber()
+    //{
+    //    return playerNumber;
+    //}
 }

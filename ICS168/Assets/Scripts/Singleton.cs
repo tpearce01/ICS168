@@ -23,13 +23,13 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
     }
 
     protected virtual void Awake() {
-
-		if (_instance == null) {
-			_instance = GameObject.FindGameObjectWithTag (typeof(Type).Name);
-			DontDestroyOnLoad (gameObject);
-		} else {
-			//OnAwake ();
-		}
+        if (_instance == null) {
+            _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name);
+            DontDestroyOnLoad(gameObject);
+        }
+        else {
+            Destroy(gameObject);
+        }
     }
 
 	/*

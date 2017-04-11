@@ -20,6 +20,20 @@ public enum ConditionEnum {
 }
 
 [System.Serializable]
+public class Player {
+
+    //Constructor
+    public Player(ControllableObject player, SOInputList soInputList) {
+        controllableObject = player;
+        inputList = soInputList;
+    }
+
+    public ControllableObject controllableObject;
+    public SOInputList inputList;
+    public bool canTakeInput = true;
+}
+
+[System.Serializable]
 public class InputAxisState {
 
     [SerializeField]
@@ -56,14 +70,41 @@ public class InputAxisState {
 public class InputManager : Singleton<InputManager> {
 
     [SerializeField]
-    private ControllableObject _player;
-    [SerializeField]
-    private InputAxisState[] _inputs;
+    private List<Player> _players;
+
+    //[SerializeField]
+    //private ControllableObject _player;
+    //[SerializeField]
+    //private InputAxisState[] _inputs;
 
     public void Update() {
 
-        foreach(InputAxisState input in _inputs) {
-            _player.SetButtonStates(input.Button, input.IsPressed);
+        int length = _players.Count;
+
+        for (int i = 0; i < length; ++i) {
+            if (_players[i].canTakeInput) {
+                foreach (InputAxisState input in _players[i].inputList.inputs) {
+                    _players[i].controllableObject.SetButtonStates(input.Button, input.IsPressed);
+                }
+            }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="inputList"></param>
+    public void AddPlayer(ControllableObject player, SOInputList inputList) {
+        _players.Add(new Player(player, inputList));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="playerNum"></param>
+    /// <param name="value"></param>
+    public void TogglePlayerInput(int playerNum, bool value) {
+        _players[playerNum].canTakeInput = value;
     }
 }

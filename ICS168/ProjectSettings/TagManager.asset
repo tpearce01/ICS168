@@ -12,6 +12,7 @@ TagManager:
   - Spawner
   - SoundManager
   - MapGenerator
+  - GameManager
   layers:
   - Default
   - TransparentFX
