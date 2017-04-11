@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeUntilExplosion: 1
   range: 2
+  explosionSound: -1
 --- !u!212 &212684123621134832
 SpriteRenderer:
   m_ObjectHideFlags: 1

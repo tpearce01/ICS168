@@ -5,6 +5,7 @@ using UnityEngine;
 public class Explosion : MonoBehaviour {
 
 	public float timeToExist;
+	public Sound destructableWallDestroyedSound;
 
     void Awake()
     {
@@ -36,6 +37,7 @@ public class Explosion : MonoBehaviour {
             if (other.CompareTag("Destructable"))
             {
 				ReplaceWithBasicTile ();
+				SoundManager.Instance.GetComponent<SoundManager> ().PlaySound (destructableWallDestroyedSound);
             }
         }
 	}

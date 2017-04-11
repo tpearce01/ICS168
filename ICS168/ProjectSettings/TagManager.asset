@@ -9,6 +9,8 @@ TagManager:
   - Wall
   - Floor
   - Destructable
+  - Spawner
+  - SoundManager
   layers:
   - Default
   - TransparentFX
