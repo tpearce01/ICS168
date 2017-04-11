@@ -10,23 +10,14 @@ public class MapGenerator : Singleton<MapGenerator>
     public Tile[,] tileMap;             //Stores all tiles
 	public Map mapToLoad;
 
-	/*
-    void Awake()
-    {
-        i = this;
-    }
-    */
 
 	void Start ()
 	{
-		//GenerateMap("TestMap");     //Generates the map. "TestMap" should be a variable based on map selection
-		Debug.Log(mapToLoad.ToString());
 		GenerateMap(mapToLoad.ToString());
-        Destroy(gameObject);        //Destroy this game object once it's functions are complete
 	}
 
     //Creates tiles and sets them to the appropriate locations
-    void GenerateMap(string fileName)
+    public void GenerateMap(string fileName)
     {
         TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
 
