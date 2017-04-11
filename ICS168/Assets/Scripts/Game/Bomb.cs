@@ -40,8 +40,8 @@ public class Bomb : MonoBehaviour {
 	        if (!blocked)
 	        {
 				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.up*(i + 1));
-	            if (MapGenerator.i.tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Destructable
-                    || MapGenerator.i.tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Wall)
+				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Destructable
+					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Wall)
 	            {
 	                blocked = true;
 	            }
@@ -52,8 +52,8 @@ public class Bomb : MonoBehaviour {
 	        if (!blocked)
 	        {
 				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.right*(i + 1));
-                if (MapGenerator.i.tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Destructable
-                    || MapGenerator.i.tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Wall)
+				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Destructable
+					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Wall)
                 {
                     blocked = true;
                 }
@@ -64,8 +64,8 @@ public class Bomb : MonoBehaviour {
 	        if (!blocked)
 	        {
 				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position - Vector2.up*(i + 1));
-                if (MapGenerator.i.tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Destructable
-                    || MapGenerator.i.tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Wall)
+				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Destructable
+					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Wall)
                 {
                     blocked = true;
                 }
@@ -76,8 +76,8 @@ public class Bomb : MonoBehaviour {
             if (!blocked)
             {
 				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position - Vector2.right*(i + 1));
-                if (MapGenerator.i.tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Destructable
-                    || MapGenerator.i.tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Wall)
+				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Destructable
+					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Wall)
                 {
                     blocked = true;
                 }

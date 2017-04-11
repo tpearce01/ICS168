@@ -11,6 +11,7 @@ TagManager:
   - Destructable
   - Spawner
   - SoundManager
+  - MapGenerator
   layers:
   - Default
   - TransparentFX
