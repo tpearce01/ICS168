@@ -17,7 +17,7 @@ public class MapGenerator : Singleton<MapGenerator>
 	}
 
     //Creates tiles and sets them to the appropriate locations
-    public void GenerateMap(string fileName)
+    void GenerateMap(string fileName)
     {
         TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
 

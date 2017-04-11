@@ -9,12 +9,6 @@ public class Spawner : Singleton<Spawner> {
 	public GameObject[] prefabs;								//List of all prefabs that may be instantiated
 	GameObject activeObject;
 
-	/*
-	void Awake(){
-		i = this;
-	}
-	*/
-
 	//Instantiate an object at the specified location and add it to the list of active objects
 	/// <summary>
 	/// Instantiate an object at the specified location
