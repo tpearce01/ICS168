@@ -16,10 +16,14 @@ public class WindowManager : Singleton<WindowManager> {
     
     private void OnEnable() {
         GenericWindow.OnToggleWindows += ToggleWindows;
+
+		GameManager.OnEndGame += ToggleWindows;
     }
+
 
     private void OnDisable() {
         GenericWindow.OnToggleWindows -= ToggleWindows;
+		GameManager.OnEndGame -= ToggleWindows;
     }
 
     // This function handles displaying and un-displaying the windows 

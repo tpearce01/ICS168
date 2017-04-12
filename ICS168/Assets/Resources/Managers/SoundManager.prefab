@@ -52,4 +52,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   masterVolume: 0.5
-  clips: []
+  clips:
+  - {fileID: 0}

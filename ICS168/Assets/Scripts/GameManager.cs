@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager> {
 
+	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
+	public static event GameManagerEvent OnEndGame;
+
     //Player Tracking Attributes
     //This attribute signifies the maximum amount of players that are playing in the scene.
     [SerializeField]
@@ -49,7 +52,8 @@ public class GameManager : Singleton<GameManager> {
 
 	// Use this for initialization
 	void Start () {
-        _numOfAlivePlayers = _numOfPlayers;
+        //_numOfAlivePlayers = _numOfPlayers;
+		_numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
         _currTime = _roundTime;
         _isGameOver = false;
 	}
@@ -146,14 +150,17 @@ public class GameManager : Singleton<GameManager> {
     /// <returns>int</returns>
     int findWinner()
     {
+		if (OnEndGame != null) {
+			OnEndGame (WindowIDs.Game, WindowIDs.Victory);
+		} 
+
 		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
 
-		if (ps.Length > 1) {
-			//Return draw
+		if (ps.Length >= 1) {
 			return 0;
-		} else if (ps.Length == 1) {
+		} /*else if (ps.Length == 1) {
 			return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
-		} else {
+		} */else {
 			Debug.Log ("Wasted");
 			return 0;
 		}

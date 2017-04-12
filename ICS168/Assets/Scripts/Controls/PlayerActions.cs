@@ -31,7 +31,7 @@ public class PlayerActions : MonoBehaviour {
 
     bool ValidPos(Vector3 pos) {
 
-        Debug.Log(pos);
+        //Debug.Log(pos);
         Tile[,] tileMap = MapGenerator.GO.GetComponent<MapGenerator>().tileMap;
 
         Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
@@ -88,7 +88,7 @@ public class PlayerActions : MonoBehaviour {
         //if (_inputHandler.OnButtonUp(ButtonEnum.MoveDown)) {
         //    Debug.Log("STOP WALKING DOWN");
         //}
-        Debug.Log(_pos);
+        //Debug.Log(_pos);
         if (ValidPos(_pos)) {
             gameObject.transform.position = _pos;
         }
