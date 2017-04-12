@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 970921648}
   - component: {fileID: 970921647}
   - component: {fileID: 970921646}
+  - component: {fileID: 970921649}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Player
@@ -282,6 +283,19 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
+--- !u!114 &970921649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 970921643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207ceeeef5c461545b22547fcde77702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerNumber: 1
+  playerName: Tyler
 --- !u!1001 &1421223351
 Prefab:
   m_ObjectHideFlags: 0
@@ -323,7 +337,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1509397193439616, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}

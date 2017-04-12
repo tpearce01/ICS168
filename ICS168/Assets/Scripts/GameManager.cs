@@ -144,27 +144,16 @@ public class GameManager : Singleton<GameManager> {
     {
 		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
 
-		ps.Length; //Number of winners
 		if (ps.Length > 1) {
 			//Return draw
 			return 0;
-		} else if (ps.Length = 1) {
+		} else if (ps.Length == 1) {
 			return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
 		} else {
 			Debug.Log ("Something went wrong");
 			return 0;
 		}
     }
-
-	void Sample(){
-		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
-
-		for (int i = 0; i < ps.Length; i++) {
-			Debug.Log (ps [i].GetComponent<PlayerScript>().PlayerNumber); //Tells us the winners
-		}
-
-		ps.Length; //Number of winners
-	}
 
     /// <summary>
     /// Displays the victory text.
