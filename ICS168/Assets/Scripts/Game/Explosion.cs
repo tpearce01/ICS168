@@ -40,7 +40,7 @@ public class Explosion : MonoBehaviour {
 			SoundManager.Instance.GetComponent<SoundManager> ().PlaySound (destructableWallDestroyedSound);
         }
 		else if(other.CompareTag("Player")){
-			//other.GetComponent<PlayerScript>().Kill();
+			other.GetComponent<PlayerScript>().Kill();
 		}
 	}
 

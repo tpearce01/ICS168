@@ -34,7 +34,7 @@ public class GameManager : Singleton<GameManager> {
      * I'll have 4 slots in there for now, but we can leave the other three empty OR have them be dummy characters the player needs to kill.
     */
     [SerializeField]
-    private GameObject[] _players;
+    //private GameObject[] _players;
 
     private int _winner = 0;
 
@@ -142,23 +142,30 @@ public class GameManager : Singleton<GameManager> {
     /// <returns>int</returns>
     int findWinner()
     {
-        int numOfWinners = 0;
-        int winnerNumber = 0;
-        for (int i = 0; i < _players.Length; i++)
-        {
-            if (_players[i].GetComponent<PlayerScript>().IsAlive)
-            {
-                ++numOfWinners;
-                winnerNumber = _players[i].GetComponent<PlayerScript>().PlayerNumber;
-            }
-            if (numOfWinners > 1)
-            {
-                winnerNumber = 0;
-                break;
-            }
-        }
-        return winnerNumber;
+		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
+
+		ps.Length; //Number of winners
+		if (ps.Length > 1) {
+			//Return draw
+			return 0;
+		} else if (ps.Length = 1) {
+			return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
+		} else {
+			Debug.Log ("Something went wrong");
+			return 0;
+		}
     }
+
+	void Sample(){
+		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
+
+		for (int i = 0; i < ps.Length; i++) {
+			Debug.Log (ps [i].GetComponent<PlayerScript>().PlayerNumber); //Tells us the winners
+		}
+
+		ps.Length; //Number of winners
+	}
+
     /// <summary>
     /// Displays the victory text.
     /// </summary>
