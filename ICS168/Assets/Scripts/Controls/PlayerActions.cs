@@ -18,8 +18,7 @@ public class PlayerActions : MonoBehaviour {
 
     private void Start() {
 
-        GameObject _IM = InputManager.Instance;
-        _IM.GetComponent<InputManager>().AddPlayer(GetComponent<ControllableObject>(),
+        InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
             Resources.Load("Input/P" + _playerNum + "InputList", typeof(SOInputList)) as SOInputList);
     }
 

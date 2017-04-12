@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
 
-    private static GameObject _instance;
+    private static Type _instance;
 
-    public static GameObject Instance {
+    public static Type Instance {
         get {
             // If the instance is null, look to see if there is already an instance in the scene
             if (_instance == null) {
-                _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name);
+                _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name) as Type;
 
                 // If an instance could not be found, create one.
                 if (_instance == null) {
-                    _instance = Instantiate(Resources.Load("Managers/" + typeof(Type).Name, typeof(GameObject)) as GameObject, Vector3.zero, Quaternion.identity) as GameObject;
+                    _instance = Instantiate(Resources.Load("Managers/" + typeof(Type).Name, typeof(Type)) as Type, Vector3.zero, Quaternion.identity) as Type;
                 }
             }
 
@@ -24,7 +24,7 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
 
     protected virtual void Awake() {
         if (_instance == null) {
-            _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name);
+            _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name) as Type;
             DontDestroyOnLoad(gameObject);
         }
         else {
