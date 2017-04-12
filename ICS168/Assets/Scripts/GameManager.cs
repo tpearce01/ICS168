@@ -60,7 +60,7 @@ public class GameManager : Singleton<GameManager> {
         //Count down the timer
         _currTime -= Time.deltaTime;
 
-        if (_currTime < 0.0f || _numOfAlivePlayers == 1)
+        if (_currTime < 0.0f)
         {
             _isGameOver = true;
         }
@@ -85,6 +85,10 @@ public class GameManager : Singleton<GameManager> {
     public void decAlivePlayers()
     {
         _numOfAlivePlayers -= 1;
+		if (_numOfAlivePlayers <= 1) {
+			findWinner ();
+		}
+		//Is the game over?
     }
 
     /*
@@ -150,7 +154,7 @@ public class GameManager : Singleton<GameManager> {
 		} else if (ps.Length == 1) {
 			return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
 		} else {
-			Debug.Log ("Something went wrong");
+			Debug.Log ("Wasted");
 			return 0;
 		}
     }
