@@ -49,5 +49,6 @@ public class Explosion : MonoBehaviour {
 		temp.x = (int)gameObject.transform.position.x;
 		temp.y = (int)gameObject.transform.position.y;
 		temp.SetLocation();
+		MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [temp.x, temp.y] = temp;
 	}
 }
