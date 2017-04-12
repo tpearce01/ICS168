@@ -39,45 +39,56 @@ public class Bomb : MonoBehaviour {
 	    {
 	        if (!blocked)
 	        {
-				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.up*(i + 1));
+				if (MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y + i + 1].GetComponent<Tile> ().type != TileType.Wall) {
+					Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position + Vector2.up * (i + 1));
+				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall)
 	            {
 	                blocked = true;
 	            }
 	        }
 	    }
+		blocked = false;
 	    for (int i = 0; i < r; i++)
 	    {
 	        if (!blocked)
 	        {
-				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.right*(i + 1));
+				if(MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type != TileType.Wall){
+					Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.right*(i + 1));
+				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall)
                 {
                     blocked = true;
                 }
             }
 	    }
+		blocked = false;
 	    for (int i = 0; i < r; i++)
 	    {
 	        if (!blocked)
 	        {
-				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position - Vector2.up*(i + 1));
+				if (MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y - (i + 1)].GetComponent<Tile> ().type != TileType.Wall) {
+					Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position - Vector2.up * (i + 1));
+				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall)
                 {
                     blocked = true;
                 }
             }
 	    }
+		blocked = false;
 	    for (int i = 0; i < r; i++)
         {
             if (!blocked)
             {
-				Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position - Vector2.right*(i + 1));
+				if (MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type != TileType.Wall) {
+					Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position - Vector2.right * (i + 1));
+				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall)
                 {
                     blocked = true;
                 }
