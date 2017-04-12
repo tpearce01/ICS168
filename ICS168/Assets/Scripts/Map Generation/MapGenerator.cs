@@ -29,7 +29,9 @@ public class MapGenerator : Singleton<MapGenerator>
         //Generate each tile specified by the text file
         for (int y = 0; y < data.Length; y++)
         {
-            for (int x = 0; x < data[y].Length; x++)
+            int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
+
+            for (int x = 0; x < data[y].Length - 1; x++)
             {
                 //Create the tile
                 temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
