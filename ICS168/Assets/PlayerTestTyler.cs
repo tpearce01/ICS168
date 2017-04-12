@@ -16,7 +16,7 @@ public class PlayerTestTyler : MonoBehaviour {
 	}
 
 	bool ValidPos(Vector3 pos){
-		Tile[,] tileMap = MapGenerator.Instance.GetComponent<MapGenerator>().tileMap;
+		Tile[,] tileMap = MapGenerator.Instance.tileMap;
 
 		//if(tileMap[]
 

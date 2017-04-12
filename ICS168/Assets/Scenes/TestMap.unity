@@ -108,52 +108,6 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &624078600
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4287772532513926, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1298209905012068, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-      propertyPath: m_TagString
-      value: MapGenerator
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 0227a6b6ef14d4445abe47745b454375, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &970921643
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,11 +116,12 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 970921645}
-  - component: {fileID: 970921644}
   - component: {fileID: 970921648}
   - component: {fileID: 970921647}
   - component: {fileID: 970921646}
+  - component: {fileID: 970921650}
   - component: {fileID: 970921649}
+  - component: {fileID: 970921644}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Player
@@ -182,7 +137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 970921643}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cb9684dd8b034fb6a642d49dd94dd03, type: 3}
+  m_Script: {fileID: 11500000, guid: eb09477252aa6fa45baf979cf2d5443f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &970921645
@@ -196,7 +151,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &970921646
 Rigidbody2D:
@@ -296,52 +251,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerNumber: 1
   playerName: Tyler
---- !u!1001 &1421223351
-Prefab:
+--- !u!114 &970921650
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -0.03151772
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 1.2461743
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 3.27991
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1509397193439616, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
-  m_IsPrefabParent: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 970921643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf80d5e832aa2e4cbf79252f67c42fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1974672580
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +274,7 @@ GameObject:
   - component: {fileID: 1974672583}
   - component: {fileID: 1974672582}
   - component: {fileID: 1974672581}
+  - component: {fileID: 1974672586}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -431,3 +352,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1974672586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1974672580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 475a55f1afc3d7842bf3e9fe2d5c5845, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startGameManager: 1
+  _startWindowManager: 0
+  _startInputManager: 1
+  _startMapGenerator: 1

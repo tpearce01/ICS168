@@ -46,10 +46,8 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
     protected virtual void Awake() {
 
         if (_GO == null) {
-            Debug.Log("was null");
             _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name) as Type;
             _GO = GameObject.FindGameObjectWithTag(typeof(Type).Name);
-            Debug.Log(_GO);
             DontDestroyOnLoad(gameObject);
         }
         else {

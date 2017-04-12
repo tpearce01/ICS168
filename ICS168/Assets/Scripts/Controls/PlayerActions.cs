@@ -10,6 +10,8 @@ public class PlayerActions : MonoBehaviour {
     private ControllableObject _inputHandler;
     private int _playerNum = 1;
 
+    private Vector3 _pos;
+
     private void OnEnable() {
         if (_inputHandler == null) {
             _inputHandler = GetComponent<ControllableObject>();
@@ -27,49 +29,68 @@ public class PlayerActions : MonoBehaviour {
         Walking();
     }
 
+    bool ValidPos(Vector3 pos) {
+
+        Debug.Log(pos);
+        Tile[,] tileMap = MapGenerator.GO.GetComponent<MapGenerator>().tileMap;
+
+        Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
+        if (tile.type == TileType.Wall || tile.type == TileType.Destructable) {
+            return false;
+        }
+
+        return true;
+    }
+
     private void DeployBomb() {
 
         if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
-            Debug.Log("DEPLOY BOMB");
+            Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Bomb, new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), 0));
         }
     }
 
     private void Walking() {
 
+        _pos = gameObject.transform.position;
+
         //RIGHT
-        if (_inputHandler.OnButton(ButtonEnum.MoveRight)) {
-            Debug.Log("WALKING RIGHT");
+        if (_inputHandler.OnButtonDown(ButtonEnum.MoveRight)) {
+            _pos.x += 1;
         }
 
-        if (_inputHandler.OnButtonUp(ButtonEnum.MoveRight)) {
-            Debug.Log("STOP WALKING RIGHT");
-        }
+        //if (_inputHandler.OnButtonUp(ButtonEnum.MoveRight)) {
+        //    Debug.Log("STOP WALKING RIGHT");
+        //}
 
         //LEFT
-        if (_inputHandler.OnButton(ButtonEnum.MoveLeft)) {
-            Debug.Log("WALKING LEFT");
+        if (_inputHandler.OnButtonDown(ButtonEnum.MoveLeft)) {
+            _pos.x -= 1;
         }
 
-        if (_inputHandler.OnButtonUp(ButtonEnum.MoveLeft)) {
-            Debug.Log("STOP WALKING LEFT");
-        }
+        //if (_inputHandler.OnButtonUp(ButtonEnum.MoveLeft)) {
+        //    Debug.Log("STOP WALKING LEFT");
+        //}
 
         //UP
-        if (_inputHandler.OnButton(ButtonEnum.MoveUp)) {
-            Debug.Log("WALKING UP");
+        if (_inputHandler.OnButtonDown(ButtonEnum.MoveUp)) {
+            _pos.y += 1;
         }
 
-        if (_inputHandler.OnButtonUp(ButtonEnum.MoveUp)) {
-            Debug.Log("STOP WALKING UP");
-        }
+        //if (_inputHandler.OnButtonUp(ButtonEnum.MoveUp)) {
+        //    Debug.Log("STOP WALKING UP");
+        //}
 
         //DOWN
-        if (_inputHandler.OnButton(ButtonEnum.MoveDown)) {
-            Debug.Log("WALKING DOWN");
+        if (_inputHandler.OnButtonDown(ButtonEnum.MoveDown)) {
+            _pos.y -= 1;
         }
 
-        if (_inputHandler.OnButtonUp(ButtonEnum.MoveDown)) {
-            Debug.Log("STOP WALKING DOWN");
+        //if (_inputHandler.OnButtonUp(ButtonEnum.MoveDown)) {
+        //    Debug.Log("STOP WALKING DOWN");
+        //}
+        Debug.Log(_pos);
+        if (ValidPos(_pos)) {
+            gameObject.transform.position = _pos;
         }
     }
 }
