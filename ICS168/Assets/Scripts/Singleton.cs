@@ -23,7 +23,6 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
     }
 
     protected virtual void Awake() {
-
         if (_instance == null) {
             _instance = GameObject.FindGameObjectWithTag(typeof(Type).Name) as Type;
             DontDestroyOnLoad(gameObject);
@@ -32,4 +31,10 @@ public class Singleton<Type> : MonoBehaviour where Type : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+
+	/*
+	protected virtual void OnAwake(){
+		//To be filled by child class
+	}
+	*/
 }

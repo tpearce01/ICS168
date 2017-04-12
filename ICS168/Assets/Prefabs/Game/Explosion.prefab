@@ -79,6 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToExist: 1
+  destructableWallDestroyedSound: -1
 --- !u!212 &212520428291843588
 SpriteRenderer:
   m_ObjectHideFlags: 1

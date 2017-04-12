@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class SoundManager : MonoBehaviour {
+public class SoundManager : Singleton<SoundManager> {
 
-	public static SoundManager i;
-    public float volume; 
+    public float masterVolume; 
 
 	//EndSound vars
 	AudioSource target;
@@ -14,24 +13,15 @@ public class SoundManager : MonoBehaviour {
 	List<AudioSource> clipsPlaying = new List<AudioSource>();
 	public AudioClip[] clips;
 
-	void Awake () {
-		//Destroy this object if one already exists
-	    if (GameObject.FindGameObjectsWithTag("GameManager").Length > 1)
-	    {
-	        Destroy(gameObject);
-	    }
-	    else
-	    {
-			Initialize ();
-        }
+
+	void Start(){
+		Initialize ();
 	}
 
 	void Initialize(){
-		i = this;
+		//i = this;
 		target = null;
 		duration = 0;
-		volume = 0.5f;
-		DontDestroyOnLoad(gameObject);
 	}
 
 	void Update () {
@@ -59,25 +49,57 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	//Plays a sound
+	/// <summary>
+	/// Plays a sound once at default volume
+	/// </summary>
+	/// <param name="clipNumber">Clip number.</param>
+	public void PlaySound(Sound clipNumber){
+		PlaySound (clipNumber, 1);
+	}
+	/// <summary>
+	/// Plays a sound once at the specified volume
+	/// </summary>
+	/// <param name="clipNumber">Clip number.</param>
+	/// <param name="v">V.</param>
 	public void PlaySound(Sound clipNumber, float v){
-		AudioSource source = gameObject.AddComponent<AudioSource> ();
-		source.clip = clips [(int)clipNumber];
-		source.volume = volume * v;
-		source.Play ();
-		clipsPlaying.Add (source);
+		if ((int)clipNumber < clips.Length && (int)clipNumber >= 0) {
+			AudioSource source = gameObject.AddComponent<AudioSource> ();
+			source.clip = clips [(int)clipNumber];
+			source.volume = masterVolume * v;
+			source.Play ();
+			clipsPlaying.Add (source);
+		}
 	}
 
 	//Plays a sound on loop
+	/// <summary>
+	/// Plays a sound with looping enabled at default volume
+	/// </summary>
+	/// <param name="clipNumber">Clip number.</param>
+	public void PlaySoundLoop(Sound clipNumber){
+		PlaySoundLoop (clipNumber, 1);
+	}
+	/// <summary>
+	/// Plays a sound with looping enabled at specified volume
+	/// </summary>
+	/// <param name="clipNumber">Clip number.</param>
+	/// <param name="v">V.</param>
 	public void PlaySoundLoop(Sound clipNumber, float v){
-		AudioSource source = gameObject.AddComponent<AudioSource> ();
-		source.clip = clips [(int)clipNumber];
-		source.volume = volume * v;
-		source.Play ();
-		source.loop = true;
-		clipsPlaying.Add (source);
+		if ((int)clipNumber < clips.Length && (int)clipNumber >= 0) {
+			AudioSource source = gameObject.AddComponent<AudioSource> ();
+			source.clip = clips [(int)clipNumber];
+			source.volume = masterVolume * v;
+			source.Play ();
+			source.loop = true;
+			clipsPlaying.Add (source);
+		}
 	}
 
 	//Ends a sound immediately
+	/// <summary>
+	/// Ends a sound immediately
+	/// </summary>
+	/// <param name="soundName">Sound name.</param>
 	public void EndSoundAbrupt(string soundName){
 		AudioSource[] sources = gameObject.GetComponents<AudioSource>();
 		for (int i = 0; i < sources.Length; i++) {
@@ -90,6 +112,11 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	//Fades a sound out over a duration
+	/// <summary>
+	/// Ends a sound over a duration. Currently only handles 1 sound at a time.
+	/// </summary>
+	/// <param name="soundName">Sound name.</param>
+	/// <param name="d">D.</param>
 	public void EndSoundFade(string soundName, float d){
 		AudioSource[] sources = gameObject.GetComponents<AudioSource>();
 		for (int i = 0; i < sources.Length; i++) {
@@ -102,6 +129,9 @@ public class SoundManager : MonoBehaviour {
 	}
 
 	//Ends all sounds immediately
+	/// <summary>
+	/// Ends all sounds immediately
+	/// </summary>
     public void EndAllSound()
     {
         AudioSource[] sources = gameObject.GetComponents<AudioSource>();
@@ -112,6 +142,10 @@ public class SoundManager : MonoBehaviour {
     }
 
 	//Ends all sounds of the specified name
+	/// <summary>
+	/// Ends all sounds of the specified name
+	/// </summary>
+	/// <param name="soundName">Sound name.</param>
     public void EndAllSound(string soundName)
     {
         AudioSource[] sources = gameObject.GetComponents<AudioSource>();
@@ -125,7 +159,10 @@ public class SoundManager : MonoBehaviour {
     }
 }
 
+/// <summary>
+/// Sound library. Converts sound name to integer
+/// </summary>
 [System.Serializable]
 public enum Sound{
-	Test = 0,
+	Test = -1,
 };

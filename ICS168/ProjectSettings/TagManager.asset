@@ -9,6 +9,9 @@ TagManager:
   - Wall
   - Floor
   - Destructable
+  - Spawner
+  - SoundManager
+  - MapGenerator
   - GameManager
   layers:
   - Default
