@@ -81,10 +81,12 @@ public class InputManager : Singleton<InputManager> {
 
         int length = _players.Count;
 
-        for (int i = 0; i < length; ++i) {
-            if (_players[i].canTakeInput) {
-                foreach (InputAxisState input in _players[i].inputList.inputs) {
-                    _players[i].controllableObject.SetButtonStates(input.Button, input.IsPressed);
+        if (length > 0) {
+            for (int i = 0; i < length; ++i) {
+                if (_players[i].canTakeInput) {
+                    foreach (InputAxisState input in _players[i].inputList.inputs) {
+                        _players[i].controllableObject.SetButtonStates(input.Button, input.IsPressed);
+                    }
                 }
             }
         }
