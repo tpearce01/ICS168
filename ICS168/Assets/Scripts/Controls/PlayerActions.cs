@@ -31,12 +31,13 @@ public class PlayerActions : MonoBehaviour {
 
     bool ValidPos(Vector3 pos) {
 
-        //Debug.Log(pos);
-        Tile[,] tileMap = MapGenerator.GO.GetComponent<MapGenerator>().tileMap;
+        Tile[,] tileMap = MapGenerator.Instance.tileMap;
 
-        Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
-        if (tile.type == TileType.Wall || tile.type == TileType.Destructable) {
-            return false;
+        if (tileMap != null) {
+            Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
+            if (tile.type == TileType.Wall || tile.type == TileType.Destructable) {
+                return false;
+            }
         }
 
         return true;

@@ -12,8 +12,8 @@ public class Explosion : MonoBehaviour {
         //Check if explosion is out of bounds
         int x = (int)gameObject.transform.position.x;
         int y = (int)gameObject.transform.position.y;
-		if (x < 0 || x >= MapGenerator.Instance.GetComponent<MapGenerator>().tileMap.GetLength(0)
-			|| y < 0 || y >= MapGenerator.Instance.GetComponent<MapGenerator>().tileMap.GetLength(1))
+		if (x < 0 || x >= MapGenerator.Instance.tileMap.GetLength(0)
+			|| y < 0 || y >= MapGenerator.Instance.tileMap.GetLength(1))
         {
             Destroy(gameObject);
         }
@@ -37,7 +37,7 @@ public class Explosion : MonoBehaviour {
         {
 			Destroy (other.gameObject);
 			ReplaceWithBasicTile ();
-			SoundManager.Instance.GetComponent<SoundManager> ().PlaySound (destructableWallDestroyedSound);
+			SoundManager.Instance.PlaySound (destructableWallDestroyedSound);
         }
 		else if(other.CompareTag("Player")){
 			other.GetComponent<PlayerScript>().Kill();
@@ -45,10 +45,10 @@ public class Explosion : MonoBehaviour {
 	}
 
 	void ReplaceWithBasicTile(){
-		Tile temp = Instantiate(MapGenerator.Instance.GetComponent<MapGenerator>().tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
+		Tile temp = Instantiate(MapGenerator.Instance.tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
 		temp.x = (int)gameObject.transform.position.x;
 		temp.y = (int)gameObject.transform.position.y;
 		temp.SetLocation();
-		MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [temp.x, temp.y] = temp;
+		MapGenerator.Instance.tileMap [temp.x, temp.y] = temp;
 	}
 }
