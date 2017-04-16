@@ -13,6 +13,7 @@ TagManager:
   - SoundManager
   - MapGenerator
   - GameManager
+  - TransportManager
   layers:
   - Default
   - TransparentFX
