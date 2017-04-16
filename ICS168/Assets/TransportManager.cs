@@ -1,19 +1,23 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class TransportManager : Singleton<TransportManager> {
 
+    [SerializeField] private int _bufferSize = 1024;
     [SerializeField] private int _maxConnections = 0;
 
-    private int TCP_ChannelID = 0;
-    private int UDP_ChannelID = 0;
+    private int TCP_ChannelID = -1;
+    private int UDP_ChannelID = -1;
 
-    private int _socketID = 0;
+    private int _socketID = -1;
     [SerializeField] private int _socketPort = 8888;
 
-    private int _connectionID = 0;
+    private int _connectionID = -1;
 
+    // IN START, WE SETUP AND START THE SERVER
     private void Start() {
         /*
          * INITIALIZATION
@@ -52,8 +56,66 @@ public class TransportManager : Singleton<TransportManager> {
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
         Debug.Log("Socket Open. SocketID is: " + _socketID);
+
+        // Test the connection.
+        Connect();
+
+        // Start a coroutine which waits for the connection to be established before sending any messages.
+        StartCoroutine(WaitToSendMessage());
     }
 
+    // Use the Update function so we can continually check for incoming messages.
+    private void Update() {
+
+        /*
+         * COMMUNICATION
+         * For checking host status you can use two functions:
+         * NetworkTransport.Receive() or NetworkTransport.ReceiveFromHost
+         * Both of them returns event, first function will return events from any host (and return host id via recHostId) 
+         * the second form check host with id recHostId.
+         */
+        int incomingSocketID = 0;
+        int incomingConnectionID = 0;
+        int incomingChannelID = 0;
+        byte[] incomingMessageBuffer = new byte[_bufferSize];
+        int dataSize = 0;
+        byte error;
+
+        NetworkEventType incomingNetworkEvent = NetworkTransport.Receive(out incomingSocketID, out incomingConnectionID,
+            out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
+
+        switch (incomingNetworkEvent) {
+            case NetworkEventType.Nothing:
+                break;
+
+            /*
+             * Connection event come in. It can be new connection, or it can be response on previous connect command:
+             */
+            case NetworkEventType.ConnectEvent:
+                Debug.Log("incoming connection event received");
+                break;
+
+            /*
+             * Data received. In this case incomingSocketID will define host, incomingConnectionID will define connection, 
+             * incomingChannelID will define channel; dataSize will define size of the received data. 
+             * If incomingMessageBuffer is big enough to contain data, data will be copied in the buffer. 
+             * If not, error will contain MessageToLong error and you will need reallocate buffer and call this function again.
+             * This is where a received message is handled and the game must do something based on the information.
+             */
+            case NetworkEventType.DataEvent:
+                Stream stream = new MemoryStream(incomingMessageBuffer);
+                BinaryFormatter formatter = new BinaryFormatter();
+                string message = formatter.Deserialize(stream) as string;
+                Debug.Log("Message received. Message contents: " + message);
+                break;
+
+            case NetworkEventType.DisconnectEvent:
+                Debug.Log("remote client event disconnected");
+                break;
+        }
+    }
+
+    // CONNECT TO THE SERVER
     public void Connect() {
 
         /*
@@ -65,7 +127,37 @@ public class TransportManager : Singleton<TransportManager> {
          *  of the remote machine, 0 (default value, probably shouldn't change it), and a spot for error reporting.
          */
         byte error = 0;
-        _connectionID = NetworkTransport.Connect(_socketID, "localhost", _socketPort, 0, out error);
+        _connectionID = NetworkTransport.Connect(_socketID, "127.0.0.1", _socketPort, 0, out error);
         Debug.Log("Connect to server. ConnectionID: " + _connectionID);
+    }
+
+    // DISCONNECT FROM THE SERVER
+    public void Disconnect() {
+        byte error = 0;
+        NetworkTransport.Disconnect(_socketID, _connectionID, out error);
+    }
+
+    // SEND MESSAGE TO THE SERVER
+    public void SendMessage() {
+
+        /*
+         * TODO: WE SHOULD PROABABLY CHANGE THIS TO USE JSON OR SOMETHING COMPARABLE. STRING IS NOT EFFECIENT.
+         */ 
+
+        byte error = 0;
+        byte[] messageBuffer = new byte[_bufferSize];
+        Stream stream = new MemoryStream(messageBuffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, "Hello Server");
+
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelID, messageBuffer, _bufferSize, out error);
+    }
+
+    private IEnumerator WaitToSendMessage() {
+
+        yield return new WaitForSeconds(1.0f);
+
+        // Send Test message.
+        SendMessage();
     }
 }
