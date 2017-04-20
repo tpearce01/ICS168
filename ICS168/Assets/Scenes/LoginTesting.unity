@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 1250293836}
   - component: {fileID: 1250293835}
   - component: {fileID: 1250293840}
-  - component: {fileID: 1250293841}
+  - component: {fileID: 1250293842}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   users: []
---- !u!114 &1250293841
+--- !u!114 &1250293842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -284,8 +284,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 1250293834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a71e124ff06d3ab4cb88208b978af2e7, type: 3}
+  m_Script: {fileID: 11500000, guid: b04fdc6244c4ac04b80e66d57d9f86ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputUsername: Hello
+  inputUsername: admin
   inputPassword: breadstick
