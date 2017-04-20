@@ -55,4 +55,6 @@ MonoBehaviour:
   - {fileID: 1405817209148390, guid: 6fb4723ce5075a04ca4e8453f6dd0207, type: 2}
   - {fileID: 1016963324597798, guid: 0ddedd75fed06d7448621a064a0ff921, type: 2}
   - {fileID: 1681205974387746, guid: 834a76299aef44c4f81733ba5318abb7, type: 2}
+  - {fileID: 1681205974387746, guid: 93c69e20e6d703b4bb4ac76b1f9f58d4, type: 2}
+  - {fileID: 1681205974387746, guid: d3c7b81ededf1574ea20a3ab61b211ee, type: 2}
   mapToLoad: 0

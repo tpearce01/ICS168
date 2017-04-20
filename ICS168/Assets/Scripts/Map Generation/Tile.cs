@@ -24,5 +24,7 @@ public enum TileType
 {
     Wall = 0,
     Basic = 1,
-    Destructable = 2
+    Destructable = 2,
+    PowerUp = 3,
+    WallPowerUp = 4
 }

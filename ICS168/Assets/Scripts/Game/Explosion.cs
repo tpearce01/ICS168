@@ -42,6 +42,11 @@ public class Explosion : MonoBehaviour {
 		else if(other.CompareTag("Player")){
 			other.GetComponent<PlayerScript>().Kill();
 		}
+        else if (other.CompareTag("WallPowerUp"))
+        {
+            Destroy(other.gameObject);
+            ReplaceWithPowerUpTile();
+        }
 	}
 
 	void ReplaceWithBasicTile(){
@@ -51,4 +56,12 @@ public class Explosion : MonoBehaviour {
 		temp.SetLocation();
 		MapGenerator.Instance.tileMap [temp.x, temp.y] = temp;
 	}
+    void ReplaceWithPowerUpTile()
+    {
+        Tile temp = Instantiate(MapGenerator.Instance.tileTypes[(int)TileType.PowerUp]).GetComponent<Tile>();
+        temp.x = (int)gameObject.transform.position.x;
+        temp.y = (int)gameObject.transform.position.y;
+        temp.SetLocation();
+        MapGenerator.Instance.tileMap[temp.x, temp.y] = temp;
+    }
 }

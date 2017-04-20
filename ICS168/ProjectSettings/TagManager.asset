@@ -14,6 +14,8 @@ TagManager:
   - MapGenerator
   - GameManager
   - TransportManager
+  - PowerUp
+  - WallPowerUp
   layers:
   - Default
   - TransparentFX

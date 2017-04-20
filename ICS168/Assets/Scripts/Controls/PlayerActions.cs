@@ -35,12 +35,35 @@ public class PlayerActions : MonoBehaviour {
 
         if (tileMap != null) {
             Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
-            if (tile.type == TileType.Wall || tile.type == TileType.Destructable) {
+            if (tile.type == TileType.Wall || tile.type == TileType.Destructable || tile.type == TileType.WallPowerUp) {
                 return false;
             }
         }
 
         return true;
+    }
+
+   
+    //Al's test code
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            Destroy(other.gameObject);
+            ReplaceWithBasicTile();
+            
+            
+
+        }
+    }
+
+    void ReplaceWithBasicTile()
+    {
+        Tile temp = Instantiate(MapGenerator.Instance.tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
+        temp.x = (int)gameObject.transform.position.x;
+        temp.y = (int)gameObject.transform.position.y;
+        temp.SetLocation();
+        MapGenerator.Instance.tileMap[temp.x, temp.y] = temp;
     }
 
     private void DeployBomb() {
