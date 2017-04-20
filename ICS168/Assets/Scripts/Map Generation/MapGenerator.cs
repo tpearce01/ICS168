@@ -13,7 +13,9 @@ public class MapGenerator : Singleton<MapGenerator>
 
 	void Start ()
 	{
-		GenerateMap(mapToLoad.ToString());
+        //Uncomment to randomize walls
+        //RandomizeWalls("Assets/Resources/" + mapToLoad.ToString() + ".txt");
+        GenerateMap(mapToLoad.ToString());
 	}
 
     //Creates tiles and sets them to the appropriate locations
@@ -50,10 +52,31 @@ public class MapGenerator : Singleton<MapGenerator>
         //Need to change camera size based on tile dimensions
     }
 
+    void RandomizeWalls(string filePath)
+    {
+        System.Random random = new System.Random();
+        int randNum = 0;
+        string mapTxt = System.IO.File.ReadAllText(filePath);
+        string newMap = "";
 
+        for(int i=0; i<mapTxt.Length; ++i)
+        {
+            if(mapTxt[i] == '1')
+            {
+                randNum = random.Next(1, 4);
+                if (randNum == 3) randNum = 4;
+                newMap += randNum.ToString()[0];
+            }else
+            {
+                newMap += mapTxt[i];
+            }
+        }
+        System.IO.File.WriteAllText(filePath, newMap);
+    }
 }
 
 [System.Serializable]
 public enum Map{
-	TestMap
+	TestMap,
+    TestRandomWalls
 }
