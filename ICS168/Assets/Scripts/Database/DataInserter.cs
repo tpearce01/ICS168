@@ -12,6 +12,11 @@ public class DataInserter : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) CreateUser(inputUsername, inputPassword);
 	}
 
+    /// <summary>
+    /// Takes in a username and password and sends it to the php script
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
     public void CreateUser(string username, string password){
         //WWWForm allows to communicate with php files
         WWWForm form = new WWWForm();

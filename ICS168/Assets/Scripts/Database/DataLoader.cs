@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DataLoader : MonoBehaviour {
-    public string[] users;
+    private string[] _users;
 
     IEnumerator Start() {
         WWW userData = new WWW("http://localhost/teamnewport/UserData.php");
@@ -11,8 +11,8 @@ public class DataLoader : MonoBehaviour {
         string userDataString = userData.text; //store text on website in string
 
         //Debug.Log(userDataString);
-        users = userDataString.Split(';');
-        Debug.Log(GetDataValue(users[0], "username:"));
+        _users = userDataString.Split(';');
+        Debug.Log(GetDataValue(_users[0], "username:"));
     }
 
     string GetDataValue(string data, string index){
