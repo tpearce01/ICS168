@@ -3,14 +3,20 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
 
 public class TransportManager : Singleton<TransportManager> {
 
-    [SerializeField] private int _bufferSize = 1024;
+    public Image testImage;
+
+    //[SerializeField] private int _bufferSize = 1024;
+    [SerializeField]
+    private int _bufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
     private int TCP_ChannelID = -1;
     private int UDP_ChannelID = -1;
+    private int UDP_ChannelIDFrag = -1;
 
     private int _socketID = -1;
     [SerializeField] private int _socketPort = 8888;
@@ -39,6 +45,7 @@ public class TransportManager : Singleton<TransportManager> {
         ConnectionConfig connectionConfig = new ConnectionConfig();
         TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
         UDP_ChannelID = connectionConfig.AddChannel(QosType.Unreliable);
+        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.UnreliableFragmented);
 
         /*
          * TOPOLOGY
@@ -61,12 +68,12 @@ public class TransportManager : Singleton<TransportManager> {
         Connect();
 
         // Start a coroutine which waits for the connection to be established before sending any messages.
-        StartCoroutine(WaitToSendMessage());
+        //StartCoroutine(WaitToSendMessage());
     }
 
     // Use the Update function so we can continually check for incoming messages.
-    private void Update() {
-
+    private void FixedUpdate() {
+         test("ss.png");
         /*
          * COMMUNICATION
          * For checking host status you can use two functions:
@@ -103,12 +110,19 @@ public class TransportManager : Singleton<TransportManager> {
              * This is where a received message is handled and the game must do something based on the information.
              */
             case NetworkEventType.DataEvent:
-                Stream stream = new MemoryStream(incomingMessageBuffer);
-                BinaryFormatter formatter = new BinaryFormatter();
-                string message = formatter.Deserialize(stream) as string;
-                Debug.Log("Message received. Message contents: " + message);
+                //Stream stream = new MemoryStream(incomingMessageBuffer);
+                //BinaryFormatter formatter = new BinaryFormatter();
+                //string message = formatter.Deserialize(stream) as string;
+                //byte[] message = formatter.Deserialize(stream) as byte[];
+                Debug.Log("Message received. Message size: " + incomingMessageBuffer.Length);
+                //Debug.Log("Message received. Message contents: " + message);
+                /*
+                 * Testing Image Conversion
+                 */
+                Texture2D testTex = new Texture2D(0, 0);
+                testTex.LoadImage(incomingMessageBuffer);
+                testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
-
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("remote client event disconnected");
                 break;
@@ -153,11 +167,35 @@ public class TransportManager : Singleton<TransportManager> {
         NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelID, messageBuffer, _bufferSize, out error);
     }
 
+    // SEND MESSAGE TO THE SERVER
+    public void SendMessageLarge(byte[] message)
+    {
+        byte error = 0;
+        Debug.Log("SendMessageLarge Message size: " + message.Length + ", " + _bufferSize);
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, message, _bufferSize, out error);
+    }
+
     private IEnumerator WaitToSendMessage() {
 
         yield return new WaitForSeconds(1.0f);
 
         // Send Test message.
         SendMessage();
+    }
+
+    void test(string filePath)
+    {
+        Application.CaptureScreenshot(filePath);
+        byte[] asByteArray = File.ReadAllBytes(filePath);
+        //Send message
+
+        //Separate client and server here
+        Debug.Log("Sending message. Byte Array Length: " + asByteArray.Length);
+        SendMessageLarge(asByteArray);
+
+        //Receive message
+        //Texture2D testTex = new Texture2D(0,0);
+        //testTex.LoadImage(asByteArray);
+        //testImage.sprite = Sprite.Create(testTex, new Rect(0,0,Screen.width, Screen.height), Vector2.zero);        
     }
 }
