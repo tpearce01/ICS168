@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 public class TransportManager : Singleton<TransportManager> {
 
+
+    private class ServerObject {
+        public float time;
+        public string imageFilePath;
+    }
+
     public Image testImage;
 
     //[SerializeField] private int _bufferSize = 1024;
@@ -72,7 +78,7 @@ public class TransportManager : Singleton<TransportManager> {
     }
 
     // Use the Update function so we can continually check for incoming messages.
-    private void FixedUpdate() {
+    private void Update() {
          test("ss.png");
         /*
          * COMMUNICATION
@@ -116,11 +122,27 @@ public class TransportManager : Singleton<TransportManager> {
                 //byte[] message = formatter.Deserialize(stream) as byte[];
                 Debug.Log("Message received. Message size: " + incomingMessageBuffer.Length);
                 //Debug.Log("Message received. Message contents: " + message);
+
                 /*
-                 * Testing Image Conversion
+                 * Testing Image Conversion && JSON HANDLING
                  */
                 Texture2D testTex = new Texture2D(0, 0);
-                testTex.LoadImage(incomingMessageBuffer);
+
+                //JSON PART
+                // 1. Convert the byte stream back into a string
+                Stream stream = new MemoryStream(incomingMessageBuffer);
+                BinaryFormatter formatter = new BinaryFormatter();
+                string jsonMessage = formatter.Deserialize(stream) as string;
+
+                // 2. Convert the string back into the original object (ServerObject)
+                ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
+
+                // 3. Convert the imageFilePath to a byte array.
+                byte[] imageByteArray = File.ReadAllBytes(incomingJsonData.imageFilePath);
+
+                // Image Conversion Part
+                // 3. Access the byte array from the original ServerObject to load the incoming screenshot.
+                testTex.LoadImage(imageByteArray);
                 testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
             case NetworkEventType.DisconnectEvent:
@@ -151,23 +173,33 @@ public class TransportManager : Singleton<TransportManager> {
         NetworkTransport.Disconnect(_socketID, _connectionID, out error);
     }
 
-    // SEND MESSAGE TO THE SERVER
     public void SendMessage() {
-
-        /*
-         * TODO: WE SHOULD PROABABLY CHANGE THIS TO USE JSON OR SOMETHING COMPARABLE. STRING IS NOT EFFECIENT.
-         */ 
 
         byte error = 0;
         byte[] messageBuffer = new byte[_bufferSize];
         Stream stream = new MemoryStream(messageBuffer);
         BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, "Hello Server");
+        formatter.Serialize(stream, "");
 
         NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelID, messageBuffer, _bufferSize, out error);
     }
 
-    // SEND MESSAGE TO THE SERVER
+    // SEND MESSAGE TO THE SERVER (UPDATED TO HANDLE JSON)
+    public void SendJSONMessage(string jsonObject) {
+        /*
+         * TODO: WE SHOULD PROABABLY CHANGE THIS TO USE JSON OR SOMETHING COMPARABLE. STRING IS NOT EFFECIENT.
+         */
+
+        byte error = 0;
+        byte[] messageBuffer = new byte[_bufferSize];
+        Stream stream = new MemoryStream(messageBuffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, jsonObject);
+
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
+    }
+
+        // SEND MESSAGE TO THE SERVER
     public void SendMessageLarge(byte[] message)
     {
         byte error = 0;
@@ -186,12 +218,22 @@ public class TransportManager : Singleton<TransportManager> {
     void test(string filePath)
     {
         Application.CaptureScreenshot(filePath);
-        byte[] asByteArray = File.ReadAllBytes(filePath);
+        //byte[] asByteArray = File.ReadAllBytes(filePath);
+
+        //JSON testing
+        ServerObject toBeSent = new ServerObject();
+        toBeSent.time = Time.time;
+        toBeSent.imageFilePath = filePath;
+        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+
+
         //Send message
 
+        SendJSONMessage(jsonToBeSent);
+
         //Separate client and server here
-        Debug.Log("Sending message. Byte Array Length: " + asByteArray.Length);
-        SendMessageLarge(asByteArray);
+        //Debug.Log("Sending message. Byte Array Length: " + asByteArray.Length);
+        //SendMessageLarge(asByteArray);
 
         //Receive message
         //Texture2D testTex = new Texture2D(0,0);
