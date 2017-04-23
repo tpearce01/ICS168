@@ -11,7 +11,7 @@ public class ServerConnection : MonoBehaviour {
 
     private class ServerObject {
         public float time;
-        public Texture2D texture2d;
+        public byte[] image;
     }
 
     private class ClientInfo {
@@ -25,7 +25,7 @@ public class ServerConnection : MonoBehaviour {
     [SerializeField] private int _maxConnections = 0;
 
 
-    private int UDP_ChannelID = -1;                 // This channel should be reserved for small message
+    //private int UDP_ChannelID = -1;                 // This channel should be reserved for small message
     private int UDP_ChannelIDFrag = -1;             // This channel should be reserved for larger messages
     private int _socketID = -1;
     [SerializeField] private int _socketPort = 8888;
@@ -74,7 +74,11 @@ public class ServerConnection : MonoBehaviour {
                 break;
 
             case NetworkEventType.DataEvent:
-                //Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
+                Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
+                Stream stream = new MemoryStream(incomingMessageBuffer);
+                BinaryFormatter formatter = new BinaryFormatter();
+                string message = formatter.Deserialize(stream) as string;
+                Debug.Log(message);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
@@ -82,17 +86,19 @@ public class ServerConnection : MonoBehaviour {
         }
     }
 
-    public void SendJSONMessage(string jsonObject) {
+    public void SendJSONMessage(byte[] byteArray) {
 
         if (_numberOfConnections > 0) {
             byte error = 0;
-            byte[] messageBuffer = new byte[_bufferSize];
-            Stream stream = new MemoryStream(messageBuffer);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, jsonObject);
+            //byte[] messageBuffer = new byte[_bufferSize];
+            //Stream stream = new MemoryStream(messageBuffer);
+            //BinaryFormatter formatter = new BinaryFormatter();
+            //formatter.Serialize(stream, byteArray);
 
             foreach (ClientInfo client in _clientSocketIDs) {
-                NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
+                //NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
+                NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, byteArray, _bufferSize, out error);
+
             }
         }
     }
@@ -102,15 +108,19 @@ public class ServerConnection : MonoBehaviour {
         Application.CaptureScreenshot(filePath);
         byte[] asByteArray = File.ReadAllBytes(filePath);
 
-        //JSON testing
-        ServerObject toBeSent = new ServerObject();
-        toBeSent.time = Time.time;
-        Texture2D textureToBeSent = new Texture2D(0, 0);
-        textureToBeSent.LoadImage(asByteArray);
-        toBeSent.texture2d = textureToBeSent;
+        ////JSON testing
+        //ServerObject toBeSent = new ServerObject();
+        //toBeSent.time = Time.time;
+        //toBeSent.image = asByteArray;
+        //Texture2D textureToBeSent = new Texture2D(0, 0);
+        //textureToBeSent.LoadImage(asByteArray);
+        //toBeSent.texture2d = textureToBeSent;
 
-        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+        //string jsonToBeSent = JsonUtility.ToJson(toBeSent);
 
-        SendJSONMessage(jsonToBeSent);    
+        //SendJSONMessage(jsonToBeSent);
+        SendJSONMessage(asByteArray);
+
+
     }
 }
