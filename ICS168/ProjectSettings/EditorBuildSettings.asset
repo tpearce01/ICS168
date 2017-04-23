@@ -5,12 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/UI and Controls Testing.unity
     guid: 445a348143d6ad04fbd6e8f8c2305a73
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/zacks_test_scene.unity
     guid: 4432813d1a6a5a14facd5dbb9626a76f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestMap.unity
     guid: 1806b0a856b597b439c304d147fb751b

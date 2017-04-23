@@ -10,7 +10,7 @@ public class TransportManager : Singleton<TransportManager> {
 
     private class ServerObject {
         public float time;
-        public string imageFilePath;
+        public Texture2D texture2d;
     }
 
     public Image testImage;
@@ -138,12 +138,12 @@ public class TransportManager : Singleton<TransportManager> {
                 ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
 
                 // 3. Convert the imageFilePath to a byte array.
-                byte[] imageByteArray = File.ReadAllBytes(incomingJsonData.imageFilePath);
+                //byte[] imageByteArray = File.ReadAllBytes(incomingJsonData.texture2d);
 
                 // Image Conversion Part
                 // 3. Access the byte array from the original ServerObject to load the incoming screenshot.
-                testTex.LoadImage(imageByteArray);
-                testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
+                //testTex.LoadImage(imageByteArray);
+                testImage.sprite = Sprite.Create( incomingJsonData.texture2d, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("remote client event disconnected");
@@ -218,14 +218,18 @@ public class TransportManager : Singleton<TransportManager> {
     void test(string filePath)
     {
         Application.CaptureScreenshot(filePath);
-        //byte[] asByteArray = File.ReadAllBytes(filePath);
+        byte[] asByteArray = File.ReadAllBytes(filePath);
 
         //JSON testing
         ServerObject toBeSent = new ServerObject();
         toBeSent.time = Time.time;
-        toBeSent.imageFilePath = filePath;
-        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+        Texture2D textureToBeSent = new Texture2D(0, 0);
+        textureToBeSent.LoadImage(asByteArray);
+        toBeSent.texture2d = textureToBeSent;
 
+        //toBeSent.imageFilePath = filePath;
+        
+        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
 
         //Send message
 
