@@ -5,19 +5,22 @@ using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
+using System.Net;
+using System.Net.Sockets;
 
 public class ClientConnection : MonoBehaviour {
 
     private class ServerObject {
         public float time;
-        public Texture2D texture2d;
+        public byte[] image;
     }
 
+    [SerializeField] private string serverIP = "";
     [SerializeField]
     private int _bufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
-    private int UDP_ChannelID = -1;
+    //private int UDP_ChannelID = -1;
     private int UDP_ChannelIDFrag = -1;
 
     [SerializeField] private int _socketID = -1;
@@ -29,6 +32,9 @@ public class ClientConnection : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
+        Debug.Log(System.Net.IPAddress.Loopback);
+
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
         //UDP_ChannelID = connectionConfig.AddChannel(QosType.Unreliable);
@@ -79,16 +85,20 @@ public class ClientConnection : MonoBehaviour {
              * This is where a received message is handled and the game must do something based on the information.
              */
             case NetworkEventType.DataEvent:
+
                 Debug.Log("client: Message received. Message size: " + incomingMessageBuffer.Length);
 
                 Texture2D testTex = new Texture2D(0, 0);
-                Stream stream = new MemoryStream(incomingMessageBuffer);
-                BinaryFormatter formatter = new BinaryFormatter();
+                //Stream stream = new MemoryStream(incomingMessageBuffer);
+                //BinaryFormatter formatter = new BinaryFormatter();
 
-                string jsonMessage = formatter.Deserialize(stream) as string;
-                ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
+                //string jsonMessage = formatter.Deserialize(stream) as string;
+                //ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
 
-                testImage.sprite = Sprite.Create(incomingJsonData.texture2d, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
+                //testTex.LoadImage(incomingJsonData.image);
+                testTex.LoadImage(incomingMessageBuffer);
+
+                testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("client: remote client event disconnected");
@@ -98,10 +108,10 @@ public class ClientConnection : MonoBehaviour {
 
     public void Connect() {
         byte error = 0;
-        _connectionID = NetworkTransport.Connect(_socketID, "127.0.0.1", _socketPort, 0, out error);
+        _connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
         //Debug.Log("Connect to server. ConnectionID: " + _connectionID);
 
-        //StartCoroutine(delay());
+        StartCoroutine(delay());
     }
 
     private IEnumerator delay() {
@@ -112,6 +122,6 @@ public class ClientConnection : MonoBehaviour {
         Stream stream = new MemoryStream(messageBuffer);
         BinaryFormatter formatter = new BinaryFormatter();
         formatter.Serialize(stream, "hello");
-        NetworkTransport.Send(0, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
     }
 }
