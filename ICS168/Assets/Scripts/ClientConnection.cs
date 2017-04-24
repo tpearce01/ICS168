@@ -12,6 +12,8 @@ using System.Net.Sockets;
 
 public class ClientConnection : MonoBehaviour {
 
+    private int i = 0;
+
     private class ServerObject {
         public float time;
         public byte[] image;
@@ -95,19 +97,22 @@ public class ClientConnection : MonoBehaviour {
                 BinaryFormatter formatter = new BinaryFormatter();
                 string message = formatter.Deserialize(stream) as string;
 
-                Debug.Log(message);
-
                 byte[] messageBytes = Convert.FromBase64String(message);
-                MemoryStream ms = new MemoryStream(messageBytes, 0, messageBytes.Length);
-                ms.Write(messageBytes, 0, messageBytes.Length);
+
+
+                //MemoryStream ms = new MemoryStream(messageBytes, 0, messageBytes.Length);
+                //ms.Write(messageBytes, 0, messageBytes.Length);
 
                 //TextAsset jsonMessage = formatter.Deserialize(stream) as TextAsset;
                 //ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
 
                 //testTex.LoadImage(jsonMessage.bytes);
-                testTex.LoadImage(ms.ToArray());
+                //testTex.LoadImage(ms.ToArray());
 
-                testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
+                //Debug.Log(testTex.LoadImage(messageBytes));
+                testImage.GetComponentInParent<CanvasRenderer>().SetTexture(testTex);
+
+                //testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("client: remote client event disconnected");
