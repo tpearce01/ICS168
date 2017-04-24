@@ -13,7 +13,7 @@ public class ServerConnection : MonoBehaviour {
 
     private class ServerObject {
         public float time;
-        public byte[] image;
+        public string image;
     }
 
     private class ClientInfo {
@@ -89,14 +89,14 @@ public class ServerConnection : MonoBehaviour {
         }
     }
 
-    public void SendJSONMessage(string image) {
+    public void SendJSONMessage(string JSONobject) {
 
         if (_numberOfConnections > 0) {
             byte error = 0;
             byte[] messageBuffer = new byte[_bufferSize];
             Stream stream = new MemoryStream(messageBuffer);
             BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, image);
+            formatter.Serialize(stream, JSONobject);
 
             foreach (ClientInfo client in _clientSocketIDs) {
                 NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
@@ -110,28 +110,19 @@ public class ServerConnection : MonoBehaviour {
         Application.CaptureScreenshot(filePath);
 
         byte[] image = File.ReadAllBytes(filePath);
-
-        //if (i++ < 1) {
-        //    for (int j = 0; j < 10; ++j) {
-        //        Debug.Log(image[j]);
-        //    }
-        //}
-
-        //SendJSONMessage(System.Text.Encoding.Default.GetString(image));
-        SendJSONMessage(Convert.ToBase64String(image));
+        //SendJSONMessage(Convert.ToBase64String(image));
 
         ////JSON testing
-        //ServerObject toBeSent = new ServerObject();
-        //toBeSent.time = Time.time;
-        //toBeSent.image = asByteArray;
+        ServerObject toBeSent = new ServerObject();
+        toBeSent.time = Time.time;
+        toBeSent.image = Convert.ToBase64String(image);
         //Texture2D textureToBeSent = new Texture2D(0, 0);
         //textureToBeSent.LoadImage(asByteArray);
         //toBeSent.texture2d = textureToBeSent;
 
-        //string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
 
-        //SendJSONMessage(jsonToBeSent);    
-        //SendJSONMessage(jsonToBeSent);
+        SendJSONMessage(jsonToBeSent);    
 
         //SendJSONMessage(asByteArray);
 
