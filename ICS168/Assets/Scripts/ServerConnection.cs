@@ -91,8 +91,6 @@ public class ServerConnection : MonoBehaviour {
 
     public void SendJSONMessage(string image) {
 
-        Debug.Log(image);
-
         if (_numberOfConnections > 0) {
             byte error = 0;
             byte[] messageBuffer = new byte[_bufferSize];
@@ -110,7 +108,15 @@ public class ServerConnection : MonoBehaviour {
     void CaptureFrame(string filePath) {
 
         Application.CaptureScreenshot(filePath);
+
         byte[] image = File.ReadAllBytes(filePath);
+
+        //if (i++ < 1) {
+        //    for (int j = 0; j < 10; ++j) {
+        //        Debug.Log(image[j]);
+        //    }
+        //}
+
         //SendJSONMessage(System.Text.Encoding.Default.GetString(image));
         SendJSONMessage(Convert.ToBase64String(image));
 
