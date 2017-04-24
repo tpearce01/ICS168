@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
+using System;
 
 public class ServerConnection : MonoBehaviour {
-
     private int i = 0;
 
     private class ServerObject {
@@ -47,6 +49,7 @@ public class ServerConnection : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
         CaptureFrame("ss.png");
 
         int incomingSocketID = -1;
@@ -86,18 +89,19 @@ public class ServerConnection : MonoBehaviour {
         }
     }
 
-    public void SendJSONMessage(byte[] byteArray) {
+    public void SendJSONMessage(string image) {
+
+        Debug.Log(image);
 
         if (_numberOfConnections > 0) {
             byte error = 0;
-            //byte[] messageBuffer = new byte[_bufferSize];
-            //Stream stream = new MemoryStream(messageBuffer);
-            //BinaryFormatter formatter = new BinaryFormatter();
-            //formatter.Serialize(stream, byteArray);
+            byte[] messageBuffer = new byte[_bufferSize];
+            Stream stream = new MemoryStream(messageBuffer);
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, image);
 
             foreach (ClientInfo client in _clientSocketIDs) {
-                //NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
-                NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, byteArray, _bufferSize, out error);
+                NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
 
             }
         }
@@ -106,7 +110,9 @@ public class ServerConnection : MonoBehaviour {
     void CaptureFrame(string filePath) {
 
         Application.CaptureScreenshot(filePath);
-        byte[] asByteArray = File.ReadAllBytes(filePath);
+        byte[] image = File.ReadAllBytes(filePath);
+        //SendJSONMessage(System.Text.Encoding.Default.GetString(image));
+        SendJSONMessage(Convert.ToBase64String(image));
 
         ////JSON testing
         //ServerObject toBeSent = new ServerObject();
@@ -121,7 +127,7 @@ public class ServerConnection : MonoBehaviour {
         //SendJSONMessage(jsonToBeSent);    
         //SendJSONMessage(jsonToBeSent);
 
-        SendJSONMessage(asByteArray);
+        //SendJSONMessage(asByteArray);
 
     }
 
