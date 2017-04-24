@@ -118,13 +118,11 @@ public class ServerConnection : MonoBehaviour {
 
         //string jsonToBeSent = JsonUtility.ToJson(toBeSent);
 
-        SendJSONMessage(jsonToBeSent);    
-    }
-}
+        //SendJSONMessage(jsonToBeSent);    
+        //SendJSONMessage(jsonToBeSent);
 
-        //SendJSONMessage(jsonToBeSent);
-        SendJSONMessage(asByteArray);
-
-
-    }
-}
+        SendJSONMessage(asByteArray);
+
+    }
+
+}
