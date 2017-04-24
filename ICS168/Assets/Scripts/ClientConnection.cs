@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
+using System;
+using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
@@ -89,14 +91,21 @@ public class ClientConnection : MonoBehaviour {
                 Debug.Log("client: Message received. Message size: " + incomingMessageBuffer.Length);
 
                 Texture2D testTex = new Texture2D(0, 0);
-                //Stream stream = new MemoryStream(incomingMessageBuffer);
-                //BinaryFormatter formatter = new BinaryFormatter();
+                Stream stream = new MemoryStream(incomingMessageBuffer);
+                BinaryFormatter formatter = new BinaryFormatter();
+                string message = formatter.Deserialize(stream) as string;
 
-                //string jsonMessage = formatter.Deserialize(stream) as string;
+                Debug.Log(message);
+
+                byte[] messageBytes = Convert.FromBase64String(message);
+                MemoryStream ms = new MemoryStream(messageBytes, 0, messageBytes.Length);
+                ms.Write(messageBytes, 0, messageBytes.Length);
+
+                //TextAsset jsonMessage = formatter.Deserialize(stream) as TextAsset;
                 //ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
 
-                //testTex.LoadImage(incomingJsonData.image);
-                testTex.LoadImage(incomingMessageBuffer);
+                //testTex.LoadImage(jsonMessage.bytes);
+                testTex.LoadImage(ms.ToArray());
 
                 testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
                 break;
