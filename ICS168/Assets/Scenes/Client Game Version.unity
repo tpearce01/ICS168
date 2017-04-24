@@ -126,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverIP: 192.168.1.113
   _bufferSize: 6000
-  _maxConnections: 4
+  _maxConnections: 1
   _socketID: -1
   _socketPort: 8888
   testImage: {fileID: 1960068527}

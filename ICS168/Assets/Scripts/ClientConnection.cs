@@ -16,7 +16,7 @@ public class ClientConnection : MonoBehaviour {
 
     private class ServerObject {
         public float time;
-        public byte[] image;
+        public string image;
     }
 
     [SerializeField] private string serverIP = "";
@@ -97,19 +97,20 @@ public class ClientConnection : MonoBehaviour {
                 BinaryFormatter formatter = new BinaryFormatter();
                 string message = formatter.Deserialize(stream) as string;
 
-                byte[] messageBytes = Convert.FromBase64String(message);
+                //byte[] messageBytes = Convert.FromBase64String(message);
 
 
                 //MemoryStream ms = new MemoryStream(messageBytes, 0, messageBytes.Length);
                 //ms.Write(messageBytes, 0, messageBytes.Length);
 
                 //TextAsset jsonMessage = formatter.Deserialize(stream) as TextAsset;
-                //ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
+                ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(message);
+                byte[] imageByteArray = Convert.FromBase64String(incomingJsonData.image);
 
                 //testTex.LoadImage(jsonMessage.bytes);
                 //testTex.LoadImage(ms.ToArray());
 
-                //Debug.Log(testTex.LoadImage(messageBytes));
+                testTex.LoadImage(imageByteArray);
                 testImage.GetComponentInParent<CanvasRenderer>().SetTexture(testTex);
 
                 //testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
