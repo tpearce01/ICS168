@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c8d5ac773fd9844881c821e499214f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bufferSize: 5000
+  _bufferSize: 6000
   _maxConnections: 4
   _socketPort: 8888
 --- !u!1001 &426532395
