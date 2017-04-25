@@ -5,12 +5,21 @@ using UnityEngine;
 
 public class GameWindow : GenericWindow {
 
-    Text timer;
+    Text[] timerrange;
     float timeLeft = 60.0f;
+    GameObject p1;
+
+    private void Start()
+    {
+    }
+
 
     private void Update()
     {
-        timer = GetComponentInChildren<Text>();
+        p1 = GameObject.FindGameObjectWithTag("Player");
+        timerrange = GetComponentsInChildren<Text>();
+
+        
         timeLeft -= Time.deltaTime;
 
         if(timeLeft < 0.0f)
@@ -19,7 +28,8 @@ public class GameWindow : GenericWindow {
         }
         else
         {
-            timer.text = "Time Left: " + (int)timeLeft;
+            timerrange[0].text = "Time Left: " + (int)timeLeft;
+            timerrange[1].text = "Range: " + p1.GetComponent<PlayerActions>().range;
         }
     }
 }

@@ -7,9 +7,13 @@ using UnityEngine;
 /// </summary>
 public class PlayerActions : MonoBehaviour {
 
+    //possibly vectors in the future for each specific client accessing different index
+    public int range = 2;
+    
+
+
     private ControllableObject _inputHandler;
     private int _playerNum = 1;
-
     private Vector3 _pos;
 
     private void OnEnable() {
@@ -51,9 +55,7 @@ public class PlayerActions : MonoBehaviour {
         {
             Destroy(other.gameObject);
             ReplaceWithBasicTile();
-            
-            
-
+            range++;
         }
     }
 
@@ -66,10 +68,11 @@ public class PlayerActions : MonoBehaviour {
         MapGenerator.Instance.tileMap[temp.x, temp.y] = temp;
     }
 
+
     private void DeployBomb() {
 
         if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
-            Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Bomb, new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), 0));
+            Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Bomb, new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), 0)).GetComponent<Bomb>().range = range;
         }
     }
 

@@ -8,6 +8,10 @@ public class Bomb : MonoBehaviour {
 	public int range;
 	public Sound explosionSound;
 
+    
+    
+    
+
 	// Use this for initialization
 	void Start () {
 		
@@ -43,7 +47,8 @@ public class Bomb : MonoBehaviour {
 					Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position + Vector2.up * (i + 1));
 				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y + i + 1].GetComponent<Tile> ().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y + i + 1].GetComponent<Tile> ().type == TileType.Wall
+                    || MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y + i + 1].GetComponent<Tile>().type == TileType.WallPowerUp)
 	            {
 	                blocked = true;
 	            }
@@ -59,7 +64,8 @@ public class Bomb : MonoBehaviour {
 					Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Explosion, (Vector2) gameObject.transform.position + Vector2.right*(i + 1));
 				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x + i + 1, y].GetComponent<Tile> ().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x + i + 1, y].GetComponent<Tile> ().type == TileType.Wall
+                    || MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x + i + 1, y].GetComponent<Tile>().type == TileType.WallPowerUp)
                 {
                     blocked = true;
                 }
@@ -76,7 +82,8 @@ public class Bomb : MonoBehaviour {
 						Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position - Vector2.up * (i + 1));
 					}
 					if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.Destructable
-						|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y - (i + 1)].GetComponent<Tile> ().type == TileType.Wall)
+						|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x, y - (i + 1)].GetComponent<Tile> ().type == TileType.Wall
+                        || MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x, y - (i + 1)].GetComponent<Tile>().type == TileType.WallPowerUp)
 	                {
 	                    blocked = true;
 	                }
@@ -93,7 +100,8 @@ public class Bomb : MonoBehaviour {
 					Spawner.Instance.GetComponent<Spawner> ().SpawnObject (Prefab.Explosion, (Vector2)gameObject.transform.position - Vector2.right * (i + 1));
 				}
 				if (MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.Destructable
-					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall)
+					|| MapGenerator.Instance.GetComponent<MapGenerator> ().tileMap [x - (i + 1), y].GetComponent<Tile> ().type == TileType.Wall
+                    || MapGenerator.Instance.GetComponent<MapGenerator>().tileMap[x - (i + 1), y].GetComponent<Tile>().type == TileType.WallPowerUp)
                 {
                     blocked = true;
                 }
