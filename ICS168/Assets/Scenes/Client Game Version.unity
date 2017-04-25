@@ -124,12 +124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf0bcfaed50c194c993cdcf27a6627a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIP: 192.168.1.113
+  serverIP: 10.0.1.3
   _bufferSize: 6000
   _maxConnections: 4
   _socketID: -1
   _socketPort: 8888
-  testImage: {fileID: 1960068527}
+  renderTo: {fileID: 1960068527}
 --- !u!1001 &426532395
 Prefab:
   m_ObjectHideFlags: 0

@@ -12,130 +12,66 @@ using System.Net.Sockets;
 
 public class ClientConnection : MonoBehaviour {
 
-    private int i = 0;
+	private class ServerObject {
+		public float 	time;
+		public string 	image;
+	}
 
-    private class ServerObject {
-        public float time;
-        public byte[] image;
-    }
+	[SerializeField] private string serverIP = "";		//Server IP address
+	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
+	[SerializeField] private int _maxConnections = 0;	//Maximum umber of connection
 
-    [SerializeField] private string serverIP = "";
-    [SerializeField]
-    private int _bufferSize = 3000;
-    [SerializeField] private int _maxConnections = 0;
+	private int UDP_ChannelIDFrag = -1;					//UDP communication channel for large messages
+	private int _connectionID = -1;						//Connection ID
 
-    //private int UDP_ChannelID = -1;
-    private int UDP_ChannelIDFrag = -1;
+	[SerializeField] private int _socketID = -1;		//Socket ID
+	[SerializeField] private int _socketPort = 8888;	//Port number
 
-    [SerializeField] private int _socketID = -1;
-    [SerializeField] private int _socketPort = 8888;
+	public Image renderTo;								//Image to render to
 
-    private int _connectionID = -1;
+	void Start() {
+		NetworkTransport.Init();
+		ConnectionConfig connectionConfig = new ConnectionConfig();
+		UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+		HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
+		_socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
+		Connect();
+	}
 
-    public Image testImage;
+	void Update() {
+		int incomingSocketID = 0;
+		int incomingConnectionID = 0;
+		int incomingChannelID = 0;
+		byte[] incomingMessageBuffer = new byte[_bufferSize];
+		int dataSize = 0;
+		byte error;
 
-    // Use this for initialization
-    void Start() {
+		NetworkEventType incomingNetworkEvent = NetworkTransport.Receive(out incomingSocketID, out incomingConnectionID,
+			out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
 
-        Debug.Log(System.Net.IPAddress.Loopback);
+		switch (incomingNetworkEvent) {
+		case NetworkEventType.Nothing:
+			break;
 
-        NetworkTransport.Init();
-        ConnectionConfig connectionConfig = new ConnectionConfig();
-        //UDP_ChannelID = connectionConfig.AddChannel(QosType.Unreliable);
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.UnreliableFragmented);
+		case NetworkEventType.ConnectEvent:
+			Debug.Log("client incoming connection event received");
+			break;
 
-        HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
+		case NetworkEventType.DataEvent:
+			Debug.Log("client: Message received. Message size: " + dataSize);
+			Texture2D testTex = new Texture2D(0, 0);
+			testTex.LoadImage(incomingMessageBuffer);
+			renderTo.GetComponentInParent<CanvasRenderer>().SetTexture(testTex);
+			break;
 
-        _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
+		case NetworkEventType.DisconnectEvent:
+			Debug.Log("client: remote client event disconnected");
+			break;
+		}
+	}
 
-        Connect();
-    }
-
-    // Update is called once per frame
-    void Update() {
-        /*
-         * COMMUNICATION
-         * For checking host status you can use two functions:
-         * NetworkTransport.Receive() or NetworkTransport.ReceiveFromHost
-         * Both of them returns event, first function will return events from any host (and return host id via recHostId) 
-         * the second form check host with id recHostId.
-         */
-        int incomingSocketID = 0;
-        int incomingConnectionID = 0;
-        int incomingChannelID = 0;
-        byte[] incomingMessageBuffer = new byte[_bufferSize];
-        int dataSize = 0;
-        byte error;
-
-        NetworkEventType incomingNetworkEvent = NetworkTransport.Receive(out incomingSocketID, out incomingConnectionID,
-            out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
-
-        switch (incomingNetworkEvent) {
-            case NetworkEventType.Nothing:
-                break;
-
-            /*
-             * Connection event come in. It can be new connection, or it can be response on previous connect command:
-             */
-            case NetworkEventType.ConnectEvent:
-                Debug.Log("client incoming connection event received");
-                break;
-
-            /*
-             * Data received. In this case incomingSocketID will define host, incomingConnectionID will define connection, 
-             * incomingChannelID will define channel; dataSize will define size of the received data. 
-             * If incomingMessageBuffer is big enough to contain data, data will be copied in the buffer. 
-             * If not, error will contain MessageToLong error and you will need reallocate buffer and call this function again.
-             * This is where a received message is handled and the game must do something based on the information.
-             */
-            case NetworkEventType.DataEvent:
-
-                Debug.Log("client: Message received. Message size: " + incomingMessageBuffer.Length);
-
-                Texture2D testTex = new Texture2D(0, 0);
-                Stream stream = new MemoryStream(incomingMessageBuffer);
-                BinaryFormatter formatter = new BinaryFormatter();
-                string message = formatter.Deserialize(stream) as string;
-
-                byte[] messageBytes = Convert.FromBase64String(message);
-
-
-                //MemoryStream ms = new MemoryStream(messageBytes, 0, messageBytes.Length);
-                //ms.Write(messageBytes, 0, messageBytes.Length);
-
-                //TextAsset jsonMessage = formatter.Deserialize(stream) as TextAsset;
-                //ServerObject incomingJsonData = JsonUtility.FromJson<ServerObject>(jsonMessage);
-
-                //testTex.LoadImage(jsonMessage.bytes);
-                //testTex.LoadImage(ms.ToArray());
-
-                //Debug.Log(testTex.LoadImage(messageBytes));
-                testImage.GetComponentInParent<CanvasRenderer>().SetTexture(testTex);
-
-                //testImage.sprite = Sprite.Create(testTex, new Rect(0, 0, Screen.width, Screen.height), Vector2.zero);
-                break;
-            case NetworkEventType.DisconnectEvent:
-                Debug.Log("client: remote client event disconnected");
-                break;
-        }
-    }
-
-    public void Connect() {
-        byte error = 0;
-        _connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
-        //Debug.Log("Connect to server. ConnectionID: " + _connectionID);
-
-        StartCoroutine(delay());
-    }
-
-    private IEnumerator delay() {
-        yield return new WaitForSeconds(2.0f);
-
-        byte error = 0;
-        byte[] messageBuffer = new byte[_bufferSize];
-        Stream stream = new MemoryStream(messageBuffer);
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, "hello");
-        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
-    }
+	public void Connect() {
+		byte error = 0;
+		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
+	}
 }
