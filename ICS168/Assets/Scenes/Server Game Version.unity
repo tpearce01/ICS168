@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
   cam: {fileID: 1974672584}
-  _bufferSize: 2000
+  _bufferSize: 6000
   _maxConnections: 4
   _socketPort: 8888
 --- !u!1 &216500003
