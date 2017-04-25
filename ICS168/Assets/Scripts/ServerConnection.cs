@@ -1,15 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Networking;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
 using System;
+using System.Text;
 
-public class ServerConnection : MonoBehaviour {
-    private int i = 0;
+public class ServerConnection : MonoBehaviour
+{
+    public RenderTexture rt;    //Target render texture
+    public Camera cam;          //Camera to render from
 
     private class ServerObject {
         public float time;
@@ -26,8 +28,6 @@ public class ServerConnection : MonoBehaviour {
     private int _bufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
-
-    //private int UDP_ChannelID = -1;                 // This channel should be reserved for small message
     private int UDP_ChannelIDFrag = -1;             // This channel should be reserved for larger messages
     private int _socketID = -1;
     [SerializeField] private int _socketPort = 8888;
@@ -36,21 +36,16 @@ public class ServerConnection : MonoBehaviour {
     private HashSet<ClientInfo> _clientSocketIDs = new HashSet<ClientInfo>();
     private int _numberOfConnections = -1;
 
-    // Use this for initialization
     void Start () {
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
-
-        //UDP_ChannelID = connectionConfig.AddChannel(QosType.Unreliable);
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.UnreliableFragmented);
+        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
     }
 	
-	// Update is called once per frame
 	void Update () {
-
-        CaptureFrame("ss.png");
+        CaptureFrame();
 
         int incomingSocketID = -1;
         int incomingConnectionID = -1;
@@ -83,6 +78,7 @@ public class ServerConnection : MonoBehaviour {
                 string message = formatter.Deserialize(stream) as string;
                 Debug.Log(message);
                 break;
+
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
                 break;
@@ -90,7 +86,6 @@ public class ServerConnection : MonoBehaviour {
     }
 
     public void SendJSONMessage(string image) {
-
         if (_numberOfConnections > 0) {
             byte error = 0;
             byte[] messageBuffer = new byte[_bufferSize];
@@ -100,41 +95,25 @@ public class ServerConnection : MonoBehaviour {
 
             foreach (ClientInfo client in _clientSocketIDs) {
                 NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
-
+                Debug.Log("Message Sent");
             }
         }
     }
 
-    void CaptureFrame(string filePath) {
-
-        Application.CaptureScreenshot(filePath);
-
-        byte[] image = File.ReadAllBytes(filePath);
-
-        //if (i++ < 1) {
-        //    for (int j = 0; j < 10; ++j) {
-        //        Debug.Log(image[j]);
-        //    }
-        //}
-
-        //SendJSONMessage(System.Text.Encoding.Default.GetString(image));
-        SendJSONMessage(Convert.ToBase64String(image));
-
-        ////JSON testing
-        //ServerObject toBeSent = new ServerObject();
-        //toBeSent.time = Time.time;
-        //toBeSent.image = asByteArray;
-        //Texture2D textureToBeSent = new Texture2D(0, 0);
-        //textureToBeSent.LoadImage(asByteArray);
-        //toBeSent.texture2d = textureToBeSent;
-
-        //string jsonToBeSent = JsonUtility.ToJson(toBeSent);
-
-        //SendJSONMessage(jsonToBeSent);    
-        //SendJSONMessage(jsonToBeSent);
-
-        //SendJSONMessage(asByteArray);
-
+    void CaptureFrame() {
+        RenderTexture.active = rt;
+        Camera.main.Render();
+        Texture2D tex = new Texture2D(cam.targetTexture.width, cam.targetTexture.height, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0,0,cam.targetTexture.width, cam.targetTexture.height), 0,0);
+        tex.Apply();
+        byte[] image = tex.EncodeToPNG();
+        Debug.Log("Message length: " + image.Length);
+        //SendJSONMessage(Convert.ToBase64String(image));
+        byte error;
+        foreach (ClientInfo client in _clientSocketIDs)
+        {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, image, image.Length, out error);
+        }
     }
 
 }
