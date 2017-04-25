@@ -37,7 +37,7 @@ public class MapGenerator : Singleton<MapGenerator>
             {
                 //Create the tile
                 temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
-
+                
                 //Set tile location
                 temp.x = x;
                 temp.y = y;
