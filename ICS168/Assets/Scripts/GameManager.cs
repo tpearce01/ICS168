@@ -179,6 +179,6 @@ public class GameManager : Singleton<GameManager> {
 
     public void PlayerActions(int playerID, PlayerIO command) {
 
-        _players[playerID].RequestAction(command);
+        _players[playerID-1].RequestAction(command);
     }
 }

@@ -18,11 +18,6 @@ public class ServerConnection : MonoBehaviour
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
 
-    private class PlayerIO {
-        public float time;
-        public ButtonEnum button;
-    }
-
     private class ClientInfo {
         public int socketID = -1;
         public int ConnectionID = -1;
@@ -87,6 +82,8 @@ public class ServerConnection : MonoBehaviour
                 string message = formatter.Deserialize(stream) as string;
 
                 PlayerIO input = JsonUtility.FromJson<PlayerIO>(message);
+                Debug.Log(incomingConnectionID);
+                GameManager.Instance.PlayerActions(incomingConnectionID, input);
 
                 break;
 
@@ -105,7 +102,7 @@ public class ServerConnection : MonoBehaviour
 
         foreach (ClientInfo client in _clientSocketIDs) {
             NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
-            Debug.Log("Message Sent");
+            //Debug.Log("Message Sent");
         }
     }
 
