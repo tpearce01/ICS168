@@ -15,8 +15,8 @@ public class ServerObject {
 
 public class ServerConnection : MonoBehaviour
 {
-    public RenderTexture rt;    //Target render texture
-    public Camera cam;          //Camera to render from
+    [SerializeField] private RenderTexture rt;    //Target render texture
+    [SerializeField] private Camera _cam;          //Camera to render from
 
     private class PlayerIO {
         public float time;
@@ -40,6 +40,10 @@ public class ServerConnection : MonoBehaviour
 
     private HashSet<ClientInfo> _clientSocketIDs = new HashSet<ClientInfo>();
     private int _numberOfConnections = -1;
+
+    private void OnEnable() {
+        _cam = Camera.main;
+    }
 
     void Start () {
         NetworkTransport.Init();
@@ -108,8 +112,8 @@ public class ServerConnection : MonoBehaviour
     void CaptureFrame() {
         RenderTexture.active = rt;
         Camera.main.Render();
-        Texture2D tex = new Texture2D(cam.targetTexture.width, cam.targetTexture.height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0,0,cam.targetTexture.width, cam.targetTexture.height), 0,0);
+        Texture2D tex = new Texture2D(_cam.targetTexture.width, _cam.targetTexture.height, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0,0, _cam.targetTexture.width, _cam.targetTexture.height), 0,0);
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
         Debug.Log("Message length: " + image.Length);

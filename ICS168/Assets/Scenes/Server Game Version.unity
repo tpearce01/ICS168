@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
-  cam: {fileID: 1974672584}
-  _bufferSize: 6000
+  _cam: {fileID: 0}
+  _bufferSize: 3000
   _maxConnections: 4
   _socketPort: 8888
 --- !u!1 &216500003
@@ -893,6 +893,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114565539961268184, guid: ddc2af275ef022940a8da9af8a864b33,
+        type: 2}
+      propertyPath: _players.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4973287636005048, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
       propertyPath: m_LocalPosition.x
       value: -0.03151772
@@ -925,6 +930,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114565539961268184, guid: ddc2af275ef022940a8da9af8a864b33,
+        type: 2}
+      propertyPath: _players.Array.data[0]
+      value: 
+      objectReference: {fileID: 970921644}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ddc2af275ef022940a8da9af8a864b33, type: 2}
   m_IsPrefabParent: 0
