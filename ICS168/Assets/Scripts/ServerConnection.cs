@@ -9,7 +9,7 @@ using System;
 using System.Text;
 
 public class ServerObject {
-    public float time;
+    //public float time;
     public string texture;
 }
 
@@ -117,7 +117,7 @@ public class ServerConnection : MonoBehaviour
 
         // Create a new Server object and populate its attributes
         ServerObject toBeSent = new ServerObject();
-        toBeSent.time = Time.time;
+        //toBeSent.time = Time.time;
         toBeSent.texture = Convert.ToBase64String(image);
 
         // Convert to JSON
