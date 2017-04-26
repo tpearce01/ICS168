@@ -19,7 +19,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 
     [SerializeField] private string serverIP = "";		//Server IP address
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
-	[SerializeField] private int _maxConnections = 0;	//Maximum umber of connection
+	private int _maxConnections = 1;	                //Maximum umber of connection
 
 	private int UDP_ChannelIDFrag = -1;					//UDP communication channel for large messages
 	private int _connectionID = -1;						//Connection ID
@@ -27,9 +27,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _socketID = -1;		//Socket ID
 	[SerializeField] private int _socketPort = 8888;	//Port number
 
-	public Image renderTo;								//Image to render to
+	[SerializeField] private Image _renderTo;								//Image to render to
 
-	void Start() {
+	private void Start() {
 		NetworkTransport.Init();
 		ConnectionConfig connectionConfig = new ConnectionConfig();
 		UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
@@ -38,7 +38,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 		Connect();
 	}
 
-	void Update() {
+	private void Update() {
 		int incomingSocketID = 0;
 		int incomingConnectionID = 0;
 		int incomingChannelID = 0;
@@ -69,7 +69,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 
                 gameTexture.LoadImage(textureByteArray);
-			    renderTo.GetComponentInParent<CanvasRenderer>().SetTexture(gameTexture);
+                _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
 			    break;
 
 		    case NetworkEventType.DisconnectEvent:
@@ -78,27 +78,26 @@ public class ClientConnection : Singleton<ClientConnection> {
 		    }
 	}
 
-	public void Connect() {
+	private void Connect() {
 		byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
 	}
 
-    public void SendJSONMessage(string image) {
+    private void SendJSONMessage(string JSONobject) {
         byte error = 0;
         byte[] messageBuffer = new byte[_bufferSize];
         Stream stream = new MemoryStream(messageBuffer);
         BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, image);
+        formatter.Serialize(stream, JSONobject);
+
         NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
     }
 
-    public void DeployBomb() {
+    // 
+    public void SendMessage(PlayerIO command) {
 
-        PlayerIO input = new PlayerIO();
-        input.time = Time.time;
-        input.button = ButtonEnum.DeployBomb;
+        string jsonToBeSent = JsonUtility.ToJson(command);
 
-        string toBeSent = JsonUtility.ToJson(input);
-        SendJSONMessage(toBeSent);
+        SendJSONMessage(jsonToBeSent);
     }
 }
