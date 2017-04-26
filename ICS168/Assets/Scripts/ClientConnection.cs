@@ -10,14 +10,14 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-public class ClientConnection : MonoBehaviour {
+public class PlayerIO {
+    public float time;
+    public ButtonEnum button;
+}
 
-	private class ServerObject {
-		public float 	time;
-		public string 	image;
-	}
+public class ClientConnection : Singleton<ClientConnection> {
 
-	[SerializeField] private string serverIP = "";		//Server IP address
+    [SerializeField] private string serverIP = "";		//Server IP address
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	[SerializeField] private int _maxConnections = 0;	//Maximum umber of connection
 
@@ -50,28 +50,55 @@ public class ClientConnection : MonoBehaviour {
 			out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
 
 		switch (incomingNetworkEvent) {
-		case NetworkEventType.Nothing:
-			break;
+		    case NetworkEventType.Nothing:
+			    break;
 
-		case NetworkEventType.ConnectEvent:
-			Debug.Log("client incoming connection event received");
-			break;
+		    case NetworkEventType.ConnectEvent:
+			    Debug.Log("client incoming connection event received");
+			    break;
 
-		case NetworkEventType.DataEvent:
-			Debug.Log("client: Message received. Message size: " + dataSize);
-			Texture2D testTex = new Texture2D(0, 0);
-			testTex.LoadImage(incomingMessageBuffer);
-			renderTo.GetComponentInParent<CanvasRenderer>().SetTexture(testTex);
-			break;
+		    case NetworkEventType.DataEvent:
+			    //Debug.Log("client: Message received. Message size: " + dataSize);
+			    Texture2D gameTexture = new Texture2D(0, 0);
+                Stream stream = new MemoryStream(incomingMessageBuffer);
+                BinaryFormatter formatter = new BinaryFormatter();
+                string message = formatter.Deserialize(stream) as string;
 
-		case NetworkEventType.DisconnectEvent:
-			Debug.Log("client: remote client event disconnected");
-			break;
-		}
+                ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
+                byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
+
+
+                gameTexture.LoadImage(textureByteArray);
+			    renderTo.GetComponentInParent<CanvasRenderer>().SetTexture(gameTexture);
+			    break;
+
+		    case NetworkEventType.DisconnectEvent:
+			    Debug.Log("client: remote client event disconnected");
+			    break;
+		    }
 	}
 
 	public void Connect() {
 		byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
 	}
+
+    public void SendJSONMessage(string image) {
+        byte error = 0;
+        byte[] messageBuffer = new byte[_bufferSize];
+        Stream stream = new MemoryStream(messageBuffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, image);
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, _bufferSize, out error);
+    }
+
+    public void DeployBomb() {
+
+        PlayerIO input = new PlayerIO();
+        input.time = Time.time;
+        input.button = ButtonEnum.DeployBomb;
+
+        string toBeSent = JsonUtility.ToJson(input);
+        SendJSONMessage(toBeSent);
+    }
 }

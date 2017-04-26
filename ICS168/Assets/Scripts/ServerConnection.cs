@@ -8,14 +8,19 @@ using UnityEngine.UI;
 using System;
 using System.Text;
 
+public class ServerObject {
+    public float time;
+    public string texture;
+}
+
 public class ServerConnection : MonoBehaviour
 {
     public RenderTexture rt;    //Target render texture
     public Camera cam;          //Camera to render from
 
-    private class ServerObject {
+    private class PlayerIO {
         public float time;
-        public byte[] image;
+        public ButtonEnum button;
     }
 
     private class ClientInfo {
@@ -76,7 +81,9 @@ public class ServerConnection : MonoBehaviour
                 Stream stream = new MemoryStream(incomingMessageBuffer);
                 BinaryFormatter formatter = new BinaryFormatter();
                 string message = formatter.Deserialize(stream) as string;
-                Debug.Log(message);
+
+                PlayerIO input = JsonUtility.FromJson<PlayerIO>(message);
+
                 break;
 
             case NetworkEventType.DisconnectEvent:
@@ -85,18 +92,16 @@ public class ServerConnection : MonoBehaviour
         }
     }
 
-    public void SendJSONMessage(string image) {
-        if (_numberOfConnections > 0) {
-            byte error = 0;
-            byte[] messageBuffer = new byte[_bufferSize];
-            Stream stream = new MemoryStream(messageBuffer);
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, image);
+    public void SendJSONMessage(string JSONobject) {
+        byte error = 0;
+        byte[] messageBuffer = new byte[_bufferSize];
+        Stream stream = new MemoryStream(messageBuffer);
+        BinaryFormatter formatter = new BinaryFormatter();
+        formatter.Serialize(stream, JSONobject);
 
-            foreach (ClientInfo client in _clientSocketIDs) {
-                NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
-                Debug.Log("Message Sent");
-            }
+        foreach (ClientInfo client in _clientSocketIDs) {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
+            Debug.Log("Message Sent");
         }
     }
 
@@ -108,12 +113,24 @@ public class ServerConnection : MonoBehaviour
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
         Debug.Log("Message length: " + image.Length);
-        //SendJSONMessage(Convert.ToBase64String(image));
-        byte error;
-        foreach (ClientInfo client in _clientSocketIDs)
-        {
-            NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, image, image.Length, out error);
+
+        // Create a new Server object and populate its attributes
+        ServerObject toBeSent = new ServerObject();
+        toBeSent.time = Time.time;
+        toBeSent.texture = Convert.ToBase64String(image);
+
+        // Convert to JSON
+        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+
+        if (_numberOfConnections > 0) {
+            SendJSONMessage(jsonToBeSent);
         }
+
+        //byte error;
+        //foreach (ClientInfo client in _clientSocketIDs)
+        //{
+        //    NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, image, image.Length, out error);
+        //}
     }
 
 }
