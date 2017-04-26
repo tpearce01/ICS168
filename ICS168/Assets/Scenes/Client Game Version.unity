@@ -824,10 +824,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   serverIP: 192.168.1.113
   _bufferSize: 3000
-  _maxConnections: 1
   _socketID: -1
   _socketPort: 8888
-  renderTo: {fileID: 1960068527}
+  _renderTo: {fileID: 1960068527}
 --- !u!114 &817306908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -923,7 +922,7 @@ GameObject:
   - component: {fileID: 1960068528}
   - component: {fileID: 1960068527}
   m_Layer: 5
-  m_Name: TestImage
+  m_Name: GameSceneImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

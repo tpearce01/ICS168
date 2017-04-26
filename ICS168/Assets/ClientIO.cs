@@ -7,7 +7,7 @@ public class ClientIO : MonoBehaviour {
     private ControllableObject _inputHandler;
     //private Vector3 _pos;
 
-    private PlayerIO _playerIO;
+    private PlayerIO _playerIO = new PlayerIO();
     private bool _buttonPressed = false;
 
     private void OnEnable() {
