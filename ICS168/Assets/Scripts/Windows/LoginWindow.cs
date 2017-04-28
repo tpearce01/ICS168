@@ -53,6 +53,12 @@ public class LoginWindow : GenericWindow {
         {
             ToggleWindows(WindowIDs.Login, WindowIDs.Game);
             SceneManager.LoadScene(NewGameScene);
+        }else if(verify.text == "invalid")
+        {
+            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
+        }else if(verify.text == "user not found")
+        {
+            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
         }
     }
 

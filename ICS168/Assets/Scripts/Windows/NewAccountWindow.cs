@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class NewAccountWindow : GenericWindow {
 
-	public void BackToMain() {
+    private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
+
+    public void BackToMain() {
         ToggleWindows(WindowIDs.NewAccount, WindowIDs.StartWindow);
     }
 
@@ -31,19 +33,51 @@ public class NewAccountWindow : GenericWindow {
                         break;
                     case 1:
                         password = input[i].text;
+                        if(password == "")
+                        {
+                            GameObject.Find("PasswordError").GetComponent<Text>().text = "Password is empty, please enter a password.";
+                            return;
+                        }
                         break;
                     case 2:
                         if (password != input[i].text)
                         {
                             Debug.Log("Password Mismatch");
+                            GameObject.Find("PasswordError").GetComponent<Text>().text = "Passwords don't match.";
                             return;
+                        }else
+                        {
+                            GameObject.Find("PasswordError").GetComponent<Text>().text = "";
                         }
                         break;
                 }
                 count++;
             }
         }
+        //Debug.Log(username + " " + password);
+
+        StartCoroutine(CreateUser(username, password));
+        
+    }
+
+    IEnumerator CreateUser(string username, string password)
+    {
         Debug.Log(username + " " + password);
-        gameObject.GetComponent<DataInserter>().CreateUser(username, password);
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("passwordPost", password);
+
+        WWW verify = new WWW(_CreateAccountURL, form);
+        yield return verify;;
+
+        if (verify.text == "username exists")
+        {
+            GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+        }
+        else if (verify.text == "account created")
+        {
+            Debug.Log("account was created");
+            ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+        }
     }
 }
