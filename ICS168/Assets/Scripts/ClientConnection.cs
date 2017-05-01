@@ -60,9 +60,10 @@ public class ClientConnection : Singleton<ClientConnection> {
 		    case NetworkEventType.DataEvent:
 			    //Debug.Log("client: Message received. Message size: " + dataSize);
 			    Texture2D gameTexture = new Texture2D(0, 0);
-                Stream stream = new MemoryStream(incomingMessageBuffer);
-                BinaryFormatter formatter = new BinaryFormatter();
-                string message = formatter.Deserialize(stream) as string;
+                //Stream stream = new MemoryStream(incomingMessageBuffer);
+                //BinaryFormatter formatter = new BinaryFormatter();
+                //string message = formatter.Deserialize(stream) as string;
+		        string message = Encoding.UTF8.GetString(incomingMessageBuffer);
 
                 ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
                 byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
@@ -91,7 +92,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         //formatter.Serialize(stream, JSONobject);
         //Test Code
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-
+        Debug.Log("Sending message of length " + messageBuffer.Length);
 
         //End Test Code
 

@@ -98,10 +98,11 @@ public class ServerConnection : MonoBehaviour
 
     public void SendJSONMessage(string JSONobject) {
         byte error = 0;
-        byte[] messageBuffer = new byte[_bufferSize];
-        Stream stream = new MemoryStream(messageBuffer);
-        BinaryFormatter formatter = new BinaryFormatter();
-        formatter.Serialize(stream, JSONobject);
+        //byte[] messageBuffer = new byte[_bufferSize];
+        //Stream stream = new MemoryStream(messageBuffer);
+        //BinaryFormatter formatter = new BinaryFormatter();
+        //formatter.Serialize(stream, JSONobject);
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
 
         foreach (ClientInfo client in _clientSocketIDs) {
             NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
