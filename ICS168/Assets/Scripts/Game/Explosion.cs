@@ -24,6 +24,7 @@ public class Explosion : MonoBehaviour {
 		timeToExist -= Time.deltaTime;
 		if (timeToExist <= 0) {
 			Destroy (gameObject);
+            
 		}
 	}
 

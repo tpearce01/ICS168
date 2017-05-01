@@ -26,5 +26,9 @@ public enum TileType
     Basic = 1,
     Destructable = 2,
     PowerUp = 3,
-    WallPowerUp = 4
+    WallPowerUp = 4,
+    Player1 = 5,
+    Player2 = 6,
+    Player3 = 7,
+    Player4 = 8
 }

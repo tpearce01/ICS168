@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 61573738019200402}
   - component: {fileID: 114979866556254326}
   - component: {fileID: 50654230988006248}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DestructableWall
   m_TagString: Destructable
   m_Icon: {fileID: 0}
@@ -134,8 +134,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4f948166428bc435dbcd4a10dc9dfe51, type: 3}
-  m_Color: {r: 0.46408987, g: 0.29514492, b: 0.75735295, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 99473bcc1d18cde4e83f4966c5ee39c1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

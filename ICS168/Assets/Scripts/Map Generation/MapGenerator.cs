@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
@@ -14,7 +15,7 @@ public class MapGenerator : Singleton<MapGenerator>
 	void Start ()
 	{
         //Uncomment to randomize walls
-        //RandomizeWalls("Assets/Resources/" + mapToLoad.ToString() + ".txt");
+        //RandomizeWalls(mapToLoad.ToString());
         GenerateMap(mapToLoad.ToString());
 	}
 
@@ -25,25 +26,38 @@ public class MapGenerator : Singleton<MapGenerator>
 
         string[] data = txt.text.Split('\n');           //Split text file by line
         Tile temp;                                      //Used to store tile temporarily
+        Tile base_temp;
 
         tileMap = new Tile[data[0].Length,data.Length]; //Allocate tileMap
 
         //Generate each tile specified by the text file
-        for (int y = 0; y < data.Length; y++)
-        {
+        for (int y = 0; y < data.Length; y++) {
             int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
 
-            for (int x = 0; x < dataYLength; x++)
-            {
-                //Create the tile
-                temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+            for (int x = 0; x < dataYLength; x++) {
+                if (Int32.Parse(data[y][x].ToString()) >= 5) {
+                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                    //Set tile location
+                    temp.x = x;
+                    temp.y = y;
+                    temp.SetLocation();
 
-                //Set tile location
-                temp.x = x;
-                temp.y = y;
-                temp.SetLocation();
+                    base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
+                    base_temp.x = x;
+                    base_temp.y = y;
+                    base_temp.SetLocation();
 
-                tileMap[x, y] = temp.GetComponent<Tile>();
+                    tileMap[x, y] = base_temp.GetComponent<Tile>();
+                } else {
+                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+
+                    //Set tile location
+                    temp.x = x;
+                    temp.y = y;
+                    temp.SetLocation();
+
+                    tileMap[x, y] = temp.GetComponent<Tile>();
+                }
             }
         }
 
@@ -52,26 +66,35 @@ public class MapGenerator : Singleton<MapGenerator>
         //Need to change camera size based on tile dimensions
     }
 
-    void RandomizeWalls(string filePath)
-    {
+    void RandomizeWalls(string fileName) {
         System.Random random = new System.Random();
         int randNum = 0;
-        string mapTxt = System.IO.File.ReadAllText(filePath);
-        string newMap = "";
+        String mapTxt = (Resources.Load(fileName) as TextAsset).text;
 
-        for(int i=0; i<mapTxt.Length; ++i)
-        {
-            if(mapTxt[i] == '1')
-            {
+        // Randomizes the walls
+        StringBuilder sb = new StringBuilder(mapTxt);
+        for (int i = 0; i < sb.Length; ++i) {
+            if (mapTxt[i] == '1') {
                 randNum = random.Next(1, 4);
                 if (randNum == 3) randNum = 4;
-                newMap += randNum.ToString()[0];
-            }else
-            {
-                newMap += mapTxt[i];
+                sb[i] = randNum.ToString()[0];
+            } else if (mapTxt[i] == '2' || mapTxt[i] == '4') {
+                sb[i] = '1';
+            } else { // if wall or player, don't change
+                sb[i] = mapTxt[i];
             }
         }
-        System.IO.File.WriteAllText(filePath, newMap);
+
+        // Clears the spaces next to the players, only works when players are on the corners
+        for (int i = 0; i < sb.Length; ++i) {
+            if (sb[i] == '5' || sb[i] == '7') sb[i + 1] = '1';
+            if (sb[i] == '6' || sb[i] == '8') sb[i - 1] = '1';
+            if (sb[i] == '5' || sb[i] == '6') sb[i + 15] = '1';
+            if (sb[i] == '7' || sb[i] == '8') sb[i - 15] = '1';
+        }
+
+        //Debug.Log(sb.ToString());
+        System.IO.File.WriteAllText("Assets/Resources/" + fileName.ToString() + ".txt", sb.ToString());
     }
 }
 

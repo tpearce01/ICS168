@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4724942753328432}
   - component: {fileID: 212012514654171688}
   - component: {fileID: 114052924368550014}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Basic
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -87,8 +87,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4f948166428bc435dbcd4a10dc9dfe51, type: 3}
-  m_Color: {r: 0.6069961, g: 0.75735295, b: 0.6391414, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 3f85b7605ee922e4084fb3bacc08a213, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
