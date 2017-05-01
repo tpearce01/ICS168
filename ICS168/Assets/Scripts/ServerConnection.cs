@@ -77,9 +77,12 @@ public class ServerConnection : MonoBehaviour
 
             case NetworkEventType.DataEvent:
                 Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
-                Stream stream = new MemoryStream(incomingMessageBuffer);
-                BinaryFormatter formatter = new BinaryFormatter();
-                string message = formatter.Deserialize(stream) as string;
+                //Stream stream = new MemoryStream(incomingMessageBuffer);
+                //BinaryFormatter formatter = new BinaryFormatter();
+                //string message = formatter.Deserialize(stream) as string;
+                //Test Code
+                string message = Encoding.UTF8.GetString(incomingMessageBuffer);
+                //End Test Code
 
                 PlayerIO input = JsonUtility.FromJson<PlayerIO>(message);
                 Debug.Log(incomingConnectionID);

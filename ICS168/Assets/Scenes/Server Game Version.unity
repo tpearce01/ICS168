@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
   _cam: {fileID: 0}
-  _bufferSize: 3000
+  _bufferSize: 10000
   _maxConnections: 4
   _socketPort: 8888
 --- !u!1001 &426532395
@@ -1028,6 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb09477252aa6fa45baf979cf2d5443f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  range: 2
 --- !u!4 &970921645
 Transform:
   m_ObjectHideFlags: 0
