@@ -26,7 +26,7 @@ public class MapGenerator : Singleton<MapGenerator>
 
         string[] data = txt.text.Split('\n');           //Split text file by line
         Tile temp;                                      //Used to store tile temporarily
-        Tile base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>();
+        Tile base_temp;
 
         tileMap = new Tile[data[0].Length,data.Length]; //Allocate tileMap
 
@@ -35,14 +35,14 @@ public class MapGenerator : Singleton<MapGenerator>
             int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
 
             for (int x = 0; x < dataYLength; x++) {
-                //Create the tile
-                if (Int32.Parse(data[y][x].ToString()) >= 5)  {
+                if (Int32.Parse(data[y][x].ToString()) >= 5) {
                     temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
                     //Set tile location
                     temp.x = x;
                     temp.y = y;
                     temp.SetLocation();
 
+                    base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
                     base_temp.x = x;
                     base_temp.y = y;
                     base_temp.SetLocation();

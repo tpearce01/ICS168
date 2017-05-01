@@ -10,8 +10,6 @@ public class PlayerActions : MonoBehaviour {
     //possibly vectors in the future for each specific client accessing different index
     public int range = 2;
     
-
-
     private ControllableObject _inputHandler;
     private int _playerNum = 1;
     private Vector3 _pos;
@@ -61,6 +59,7 @@ public class PlayerActions : MonoBehaviour {
 
     void ReplaceWithBasicTile()
     {
+        //Debug.Log("ReplaceWithBasicTile");
         Tile temp = Instantiate(MapGenerator.Instance.tileTypes[(int)TileType.Basic]).GetComponent<Tile>();
         temp.x = (int)gameObject.transform.position.x;
         temp.y = (int)gameObject.transform.position.y;
@@ -77,7 +76,6 @@ public class PlayerActions : MonoBehaviour {
     }
 
     private void Walking() {
-
         _pos = gameObject.transform.position;
 
         //RIGHT
