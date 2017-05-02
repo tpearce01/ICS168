@@ -103,7 +103,7 @@ public class ServerConnection : MonoBehaviour
         //BinaryFormatter formatter = new BinaryFormatter();
         //formatter.Serialize(stream, JSONobject);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-
+        Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (ClientInfo client in _clientSocketIDs) {
             NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
             //Debug.Log("Message Sent");
@@ -117,7 +117,6 @@ public class ServerConnection : MonoBehaviour
         tex.ReadPixels(new Rect(0,0, _cam.targetTexture.width, _cam.targetTexture.height), 0,0);
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
-        Debug.Log("Message length: " + image.Length);
 
         // Create a new Server object and populate its attributes
         ServerObject toBeSent = new ServerObject();

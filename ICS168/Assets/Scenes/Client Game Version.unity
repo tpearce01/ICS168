@@ -823,7 +823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serverIP: 192.168.1.113
-  _bufferSize: 3000
+  _bufferSize: 10000
   _socketID: -1
   _socketPort: 8888
   _renderTo: {fileID: 1960068527}
