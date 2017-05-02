@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +6,29 @@ using UnityEngine;
 /// This script is for all player actions which includes walking horizontal, wakling vertical, and deploying bombs.
 /// </summary>
 public class PlayerActions : MonoBehaviour {
+
+    public void RequestAction(PlayerIO command) {
+        _pos = gameObject.transform.position;
+        switch (command.button) {
+            case ButtonEnum.DeployBomb:
+                Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Bomb, new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), 0));
+                break;
+            case ButtonEnum.MoveDown:
+                _pos.y -= 1;
+                break;
+            case ButtonEnum.MoveUp:
+                _pos.y += 1;
+                break;
+            case ButtonEnum.MoveLeft:
+                _pos.x -= 1;
+                break;
+            case ButtonEnum.MoveRight:
+                _pos.x += 1;
+                break;
+        }
+
+        if (ValidPos(_pos)) { gameObject.transform.position = _pos; }
+    }
 
     //possibly vectors in the future for each specific client accessing different index
     public int range = 2;

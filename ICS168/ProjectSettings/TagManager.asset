@@ -16,6 +16,7 @@ TagManager:
   - TransportManager
   - PowerUp
   - WallPowerUp
+  - ClientConnection
   layers:
   - Default
   - TransparentFX

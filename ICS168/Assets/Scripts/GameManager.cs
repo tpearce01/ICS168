@@ -14,6 +14,8 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     private int _numOfPlayers;
 
+    [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
+
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
     private int _numOfAlivePlayers;
@@ -50,8 +52,13 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     private float _timeToShowVictory;
 
-	// Use this for initialization
-	void Start () {
+    private void OnEnable() {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 30;
+    }
+
+    // Use this for initialization
+    void Start () {
         //_numOfAlivePlayers = _numOfPlayers;
 		_numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
         _currTime = _roundTime;
@@ -173,5 +180,10 @@ public class GameManager : Singleton<GameManager> {
     { 
         _victoryText.enabled = true;
         _victoryText.text = _winner.ToString() + " wins!";
+    }
+
+    public void PlayerActions(int playerID, PlayerIO command) {
+
+        _players[playerID-1].RequestAction(command);
     }
 }
