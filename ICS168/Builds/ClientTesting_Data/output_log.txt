@@ -2,60 +2,33 @@ Initialize engine version: 5.6.0f3 (497a0f351392)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce GTX 860M (ID=0x1392)
+    Renderer: NVIDIA GeForce 940M (ID=0x1347)
     Vendor:   NVIDIA
-    VRAM:     2019 MB
-    Driver:   22.21.13.8165
+    VRAM:     2013 MB
+    Driver:   21.21.13.7654
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.019 seconds
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.dll (this message is harmless)
-desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.056 seconds
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.dll (this message is harmless)
+desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initializing input.
-XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.964053 ms
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-client incoming connection event received
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Warning: received system packet belongs to wrong session
-Log: connection {1} has been disconnected by timeout; address {::ffff:169.234.14.132:8888}
+UnloadTime: 3.057648 ms
+Warning: no free slot for incoming connection
+Log: Connected peer has not got free resources
 client: remote client event disconnected
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Setting up 4 worker threads for Enlighten.
-  Thread -> id: 2e2c -> priority: 1 
-  Thread -> id: 345c -> priority: 1 
-  Thread -> id: b38 -> priority: 1 
-  Thread -> id: 3200 -> priority: 1 
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: b78 -> priority: 1 
+  Thread -> id: 24d8 -> priority: 1 

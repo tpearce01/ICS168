@@ -13,6 +13,7 @@ public enum WindowIDs {
     Game = 5,
     Victory = 6,
     NewAccountSuccess = 7,
+    Lobby = 8,
     None = -1
 }
 

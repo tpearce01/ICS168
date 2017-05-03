@@ -47,10 +47,10 @@ public class LoginWindow : GenericWindow {
 
         WWW verify = new WWW(_LoginURL, form);
         yield return verify;
-        Debug.Log(verify.text);
 
         if(verify.text == "valid")
         {
+            //GameObject.Find("GameManager").GetComponent<ServerConnection>();
             ToggleWindows(WindowIDs.Login, WindowIDs.Game);
             SceneManager.LoadScene(NewGameScene);
         }else if(verify.text == "invalid")
@@ -64,5 +64,9 @@ public class LoginWindow : GenericWindow {
 
     public void BackToMain() {
         ToggleWindows(WindowIDs.Login, WindowIDs.StartWindow);
+    }
+
+    public void goToLobby() {
+        ToggleWindows(WindowIDs.Login, WindowIDs.Game);
     }
 }

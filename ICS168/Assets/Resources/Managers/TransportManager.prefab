@@ -19,10 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4216951342148530}
-  - component: {fileID: 114729690045998816}
+  - component: {fileID: 114729802079748742}
   m_Layer: 0
   m_Name: TransportManager
-  m_TagString: Untagged
+  m_TagString: ServerConnection
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114729690045998816
+--- !u!114 &114729802079748742
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,8 +48,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1815588653629816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f767c7857c2dd8418fdfadd5725bd67, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c8d5ac773fd9844881c821e499214f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
+  _cam: {fileID: 0}
+  _bufferSize: 10000
   _maxConnections: 4
   _socketPort: 8888

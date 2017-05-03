@@ -10,7 +10,7 @@ public class MapGenerator : Singleton<MapGenerator>
     public List<GameObject> tileTypes;  //List of tile prefabs
     public Tile[,] tileMap;             //Stores all tiles
 	public Map mapToLoad;
-
+    //private bool _isGenerated = false;
 
 	void Start ()
 	{
@@ -19,51 +19,58 @@ public class MapGenerator : Singleton<MapGenerator>
         GenerateMap(mapToLoad.ToString());
 	}
 
+    //public void GenerateMap() {
+    //    GenerateMap(mapToLoad.ToString());
+    //}
     //Creates tiles and sets them to the appropriate locations
-    void GenerateMap(string fileName)
+    public void GenerateMap(string fileName)
     {
-        TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
+        //if (!_isGenerated) {
+           // _isGenerated = true;
+            TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
 
-        string[] data = txt.text.Split('\n');           //Split text file by line
-        Tile temp;                                      //Used to store tile temporarily
-        Tile base_temp;
+            string[] data = txt.text.Split('\n');           //Split text file by line
+            Tile temp;                                      //Used to store tile temporarily
+            Tile base_temp;
 
-        tileMap = new Tile[data[0].Length,data.Length]; //Allocate tileMap
+            tileMap = new Tile[data[0].Length, data.Length]; //Allocate tileMap
 
-        //Generate each tile specified by the text file
-        for (int y = 0; y < data.Length; y++) {
-            int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
+            //Generate each tile specified by the text file
+            for (int y = 0; y < data.Length; y++) {
+                int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
 
-            for (int x = 0; x < dataYLength; x++) {
-                if (Int32.Parse(data[y][x].ToString()) >= 5) {
-                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
-                    //Set tile location
-                    temp.x = x;
-                    temp.y = y;
-                    temp.SetLocation();
+                for (int x = 0; x < dataYLength; x++) {
+                    if (Int32.Parse(data[y][x].ToString()) >= 5) {
+                        temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                        //Set tile location
+                        temp.x = x;
+                        temp.y = y;
+                        temp.SetLocation();
 
-                    base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
-                    base_temp.x = x;
-                    base_temp.y = y;
-                    base_temp.SetLocation();
+                        base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
+                        base_temp.x = x;
+                        base_temp.y = y;
+                        base_temp.SetLocation();
 
-                    tileMap[x, y] = base_temp.GetComponent<Tile>();
-                } else {
-                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                        tileMap[x, y] = base_temp.GetComponent<Tile>();
+                    } else {
+                        temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
 
-                    //Set tile location
-                    temp.x = x;
-                    temp.y = y;
-                    temp.SetLocation();
+                        //Set tile location
+                        temp.x = x;
+                        temp.y = y;
+                        temp.SetLocation();
 
-                    tileMap[x, y] = temp.GetComponent<Tile>();
+                        tileMap[x, y] = temp.GetComponent<Tile>();
+                    }
                 }
             }
-        }
 
-        //Move camera to middle position
-        GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f,(data.Length) / 2f,-10);
-        //Need to change camera size based on tile dimensions
+            //Move camera to middle position
+            GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
+            //Need to change camera size based on tile dimensions
+       // }
+        
     }
 
     void RandomizeWalls(string fileName) {

@@ -61,13 +61,14 @@ public class GameManager : Singleton<GameManager> {
     void Start () {
         //_numOfAlivePlayers = _numOfPlayers;
 		_numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
+        
         _currTime = _roundTime;
         _isGameOver = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+        _numOfPlayers = ServerConnection.Instance.NumberOfConnections;
         //Count down the timer
         _currTime -= Time.deltaTime;
 
@@ -88,8 +89,20 @@ public class GameManager : Singleton<GameManager> {
                 SceneManager.LoadScene("UI and Controls Testing");
             }
         }
-	}
+    }
+    public void addPlayers() {
+        GameObject[] tempPlayers = GameObject.FindGameObjectsWithTag("Player");
 
+        int numPlayers = ServerConnection.Instance.NumberOfConnections;
+
+        for(int i = 0; i < numPlayers; i++) {
+            _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
+        }
+
+        for(int i = numPlayers; i < tempPlayers.Length; i++) {
+            Destroy(tempPlayers[i]);
+        }
+    }
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>
@@ -185,5 +198,9 @@ public class GameManager : Singleton<GameManager> {
     public void PlayerActions(int playerID, PlayerIO command) {
 
         _players[playerID-1].RequestAction(command);
+    }
+
+    public void checkConnections() { 
+        
     }
 }

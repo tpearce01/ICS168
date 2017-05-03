@@ -13,7 +13,7 @@ public class ServerObject {
     public string texture;
 }
 
-public class ServerConnection : MonoBehaviour
+public class ServerConnection : Singleton<ServerConnection>
 {
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
@@ -35,6 +35,9 @@ public class ServerConnection : MonoBehaviour
 
     private HashSet<ClientInfo> _clientSocketIDs = new HashSet<ClientInfo>();
     private int _numberOfConnections = -1;
+    public int NumberOfConnections {
+        get { return _numberOfConnections; }
+    }
 
     private void OnEnable() {
         _cam = Camera.main;
@@ -73,6 +76,7 @@ public class ServerConnection : MonoBehaviour
                 clientInfo.ChannelID = incomingChannelID;
                 _clientSocketIDs.Add(clientInfo);
                 _numberOfConnections = _clientSocketIDs.Count;
+                //GameManager.Instance
                 break;
 
             case NetworkEventType.DataEvent:
@@ -136,5 +140,9 @@ public class ServerConnection : MonoBehaviour
         //    NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, image, image.Length, out error);
         //}
     }
+
+    //public int getNumConnections() {
+    //    return _numberOfConnections;
+    //}
 
 }

@@ -8,12 +8,7 @@ public class GameWindow : GenericWindow {
     Text[] timerrange;
     float timeLeft = 60.0f;
     GameObject p1;
-
-    private void Start()
-    {
-    }
-
-
+    
     private void Update()
     {
         p1 = GameObject.FindGameObjectWithTag("Player");
