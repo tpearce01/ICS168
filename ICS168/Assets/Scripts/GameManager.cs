@@ -32,6 +32,11 @@ public class GameManager : Singleton<GameManager> {
     //This attribute is used to track if the game is over or not. Should not appear in the inspector.
     private bool _isGameOver;
 
+    private bool _beginGame = false;
+    public bool BeginGame {
+        set { _beginGame = value; }
+    }
+
     //Player attributes.
     /* These attributes are used to track the game objects that will represent the players.
      * I'm guessing that we will be having 4 players in the networked version, similar to the normal bomberman game.
@@ -68,25 +73,25 @@ public class GameManager : Singleton<GameManager> {
 	
 	// Update is called once per frame
 	void Update () {
-        _numOfPlayers = ServerConnection.Instance.NumberOfConnections;
-        //Count down the timer
-        _currTime -= Time.deltaTime;
 
-        if (_currTime < 0.0f)
-        {
-            _isGameOver = true;
-        }
+        if (_beginGame) {
+            _numOfPlayers = ServerConnection.Instance.NumberOfConnections;
+            //Count down the timer
+            _currTime -= Time.deltaTime;
 
-        if (_isGameOver)
-        {
-            _timeToShowVictory -= Time.deltaTime;
-            //Do whatever you need to do once the game is over. 
-            _winner = findWinner();
-            displayVictor();
-            //After a few seconds, go to the next scene.
-            if (_timeToShowVictory < 0.0f)
-            {
-                SceneManager.LoadScene("UI and Controls Testing");
+            if (_currTime < 0.0f) {
+                _isGameOver = true;
+            }
+
+            if (_isGameOver) {
+                _timeToShowVictory -= Time.deltaTime;
+                //Do whatever you need to do once the game is over. 
+                _winner = findWinner();
+                displayVictor();
+                //After a few seconds, go to the next scene.
+                if (_timeToShowVictory < 0.0f) {
+                    SceneManager.LoadScene("UI and Controls Testing");
+                }
             }
         }
     }

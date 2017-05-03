@@ -2855,7 +2855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultWindow: 0
-  currentWindow: 0
+  currentWindow: 8
   _windows:
   - {fileID: 114502434949840498}
   - {fileID: 114028114955536916}
@@ -2865,7 +2865,7 @@ MonoBehaviour:
   - {fileID: 114579187596467690}
   - {fileID: 114851104773981922}
   - {fileID: 114436577393299308}
-  - {fileID: 114436577393299308}
+  - {fileID: 114754843428965262}
 --- !u!114 &114330598550743790
 MonoBehaviour:
   m_ObjectHideFlags: 1

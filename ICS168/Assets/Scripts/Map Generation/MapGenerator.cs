@@ -16,18 +16,18 @@ public class MapGenerator : Singleton<MapGenerator>
 	{
         //Uncomment to randomize walls
         //RandomizeWalls(mapToLoad.ToString());
-        GenerateMap(mapToLoad.ToString());
+        //GenerateMap(mapToLoad.ToString());
 	}
 
     //public void GenerateMap() {
     //    GenerateMap(mapToLoad.ToString());
     //}
     //Creates tiles and sets them to the appropriate locations
-    public void GenerateMap(string fileName)
+    public void GenerateMap(/*string fileName*/)
     {
         //if (!_isGenerated) {
            // _isGenerated = true;
-            TextAsset txt = Resources.Load(fileName) as TextAsset;  //Load text file
+            TextAsset txt = Resources.Load(mapToLoad.ToString()) as TextAsset;  //Load text file
 
             string[] data = txt.text.Split('\n');           //Split text file by line
             Tile temp;                                      //Used to store tile temporarily
@@ -68,9 +68,10 @@ public class MapGenerator : Singleton<MapGenerator>
 
             //Move camera to middle position
             GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
-            //Need to change camera size based on tile dimensions
-       // }
-        
+        //Need to change camera size based on tile dimensions
+        // }
+
+        GameManager.Instance.addPlayers();
     }
 
     void RandomizeWalls(string fileName) {

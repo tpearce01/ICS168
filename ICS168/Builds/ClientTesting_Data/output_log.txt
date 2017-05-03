@@ -2,33 +2,35 @@ Initialize engine version: 5.6.0f3 (497a0f351392)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce 940M (ID=0x1347)
+    Renderer: NVIDIA GeForce GTX 660 Ti (ID=0x1183)
     Vendor:   NVIDIA
-    VRAM:     2013 MB
-    Driver:   21.21.13.7654
+    VRAM:     2016 MB
+    Driver:   22.21.13.8189
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.056 seconds
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.dll (this message is harmless)
-desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.018 seconds
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\ClientTesting_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 3.057648 ms
+UnloadTime: 1.084528 ms
 Warning: no free slot for incoming connection
 Log: Connected peer has not got free resources
 client: remote client event disconnected
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Setting up 2 worker threads for Enlighten.
-  Thread -> id: b78 -> priority: 1 
-  Thread -> id: 24d8 -> priority: 1 
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 3730 -> priority: 1 
+  Thread -> id: 3734 -> priority: 1 
+  Thread -> id: 373c -> priority: 1 
+  Thread -> id: 3738 -> priority: 1 
