@@ -9,6 +9,10 @@ public class ClientIO : MonoBehaviour {
 
     private PlayerIO _playerIO = new PlayerIO();
     private bool _buttonPressed = false;
+    private bool _gameStart = false;
+    public bool SetGameStart {
+        set { _gameStart = value; }
+    }
 
     private void OnEnable() {
         if (_inputHandler == null) {
@@ -17,50 +21,54 @@ public class ClientIO : MonoBehaviour {
     }
 
     private void Start() {
-
-        InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
-            Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
+        if (_gameStart) {
+            InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
+                Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
+        }
     }
 
     private void Update() {
+        if (_gameStart) {
+            _playerIO.time = Time.time;
 
-        _playerIO.time = Time.time;
+            if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
+                _playerIO.button = ButtonEnum.DeployBomb;
+                _buttonPressed = true;
+            }
 
-        if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
-            _playerIO.button = ButtonEnum.DeployBomb;
-            _buttonPressed = true; }
+            //RIGHT
+            if (_inputHandler.OnButtonDown(ButtonEnum.MoveRight)) {
+                _playerIO.button = ButtonEnum.MoveRight;
+                _buttonPressed = true;
+            }
 
-        //RIGHT
-        if (_inputHandler.OnButtonDown(ButtonEnum.MoveRight)) {
-            _playerIO.button = ButtonEnum.MoveRight;
-            _buttonPressed = true;
+            //LEFT
+            if (_inputHandler.OnButtonDown(ButtonEnum.MoveLeft)) {
+                _playerIO.button = ButtonEnum.MoveLeft;
+                _buttonPressed = true;
+            }
+
+            //UP
+            if (_inputHandler.OnButtonDown(ButtonEnum.MoveUp)) {
+                _playerIO.button = ButtonEnum.MoveUp;
+                _buttonPressed = true;
+            }
+
+            //DOWN
+            if (_inputHandler.OnButtonDown(ButtonEnum.MoveDown)) {
+                _playerIO.button = ButtonEnum.MoveDown;
+                _buttonPressed = true;
+            }
+
+            if (_buttonPressed) {
+                ClientConnection.Instance.SendMessage(_playerIO);
+                _buttonPressed = false;
+            }
+
+            //if (ValidPos(_pos)) {
+            //    gameObject.transform.position = _pos;
+            //}
         }
 
-        //LEFT
-        if (_inputHandler.OnButtonDown(ButtonEnum.MoveLeft)) {
-            _playerIO.button = ButtonEnum.MoveLeft;
-            _buttonPressed = true;
-        }
-
-        //UP
-        if (_inputHandler.OnButtonDown(ButtonEnum.MoveUp)) {
-            _playerIO.button = ButtonEnum.MoveUp;
-            _buttonPressed = true;
-        }
-
-        //DOWN
-        if (_inputHandler.OnButtonDown(ButtonEnum.MoveDown)) {
-            _playerIO.button = ButtonEnum.MoveDown;
-            _buttonPressed = true;
-        }
-
-        if (_buttonPressed) {
-            ClientConnection.Instance.SendMessage(_playerIO);
-            _buttonPressed = false;
-        }
-
-        //if (ValidPos(_pos)) {
-        //    gameObject.transform.position = _pos;
-        //}
     }
 }

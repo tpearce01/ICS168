@@ -8,7 +8,6 @@ public class LobbyWindow : GenericWindow {
 
     private void Update() {
         if ((ServerConnection.Instance.NumberOfConnections >= 2 && _timeLeft <= 0.0f) || ServerConnection.Instance.NumberOfConnections == 4) {
-
             GameManager.Instance.BeginGame = true;
             MapGenerator.Instance.GenerateMap();
             ToggleWindows(WindowIDs.Lobby, WindowIDs.None);

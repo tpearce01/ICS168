@@ -55,4 +55,4 @@ MonoBehaviour:
   _cam: {fileID: 0}
   _bufferSize: 10000
   _maxConnections: 4
-  _socketPort: 8888
+  _socketPort: 25564
