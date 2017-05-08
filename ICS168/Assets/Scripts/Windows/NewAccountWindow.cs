@@ -4,8 +4,8 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class NewAccountWindow : GenericWindow {
-
-    private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
+    //private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
+    private LoginInfo _createAccount = new LoginInfo();
 
     public void BackToMain() {
         ToggleWindows(WindowIDs.NewAccount, WindowIDs.StartWindow);
@@ -55,29 +55,32 @@ public class NewAccountWindow : GenericWindow {
             }
         }
         //Debug.Log(username + " " + password);
+        _createAccount.username = username;
+        _createAccount.password = password;
 
-        StartCoroutine(CreateUser(username, password));
+        ClientConnection.Instance.SendMessageAccount(_createAccount);
+        //StartCoroutine(CreateUser(username, password));
         
     }
 
-    IEnumerator CreateUser(string username, string password)
-    {
-        Debug.Log(username + " " + password);
-        WWWForm form = new WWWForm();
-        form.AddField("usernamePost", username);
-        form.AddField("passwordPost", password);
+    //IEnumerator CreateUser(string username, string password)
+    //{
+    //    Debug.Log(username + " " + password);
+    //    WWWForm form = new WWWForm();
+    //    form.AddField("usernamePost", username);
+    //    form.AddField("passwordPost", password);
 
-        WWW verify = new WWW(_CreateAccountURL, form);
-        yield return verify;;
+    //    WWW verify = new WWW(_CreateAccountURL, form);
+    //    yield return verify;;
 
-        if (verify.text == "username exists")
-        {
-            GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
-        }
-        else if (verify.text == "account created")
-        {
-            Debug.Log("account was created");
-            ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
-        }
-    }
+    //    if (verify.text == "username exists")
+    //    {
+    //        GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+    //    }
+    //    else if (verify.text == "account created")
+    //    {
+    //        Debug.Log("account was created");
+    //        ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+    //    }
+    //}
 }

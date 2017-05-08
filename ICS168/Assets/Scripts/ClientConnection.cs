@@ -15,6 +15,11 @@ public class PlayerIO {
     public ButtonEnum button;
 }
 
+public class LoginInfo {
+    public string username;
+    public string password;
+}
+
 public class ClientConnection : Singleton<ClientConnection> {
 
     [SerializeField] private string serverIP = "";		//Server IP address
@@ -57,12 +62,23 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    Debug.Log("client incoming connection event received");
 			    break;
 
+            //0 for username/password info, 1 for PlayerIO
 		    case NetworkEventType.DataEvent:
+                ////Grab Username and Password
+                //List<string> login = new List<string>();
+
+                //foreach(Text loginText in GameObject.Find("UserInput").GetComponents<Text>()) {
+                //    login.Add(loginText.text);
+                //}
+
+                
 			    //Debug.Log("client: Message received. Message size: " + dataSize);
 			    Texture2D gameTexture = new Texture2D(0, 0);
                 //Stream stream = new MemoryStream(incomingMessageBuffer);
                 //BinaryFormatter formatter = new BinaryFormatter();
                 //string message = formatter.Deserialize(stream) as string;
+
+                
 		        string message = Encoding.UTF8.GetString(incomingMessageBuffer);
 
                 ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
@@ -99,11 +115,24 @@ public class ClientConnection : Singleton<ClientConnection> {
         NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length/*_bufferSize*/, out error);
     }
 
-    // 
+    //Login
+    public void SendMessage(LoginInfo info) {
+        string jsonToBeSent = "0";
+        jsonToBeSent += JsonUtility.ToJson(info);
+        SendJSONMessage(jsonToBeSent);
+    }
+
+    //Create Account
+    public void SendMessageAccount(LoginInfo info) {
+        string jsonToBeSent = "1";
+        jsonToBeSent += JsonUtility.ToJson(info);
+        SendJSONMessage(jsonToBeSent);
+    }
+
+    //Player IO
     public void SendMessage(PlayerIO command) {
-
-        string jsonToBeSent = JsonUtility.ToJson(command);
-
+        string jsonToBeSent = "2";
+        jsonToBeSent += JsonUtility.ToJson(command);
         SendJSONMessage(jsonToBeSent);
     }
 }

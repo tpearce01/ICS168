@@ -18,6 +18,9 @@ public class ServerConnection : Singleton<ServerConnection>
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
 
+    private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
+    private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
+
     private class ClientInfo {
         public int socketID = -1;
         public int ConnectionID = -1;
@@ -88,10 +91,24 @@ public class ServerConnection : Singleton<ServerConnection>
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
                 //End Test Code
 
-                PlayerIO input = JsonUtility.FromJson<PlayerIO>(message);
-                Debug.Log(incomingConnectionID);
-                GameManager.Instance.PlayerActions(incomingConnectionID, input);
+                string prefix = message.Substring(0,1);
+                string newMessage = message.Substring(1);
 
+                if (prefix == "0") {
+                    //process login info
+                    LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
+                    StartCoroutine(verifyLogin(info.username, info.password));
+                } else if (prefix == "1") {
+                    //process create account info
+                    LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
+                    StartCoroutine(CreateUser(info.username, info.password));
+                } else if (prefix == "2") {
+                    //process user game input
+                    PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
+                    Debug.Log(incomingConnectionID);
+                    GameManager.Instance.PlayerActions(incomingConnectionID, input);
+                }
+                
                 break;
 
             case NetworkEventType.DisconnectEvent:
@@ -141,8 +158,39 @@ public class ServerConnection : Singleton<ServerConnection>
         //}
     }
 
-    //public int getNumConnections() {
-    //    return _numberOfConnections;
-    //}
+    IEnumerator verifyLogin(string username, string password) {
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("passwordPost", password);
+
+        WWW verify = new WWW(_LoginURL, form);
+        yield return verify;
+
+        if (verify.text == "valid") {
+            WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.Lobby);
+            
+        } else if (verify.text == "invalid") {
+            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
+        } else if (verify.text == "user not found") {
+            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
+        }
+    }
+
+    IEnumerator CreateUser(string username, string password) {
+        Debug.Log(username + " " + password);
+        WWWForm form = new WWWForm();
+        form.AddField("usernamePost", username);
+        form.AddField("passwordPost", password);
+
+        WWW verify = new WWW(_CreateAccountURL, form);
+        yield return verify; ;
+
+        if (verify.text == "username exists") {
+            GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+        } else if (verify.text == "account created") {
+            Debug.Log("account was created");
+            WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+        }
+    }
 
 }
