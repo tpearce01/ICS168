@@ -22,6 +22,8 @@ public class LoginInfo {
 
 public class ClientConnection : Singleton<ClientConnection> {
 
+    [SerializeField] private Canvas _gameCanvas;
+
     [SerializeField] private string serverIP = "";		//Server IP address
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	private int _maxConnections = 1;	                //Maximum umber of connection
@@ -64,33 +66,33 @@ public class ClientConnection : Singleton<ClientConnection> {
 
             //0 for username/password info, 1 for PlayerIO
 		    case NetworkEventType.DataEvent:
-                ////Grab Username and Password
-                //List<string> login = new List<string>();
 
-                //foreach(Text loginText in GameObject.Find("UserInput").GetComponents<Text>()) {
-                //    login.Add(loginText.text);
-                //}
+                string message = Encoding.UTF8.GetString(incomingMessageBuffer);
+                string prefix = message.Substring(0, 1);
+                string newMessage = message.Substring(1);
 
-                
-			    //Debug.Log("client: Message received. Message size: " + dataSize);
-			    Texture2D gameTexture = new Texture2D(0, 0);
-                //Stream stream = new MemoryStream(incomingMessageBuffer);
-                //BinaryFormatter formatter = new BinaryFormatter();
-                //string message = formatter.Deserialize(stream) as string;
+                if (prefix == "0") {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.None);
+                    _gameCanvas.enabled = true;
+                    break;
+                }
+                else if (prefix == "1") {
+                    Texture2D gameTexture = new Texture2D(0, 0);
 
-                
-		        string message = Encoding.UTF8.GetString(incomingMessageBuffer);
-
-                ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
-                byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
+                    ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
+                    byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
 
 
-                gameTexture.LoadImage(textureByteArray);
-                _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
-			    break;
+                    gameTexture.LoadImage(textureByteArray);
+                    _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                    break;
+                }
+                break;
 
 		    case NetworkEventType.DisconnectEvent:
 			    Debug.Log("client: remote client event disconnected");
+                _gameCanvas.enabled = false;
+                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
 			    break;
 		    }
 	}

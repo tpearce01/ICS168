@@ -97,7 +97,7 @@ public class ServerConnection : Singleton<ServerConnection>
                 if (prefix == "0") {
                     //process login info
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
-                    StartCoroutine(verifyLogin(info.username, info.password));
+                    StartCoroutine(verifyLogin(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
                 } else if (prefix == "1") {
                     //process create account info
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
@@ -145,7 +145,8 @@ public class ServerConnection : Singleton<ServerConnection>
         toBeSent.texture = Convert.ToBase64String(image);
 
         // Convert to JSON
-        string jsonToBeSent = JsonUtility.ToJson(toBeSent);
+        string jsonToBeSent = "1";
+        jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
         if (_numberOfConnections > 0) {
             SendJSONMessage(jsonToBeSent);
@@ -158,7 +159,7 @@ public class ServerConnection : Singleton<ServerConnection>
         //}
     }
 
-    IEnumerator verifyLogin(string username, string password) {
+    IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);
         form.AddField("passwordPost", password);
@@ -168,7 +169,13 @@ public class ServerConnection : Singleton<ServerConnection>
 
         if (verify.text == "valid") {
             WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.Lobby);
-            
+
+            byte error;
+            string jsonToBeSent = "0";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
+
         } else if (verify.text == "invalid") {
             GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
         } else if (verify.text == "user not found") {
