@@ -87,13 +87,17 @@ public class ClientConnection : Singleton<ClientConnection> {
                     _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
                     break;
                 }
+                else if(prefix == "2") {
+                    GameManager.Instance.BeginGame = true;
+                }
                 break;
 
 		    case NetworkEventType.DisconnectEvent:
 			    Debug.Log("client: remote client event disconnected");
                 _gameCanvas.gameObject.SetActive(false);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
-			    break;
+                GameManager.Instance.BeginGame = false;
+                break;
 		    }
 	}
 

@@ -159,7 +159,7 @@ public class ServerConnection : Singleton<ServerConnection>
         //}
     }
 
-    IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
+    private IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);
         form.AddField("passwordPost", password);
@@ -183,7 +183,7 @@ public class ServerConnection : Singleton<ServerConnection>
         }
     }
 
-    IEnumerator CreateUser(string username, string password) {
+    private IEnumerator CreateUser(string username, string password) {
         Debug.Log(username + " " + password);
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);
@@ -200,4 +200,9 @@ public class ServerConnection : Singleton<ServerConnection>
         }
     }
 
+
+    public void EnableClientControls() {
+        string toBeSent = "2";
+        SendJSONMessage(toBeSent);
+    }
 }
