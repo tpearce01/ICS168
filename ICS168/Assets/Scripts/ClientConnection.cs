@@ -73,13 +73,13 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                 if (prefix == "0") {
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.None);
-                    _gameCanvas.enabled = true;
+                    _gameCanvas.gameObject.SetActive(true);
                     break;
                 }
                 else if (prefix == "1") {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
-                    ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(message);
+                    ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
                     byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
 
 
@@ -91,7 +91,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 		    case NetworkEventType.DisconnectEvent:
 			    Debug.Log("client: remote client event disconnected");
-                _gameCanvas.enabled = false;
+                _gameCanvas.gameObject.SetActive(false);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
 			    break;
 		    }
