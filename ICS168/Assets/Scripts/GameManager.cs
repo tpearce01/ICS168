@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager> {
 
     private bool _beginGame = false;
     public bool BeginGame {
+        get { return _beginGame; }
         set { _beginGame = value; }
     }
 

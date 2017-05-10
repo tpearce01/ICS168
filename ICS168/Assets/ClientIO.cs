@@ -9,10 +9,6 @@ public class ClientIO : MonoBehaviour {
 
     private PlayerIO _playerIO = new PlayerIO();
     private bool _buttonPressed = false;
-    private bool _gameStart = false;
-    public bool SetGameStart {
-        set { _gameStart = value; }
-    }
 
     private void OnEnable() {
         if (_inputHandler == null) {
@@ -21,14 +17,14 @@ public class ClientIO : MonoBehaviour {
     }
 
     private void Start() {
-        if (_gameStart) {
+        if (GameManager.Instance.BeginGame) {
             InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
                 Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
         }
     }
 
     private void Update() {
-        if (_gameStart) {
+        if (GameManager.Instance.BeginGame) {
             _playerIO.time = Time.time;
 
             if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
