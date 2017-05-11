@@ -101,7 +101,7 @@ public class ServerConnection : Singleton<ServerConnection>
                 } else if (prefix == "1") {
                     //process create account info
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
-                    StartCoroutine(CreateUser(info.username, info.password));
+                    StartCoroutine(CreateUser(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
                 } else if (prefix == "2") {
                     //process user game input
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
@@ -177,13 +177,21 @@ public class ServerConnection : Singleton<ServerConnection>
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
         } else if (verify.text == "invalid") {
-            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
+            byte error;
+            string jsonToBeSent = "8";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
         } else if (verify.text == "user not found") {
-            GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
+            byte error;
+            string jsonToBeSent = "9";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
         }
     }
 
-    private IEnumerator CreateUser(string username, string password) {
+    private IEnumerator CreateUser(string username, string password, int socketID, int connectionID, int channelID) {
         Debug.Log(username + " " + password);
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);
@@ -193,10 +201,21 @@ public class ServerConnection : Singleton<ServerConnection>
         yield return verify; ;
 
         if (verify.text == "username exists") {
-            GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+            //GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+            byte error;
+            string jsonToBeSent = "7";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
+
         } else if (verify.text == "account created") {
             Debug.Log("account was created");
-            WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+            //WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+            byte error;
+            string jsonToBeSent = "6";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
         }
     }
 

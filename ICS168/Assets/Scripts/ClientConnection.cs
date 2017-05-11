@@ -78,7 +78,6 @@ public class ClientConnection : Singleton<ClientConnection> {
                 if (prefix == "0") {
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.None);
                     _gameCanvas.gameObject.SetActive(true);
-                    break;
                 }
                 else if (prefix == "1") {
                     Texture2D gameTexture = new Texture2D(0, 0);
@@ -89,10 +88,21 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     gameTexture.LoadImage(textureByteArray);
                     _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
-                    break;
                 }
                 else if(prefix == "2") {
                     _clientIO.gameInSession = true;
+                }
+                else if (prefix == "6") {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+                }
+                else if (prefix == "7") {
+                    GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+                }
+                else if (prefix == "8") {
+                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
+                }
+                else if (prefix == "9") {
+                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
                 }
                 break;
 
