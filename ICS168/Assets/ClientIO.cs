@@ -10,21 +10,24 @@ public class ClientIO : MonoBehaviour {
     private PlayerIO _playerIO = new PlayerIO();
     private bool _buttonPressed = false;
 
+    [HideInInspector] public bool gameInSession = false;
+
     private void OnEnable() {
         if (_inputHandler == null) {
             _inputHandler = GetComponent<ControllableObject>();
         }
+
     }
 
     private void Start() {
-        if (GameManager.Instance.BeginGame) {
+        if (gameInSession) {
             InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
                 Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
         }
     }
 
     private void Update() {
-        if (GameManager.Instance.BeginGame) {
+        if (gameInSession) {
             _playerIO.time = Time.time;
 
             if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {

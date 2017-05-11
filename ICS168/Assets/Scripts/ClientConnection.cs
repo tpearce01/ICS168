@@ -36,7 +36,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 	[SerializeField] private Image _renderTo;								//Image to render to
 
+    private ClientIO _clientIO;
+
 	private void Start() {
+        _clientIO = GetComponent<ClientIO>();
+
 		NetworkTransport.Init();
 		ConnectionConfig connectionConfig = new ConnectionConfig();
 		UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
@@ -88,7 +92,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                     break;
                 }
                 else if(prefix == "2") {
-                    GameManager.Instance.BeginGame = true;
+                    _clientIO.gameInSession = true;
                 }
                 break;
 
@@ -96,7 +100,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    Debug.Log("client: remote client event disconnected");
                 _gameCanvas.gameObject.SetActive(false);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
-                GameManager.Instance.BeginGame = false;
+                _clientIO.gameInSession = false;
                 break;
 		    }
 	}
