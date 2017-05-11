@@ -20,15 +20,14 @@ public class ClientIO : MonoBehaviour {
     }
 
     private void Start() {
-        if (gameInSession) {
-            InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
-                Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
-        }
+        InputManager.Instance.AddPlayer(GetComponent<ControllableObject>(),
+            Resources.Load("Input/P1InputList", typeof(SOInputList)) as SOInputList);
     }
 
     private void Update() {
         if (gameInSession) {
             _playerIO.time = Time.time;
+
 
             if (_inputHandler.OnButtonDown(ButtonEnum.DeployBomb)) {
                 _playerIO.button = ButtonEnum.DeployBomb;

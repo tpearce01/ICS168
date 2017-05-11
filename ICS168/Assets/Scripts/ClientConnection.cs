@@ -144,5 +144,6 @@ public class ClientConnection : Singleton<ClientConnection> {
         string jsonToBeSent = "2";
         jsonToBeSent += JsonUtility.ToJson(command);
         SendJSONMessage(jsonToBeSent);
+        Debug.Log("client: send message");
     }
 }

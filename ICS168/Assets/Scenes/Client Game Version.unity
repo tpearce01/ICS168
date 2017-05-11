@@ -1313,6 +1313,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114380995271777792, guid: f3e4b1aa7df93c64394797581fb62099,
+        type: 2}
+      propertyPath: _players.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4017709772280060, guid: f3e4b1aa7df93c64394797581fb62099, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1344,6 +1349,16 @@ Prefab:
     - target: {fileID: 4017709772280060, guid: f3e4b1aa7df93c64394797581fb62099, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114380995271777792, guid: f3e4b1aa7df93c64394797581fb62099,
+        type: 2}
+      propertyPath: _players.Array.data[0].controllableObject
+      value: 
+      objectReference: {fileID: 817306909}
+    - target: {fileID: 114380995271777792, guid: f3e4b1aa7df93c64394797581fb62099,
+        type: 2}
+      propertyPath: _players.Array.data[0].inputList
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f3e4b1aa7df93c64394797581fb62099, type: 2}
@@ -1407,6 +1422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088f08197ab0a2743a39fd5cc4c52af8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameInSession: 0
 --- !u!114 &817306909
 MonoBehaviour:
   m_ObjectHideFlags: 0
