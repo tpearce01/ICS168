@@ -14,6 +14,13 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     private int _numOfPlayers;
 
+    [SerializeField]
+    private int _signedInPlayers = 0;
+    public int SignedInPlayers {
+        get { return _signedInPlayers; }
+        set { _signedInPlayers = value; }
+    }
+
     [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
 
     //This variable is used to track the number of players that are still alive internally.

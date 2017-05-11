@@ -8,7 +8,9 @@ using UnityEngine;
 public class PlayerActions : MonoBehaviour {
 
     public void RequestAction(PlayerIO command) {
+        //MissingReferenceException: The object of type 'PlayerActions' has been destroyed but you are still trying to access it.
         _pos = gameObject.transform.position;
+
         switch (command.button) {
             case ButtonEnum.DeployBomb:
                 Spawner.Instance.GetComponent<Spawner>().SpawnObject(Prefab.Bomb, new Vector3(Mathf.Round(gameObject.transform.position.x), Mathf.Round(gameObject.transform.position.y), 0));
@@ -59,6 +61,7 @@ public class PlayerActions : MonoBehaviour {
         Tile[,] tileMap = MapGenerator.Instance.tileMap;
 
         if (tileMap != null) {
+            //MissingReferenceException: The object of type 'Tile' has been destroyed but you are still trying to access it.
             Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
             if (tile.type == TileType.Wall || tile.type == TileType.Destructable || tile.type == TileType.WallPowerUp) {
                 return false;

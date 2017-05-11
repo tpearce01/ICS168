@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LobbyWindow : GenericWindow {
-    private float _timeLeft = 60.0f;
+    private float _timeLeft = 30.0f;
 
     private void Update() {
-        if ((ServerConnection.Instance.NumberOfConnections >= 2 && _timeLeft <= 0.0f) || ServerConnection.Instance.NumberOfConnections == 4) {
+        if ((GameManager.Instance.SignedInPlayers >= 2 && _timeLeft <= 0.0f) ||  GameManager.Instance.SignedInPlayers == 3) {
             ServerConnection.Instance.EnableClientControls();
             MapGenerator.Instance.GenerateMap();
             ToggleWindows(WindowIDs.Lobby, WindowIDs.None);

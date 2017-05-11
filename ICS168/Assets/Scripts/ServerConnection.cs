@@ -113,6 +113,7 @@ public class ServerConnection : Singleton<ServerConnection>
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
+                GameManager.Instance.SignedInPlayers -= 1;
                 break;
         }
     }
@@ -175,6 +176,8 @@ public class ServerConnection : Singleton<ServerConnection>
             jsonToBeSent += JsonUtility.ToJson(verify.text);
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
+
+            GameManager.Instance.SignedInPlayers += 1;
 
         } else if (verify.text == "invalid") {
             byte error;
