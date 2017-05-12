@@ -132,16 +132,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
     private void SendJSONMessage(string JSONobject) {
         byte error = 0;
-        //byte[] messageBuffer = new byte[_bufferSize];
-        //Stream stream = new MemoryStream(messageBuffer);
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //formatter.Serialize(stream, JSONobject);
-        //Test Code
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         Debug.Log("Sending message of length " + messageBuffer.Length);
-
-        //End Test Code
-
         NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length/*_bufferSize*/, out error);
     }
 

@@ -41,32 +41,7 @@ public class LoginWindow : GenericWindow {
         _loginInfo.password = password;
 
         ClientConnection.Instance.SendMessage(_loginInfo);
-        //StartCoroutine(verifyLogin(username, password, NewGameScene));
     }
-    
-
-    //IEnumerator verifyLogin(string username, string password, string NewGameScene)
-    //{
-    //    WWWForm form = new WWWForm();
-    //    form.AddField("usernamePost", username);
-    //    form.AddField("passwordPost", password);
-
-    //    WWW verify = new WWW(_LoginURL, form);
-    //    yield return verify;
-
-    //    if(verify.text == "valid")
-    //    {
-    //        //GameObject.Find("GameManager").GetComponent<ServerConnection>();
-    //        ToggleWindows(WindowIDs.Login, WindowIDs.Game);
-    //        SceneManager.LoadScene(NewGameScene);
-    //    }else if(verify.text == "invalid")
-    //    {
-    //        GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
-    //    }else if(verify.text == "user not found")
-    //    {
-    //        GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
-    //    }
-    //}
 
     public void BackToMain() {
         ToggleWindows(WindowIDs.Login, WindowIDs.StartWindow);

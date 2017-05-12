@@ -5,7 +5,6 @@ using UnityEngine;
 public class ClientIO : MonoBehaviour {
 
     private ControllableObject _inputHandler;
-    //private Vector3 _pos;
 
     private PlayerIO _playerIO = new PlayerIO();
     private bool _buttonPressed = false;
@@ -62,10 +61,6 @@ public class ClientIO : MonoBehaviour {
                 ClientConnection.Instance.SendMessage(_playerIO);
                 _buttonPressed = false;
             }
-
-            //if (ValidPos(_pos)) {
-            //    gameObject.transform.position = _pos;
-            //}
         }
 
     }

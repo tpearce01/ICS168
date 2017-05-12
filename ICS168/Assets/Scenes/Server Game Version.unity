@@ -848,6 +848,11 @@ Prefab:
       propertyPath: _bufferSize
       value: 7000
       objectReference: {fileID: 0}
+    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
+        type: 2}
+      propertyPath: _maxConnections
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
   m_IsPrefabParent: 0

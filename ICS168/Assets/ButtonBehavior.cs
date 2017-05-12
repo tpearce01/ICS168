@@ -42,12 +42,4 @@ public class ButtonBehavior : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerExit(PointerEventData data) {
         _isSelected = false;
     }
-
-    //public void OnSelect(BaseEventData data) {
-    //    _isSelected = true;
-    //}
-
-    //public void OnDeselect(BaseEventData data) {
-    //    _isSelected = false;
-    //}
 }
