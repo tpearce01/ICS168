@@ -72,11 +72,6 @@ public class InputManager : Singleton<InputManager> {
     [SerializeField]
     private List<Player> _players;
 
-    //[SerializeField]
-    //private ControllableObject _player;
-    //[SerializeField]
-    //private InputAxisState[] _inputs;
-
     public void Update() {
 
         int length = _players.Count;

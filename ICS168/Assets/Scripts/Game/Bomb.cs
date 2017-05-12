@@ -7,11 +7,7 @@ public class Bomb : MonoBehaviour {
 	public float timeUntilExplosion;
 	public int range;
 	public Sound explosionSound;
-
     
-    
-    
-
 	// Use this for initialization
 	void Start () {
 		

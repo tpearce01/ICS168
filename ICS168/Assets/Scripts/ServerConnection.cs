@@ -16,7 +16,6 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
-    //public float time;
     public string texture;
 }
 
@@ -111,9 +110,6 @@ public class ServerConnection : Singleton<ServerConnection>
 
             case NetworkEventType.DataEvent:
                 Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
-                //Stream stream = new MemoryStream(incomingMessageBuffer);
-                //BinaryFormatter formatter = new BinaryFormatter();
-                //string message = formatter.Deserialize(stream) as string;
                 //Test Code
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
                 //End Test Code
@@ -170,15 +166,10 @@ public class ServerConnection : Singleton<ServerConnection>
 
     public void SendJSONMessage(string JSONobject) {
         byte error = 0;
-        //byte[] messageBuffer = new byte[_bufferSize];
-        //Stream stream = new MemoryStream(messageBuffer);
-        //BinaryFormatter formatter = new BinaryFormatter();
-        //formatter.Serialize(stream, JSONobject);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (ClientInfo client in _clientSocketIDs) {
             NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
-            //Debug.Log("Message Sent");
         }
     }
 
@@ -197,7 +188,6 @@ public class ServerConnection : Singleton<ServerConnection>
 
         // Create a new Server object and populate its attributes
         ServerObject toBeSent = new ServerObject();
-        //toBeSent.time = Time.time;
         toBeSent.texture = Convert.ToBase64String(image);
 
         // Convert to JSON
@@ -208,12 +198,6 @@ public class ServerConnection : Singleton<ServerConnection>
         if (_inGamePlayers > 0) {
             SendJSONMessage(jsonToBeSent);
         }
-
-        //byte error;
-        //foreach (ClientInfo client in _clientSocketIDs)
-        //{
-        //    NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, image, image.Length, out error);
-        //}
     }
 
     private IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
