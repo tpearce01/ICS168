@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212154769851666532}
   - component: {fileID: 61275622075669310}
   - component: {fileID: 50683172395884100}
-  - component: {fileID: 114009278297670904}
   - component: {fileID: 114004804487389534}
   - component: {fileID: 114328519038635100}
   - component: {fileID: 114544170553689726}
@@ -104,17 +103,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerNumber: 2
   playerName: Zach
---- !u!114 &114009278297670904
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1191428081707594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cf80d5e832aa2e4cbf79252f67c42fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114328519038635100
 MonoBehaviour:
   m_ObjectHideFlags: 1

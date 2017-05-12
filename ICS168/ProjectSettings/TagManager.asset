@@ -18,6 +18,7 @@ TagManager:
   - WallPowerUp
   - ClientConnection
   - ServerConnection
+  - DontDestroyOnLoad
   layers:
   - Default
   - TransparentFX
