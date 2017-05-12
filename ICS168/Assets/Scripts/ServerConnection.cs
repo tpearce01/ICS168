@@ -12,7 +12,8 @@ using UnityEngine.SceneManagement;
 public enum ServerCommands {
     VerifyLogin = 0,
     CreateAccount = 1,
-    PlayerInput = 2
+    PlayerInput = 2,
+    SetUsername = 3
 }
 
 public class ServerObject {
@@ -43,6 +44,7 @@ public class ServerConnection : Singleton<ServerConnection>
         public int socketID = -1;
         public int ConnectionID = -1;
         public int ChannelID = -1;
+        public string username = "";
     }
 
     [SerializeField]
@@ -57,7 +59,7 @@ public class ServerConnection : Singleton<ServerConnection>
     [SerializeField] private int _socketPort = 8888;
     private int _connectionID = -1;
 
-    private HashSet<ClientInfo> _clientSocketIDs = new HashSet<ClientInfo>();
+    private Dictionary<int,ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
     private int _numberOfConnections = -1;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
@@ -70,8 +72,11 @@ public class ServerConnection : Singleton<ServerConnection>
         set { _inGamePlayers = value; }
     }
 
+    private LobbyWindow _lobby;
+
     private void OnEnable() {
         _cam = Camera.main;
+        _lobby = FindObjectOfType<LobbyWindow>();
     }
 
     void Start () {
@@ -105,7 +110,7 @@ public class ServerConnection : Singleton<ServerConnection>
                 clientInfo.socketID = incomingSocketID;
                 clientInfo.ConnectionID = incomingConnectionID;
                 clientInfo.ChannelID = incomingChannelID;
-                _clientSocketIDs.Add(clientInfo);
+                _clientSocketIDs.Add(incomingConnectionID, clientInfo);
                 _numberOfConnections = _clientSocketIDs.Count;
                 break;
 
@@ -139,6 +144,10 @@ public class ServerConnection : Singleton<ServerConnection>
                     Debug.Log(incomingConnectionID);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
                 }
+
+                else if (prefix == (int)ServerCommands.SetUsername) {
+                    _clientSocketIDs[incomingConnectionID].username = message;
+                }
                 
                 break;
 
@@ -149,15 +158,21 @@ public class ServerConnection : Singleton<ServerConnection>
                 _inGamePlayers -= 1;
                 _numberOfConnections -= 1;
 
+                // If the lobby is currently showing, make sure to update the information.
+                if (_lobby.gameObject.activeInHierarchy == true) {
+                    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
+                }
+
                 ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
-                foreach(ClientInfo client in _clientSocketIDs) {
-                    if (client.ConnectionID == incomingConnectionID) {
-                        clientToDelete = client;
+
+                foreach(KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
+                    if (client.Value.ConnectionID == incomingConnectionID) {
+                        clientToDelete = client.Value;
                     }
                 }
 
                 if (clientToDelete.socketID != -1) {
-                    _clientSocketIDs.Remove(clientToDelete);
+                    _clientSocketIDs.Remove(clientToDelete.ConnectionID);
                 }
 
                 if (_inGamePlayers <= 1) {
@@ -176,8 +191,8 @@ public class ServerConnection : Singleton<ServerConnection>
         //formatter.Serialize(stream, JSONobject);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         Debug.Log("Sending message of length " + messageBuffer.Length);
-        foreach (ClientInfo client in _clientSocketIDs) {
-            NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, _bufferSize, out error);
+        foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
+            NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, _bufferSize, out error);
             //Debug.Log("Message Sent");
         }
     }
@@ -234,11 +249,15 @@ public class ServerConnection : Singleton<ServerConnection>
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
             _inGamePlayers++;
+            _clientSocketIDs[connectionID].username = username;
 
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
             }
+
+            // Tell the lobby to add this player so it shows in the lobby.
+            _lobby.AddPlayerToLobby(username);
 
         } else if (verify.text == "invalid") {
             byte error;

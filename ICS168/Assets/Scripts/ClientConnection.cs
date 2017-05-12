@@ -10,6 +10,16 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
+public enum ClientCommands {
+    StartStream = 0,
+    RenderGame = 1,
+    SetGameInSession = 2,
+    AccountCreated = 6,
+    PreExistingUser = 7,
+    InvalidLogin = 8,
+    DoesNotExist = 9
+}
+
 public class PlayerIO {
     public float time;
     public ButtonEnum button;
@@ -72,14 +82,14 @@ public class ClientConnection : Singleton<ClientConnection> {
 		    case NetworkEventType.DataEvent:
 
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
-                string prefix = message.Substring(0, 1);
+                int prefix = Convert.ToInt32(message.Substring(0, 1));
                 string newMessage = message.Substring(1);
 
-                if (prefix == "0") {
+                if (prefix == (int)ClientCommands.StartStream) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.None);
                     _gameCanvas.gameObject.SetActive(true);
                 }
-                else if (prefix == "1") {
+                else if (prefix == (int)ClientCommands.RenderGame) {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
@@ -89,19 +99,19 @@ public class ClientConnection : Singleton<ClientConnection> {
                     gameTexture.LoadImage(textureByteArray);
                     _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
                 }
-                else if(prefix == "2") {
+                else if(prefix == (int)ClientCommands.SetGameInSession) {
                     _clientIO.gameInSession = true;
                 }
-                else if (prefix == "6") {
+                else if (prefix == (int)ClientCommands.AccountCreated) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
                 }
-                else if (prefix == "7") {
+                else if (prefix == (int)ClientCommands.PreExistingUser) {
                     GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
                 }
-                else if (prefix == "8") {
+                else if (prefix == (int)ClientCommands.InvalidLogin) {
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
                 }
-                else if (prefix == "9") {
+                else if (prefix == (int)ClientCommands.DoesNotExist) {
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
                 }
                 break;
