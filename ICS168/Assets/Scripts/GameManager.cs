@@ -9,18 +9,6 @@ public class GameManager : Singleton<GameManager> {
 	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
 	public static event GameManagerEvent OnEndGame;
 
-    //Player Tracking Attributes
-    //This attribute signifies the maximum amount of players that are playing in the scene.
-    [SerializeField]
-    private int _numOfPlayers;
-
-    [SerializeField]
-    private int _signedInPlayers = 0;
-    public int SignedInPlayers {
-        get { return _signedInPlayers; }
-        set { _signedInPlayers = value; }
-    }
-
     [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
 
     //This variable is used to track the number of players that are still alive internally.
@@ -39,10 +27,10 @@ public class GameManager : Singleton<GameManager> {
     //This attribute is used to track if the game is over or not. Should not appear in the inspector.
     private bool _isGameOver;
 
-    private bool _beginGame = false;
-    public bool BeginGame {
-        get { return _beginGame; }
-        set { _beginGame = value; }
+    private bool _gameInSession = false;
+    public bool GameInSession {
+        get { return _gameInSession; }
+        set { _gameInSession = value; }
     }
 
     //Player attributes.
@@ -51,8 +39,6 @@ public class GameManager : Singleton<GameManager> {
      *
      * I'll have 4 slots in there for now, but we can leave the other three empty OR have them be dummy characters the player needs to kill.
     */
-    [SerializeField]
-    //private GameObject[] _players;
 
     private int _winner = 0;
 
@@ -67,23 +53,28 @@ public class GameManager : Singleton<GameManager> {
 
     private void OnEnable() {
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = 15;
     }
 
-    // Use this for initialization
-    void Start () {
-        //_numOfAlivePlayers = _numOfPlayers;
-		_numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
-        
+    public void StartGame() {
+        _numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
+
         _currTime = _roundTime;
         _isGameOver = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        _gameInSession = true;
+    }
 
-        if (_beginGame) {
-            _numOfPlayers = ServerConnection.Instance.NumberOfConnections;
+    public void ResetGameManager() {
+        _gameInSession = false;
+        _isGameOver = true;
+        _players.Clear();
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        if (_gameInSession) {
+
             //Count down the timer
             _currTime -= Time.deltaTime;
 
@@ -94,8 +85,8 @@ public class GameManager : Singleton<GameManager> {
             if (_isGameOver) {
                 _timeToShowVictory -= Time.deltaTime;
                 //Do whatever you need to do once the game is over. 
-                _winner = findWinner();
-                displayVictor();
+                //_winner = findWinner();
+                //displayVictor();
                 //After a few seconds, go to the next scene.
                 if (_timeToShowVictory < 0.0f) {
                     SceneManager.LoadScene("UI and Controls Testing");
@@ -119,27 +110,14 @@ public class GameManager : Singleton<GameManager> {
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>
-    public void decAlivePlayers()
-    {
-        _numOfAlivePlayers -= 1;
-		if (_numOfAlivePlayers <= 1) {
-			findWinner ();
-		}
-		//Is the game over?
-    }
-
-    /*
-     * Getters
-    */
-
-    /// <summary>
-    /// Returns the number of players in the game.
-    /// </summary>
-    /// <returns>int</returns>
-    public int getNumOfPlayers()
-    {
-        return _numOfPlayers;
-    }
+  //  public void decAlivePlayers()
+  //  {
+  //      _numOfAlivePlayers -= 1;
+		//if (_numOfAlivePlayers <= 1) {
+		//	findWinner ();
+		//}
+		////Is the game over?
+  //  }
 
     /// <summary>
     /// Returns the number of players that are still alive in this game.
@@ -172,48 +150,45 @@ public class GameManager : Singleton<GameManager> {
     /// Returns a bool stating whether or not the game is over.
     /// </summary>
     /// <returns>bool</returns>
-    public bool getIsGameOver()
-    {
-        return _isGameOver;
-    }
+    //public bool getIsGameOver()
+    //{
+    //    return _isGameOver;
+    //}
 
     /// <summary>
     /// Returns the player number of the winner, 0 if there is a draw.
     /// </summary>
     /// <returns>int</returns>
-    int findWinner()
-    {
-		if (OnEndGame != null) {
-			OnEndGame (WindowIDs.Game, WindowIDs.Victory);
-		} 
+  //  int findWinner()
+  //  {
+		//if (OnEndGame != null) {
+		//	OnEndGame (WindowIDs.Game, WindowIDs.Victory);
+		//} 
 
-		GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
+		//GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
 
-		if (ps.Length >= 1) {
-			return 0;
-		} /*else if (ps.Length == 1) {
-			return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
-		} */else {
-			Debug.Log ("Wasted");
-			return 0;
-		}
-    }
+		//if (ps.Length >= 1) {
+		//	return 0;
+		//} /*else if (ps.Length == 1) {
+		//	return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
+		//} */else {
+		//	Debug.Log ("Wasted");
+		//	return 0;
+		//}
+  //  }
 
     /// <summary>
     /// Displays the victory text.
     /// </summary>
-    void displayVictor()
-    { 
-        _victoryText.enabled = true;
-        _victoryText.text = _winner.ToString() + " wins!";
-    }
+    //void displayVictor()
+    //{ 
+    //    _victoryText.enabled = true;
+    //    _victoryText.text = _winner.ToString() + " wins!";
+    //}
 
     public void PlayerActions(int playerID, PlayerIO command) {
 
-        _players[playerID-1].RequestAction(command);
+        _players[playerID - 1].RequestAction(command);
     }
 
-    public void checkConnections() { 
-        
-    }
 }

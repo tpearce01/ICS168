@@ -70,7 +70,7 @@ public class PlayerScript : MonoBehaviour {
 
 	public void Kill(){
 		//I'm dead
-		GameManager.Instance.decAlivePlayers();
-		Destroy (gameObject);
+		//GameManager.Instance.decAlivePlayers();
+		//Destroy (gameObject);
 	}
 }

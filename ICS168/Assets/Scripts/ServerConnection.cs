@@ -7,6 +7,13 @@ using System.IO;
 using UnityEngine.UI;
 using System;
 using System.Text;
+using UnityEngine.SceneManagement;
+
+public enum ServerCommands {
+    VerifyLogin = 0,
+    CreateAccount = 1,
+    PlayerInput = 2
+}
 
 public class ServerObject {
     //public float time;
@@ -22,6 +29,17 @@ public class ServerConnection : Singleton<ServerConnection>
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
 
     private class ClientInfo {
+
+        // Default Constructor
+        public ClientInfo() { }
+
+        // Override default constructor
+        public ClientInfo(int socket, int connection, int channel) {
+            socketID = socket;
+            ConnectionID = connection;
+            ChannelID = channel;
+        }
+
         public int socketID = -1;
         public int ConnectionID = -1;
         public int ChannelID = -1;
@@ -30,6 +48,9 @@ public class ServerConnection : Singleton<ServerConnection>
     [SerializeField]
     private int _bufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
+    public int MaxConnections {
+        get { return _maxConnections; }
+    }
 
     private int UDP_ChannelIDFrag = -1;             // This channel should be reserved for larger messages
     private int _socketID = -1;
@@ -40,6 +61,13 @@ public class ServerConnection : Singleton<ServerConnection>
     private int _numberOfConnections = -1;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
+    }
+
+    // Keep track of players which have successfully logged in and are ready to play
+    private int _inGamePlayers = 0;
+    public int InGamePlayers {
+        get { return _inGamePlayers; }
+        set { _inGamePlayers = value; }
     }
 
     private void OnEnable() {
@@ -79,7 +107,6 @@ public class ServerConnection : Singleton<ServerConnection>
                 clientInfo.ChannelID = incomingChannelID;
                 _clientSocketIDs.Add(clientInfo);
                 _numberOfConnections = _clientSocketIDs.Count;
-                //GameManager.Instance
                 break;
 
             case NetworkEventType.DataEvent:
@@ -91,19 +118,23 @@ public class ServerConnection : Singleton<ServerConnection>
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
                 //End Test Code
 
-                string prefix = message.Substring(0,1);
+                int prefix = Convert.ToInt32(message.Substring(0,1));
                 string newMessage = message.Substring(1);
 
-                if (prefix == "0") {
-                    //process login info
+                //process login info
+                if (prefix == (int)ServerCommands.VerifyLogin) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
                     StartCoroutine(verifyLogin(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
-                } else if (prefix == "1") {
-                    //process create account info
+                }
+
+                //process create account info
+                else if (prefix == (int)ServerCommands.CreateAccount) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
                     StartCoroutine(CreateUser(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
-                } else if (prefix == "2") {
-                    //process user game input
+                }
+
+                //process user game input
+                else if (prefix == (int)ServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
                     Debug.Log(incomingConnectionID);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
@@ -113,7 +144,26 @@ public class ServerConnection : Singleton<ServerConnection>
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
-                GameManager.Instance.SignedInPlayers -= 1;
+
+                // Decrement the number of players and remove the player from the hashmap.
+                _inGamePlayers -= 1;
+                _numberOfConnections -= 1;
+
+                ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
+                foreach(ClientInfo client in _clientSocketIDs) {
+                    if (client.ConnectionID == incomingConnectionID) {
+                        clientToDelete = client;
+                    }
+                }
+
+                if (clientToDelete.socketID != -1) {
+                    _clientSocketIDs.Remove(clientToDelete);
+                }
+
+                if (_inGamePlayers <= 1) {
+                    GameManager.Instance.ResetGameManager();
+                    SceneManager.LoadScene("Server Game Version");
+                }
                 break;
         }
     }
@@ -133,8 +183,13 @@ public class ServerConnection : Singleton<ServerConnection>
     }
 
     void CaptureFrame() {
+
         RenderTexture.active = rt;
         Camera.main.Render();
+
+        if (_cam == null) {
+            _cam = Camera.main;
+        }
         Texture2D tex = new Texture2D(_cam.targetTexture.width, _cam.targetTexture.height, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0,0, _cam.targetTexture.width, _cam.targetTexture.height), 0,0);
         tex.Apply();
@@ -149,7 +204,8 @@ public class ServerConnection : Singleton<ServerConnection>
         string jsonToBeSent = "1";
         jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
-        if (_numberOfConnections > 0) {
+        // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
+        if (_inGamePlayers > 0) {
             SendJSONMessage(jsonToBeSent);
         }
 
@@ -177,7 +233,12 @@ public class ServerConnection : Singleton<ServerConnection>
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
-            GameManager.Instance.SignedInPlayers += 1;
+            _inGamePlayers++;
+
+            // IF the lobby is not loaded, load it.
+            if (WindowManager.Instance.currentWindow == WindowIDs.None) {
+                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
+            }
 
         } else if (verify.text == "invalid") {
             byte error;
