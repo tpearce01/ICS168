@@ -6,38 +6,63 @@ using UnityEngine.UI;
 
 public class LobbyWindow : GenericWindow {
 
+    [SerializeField] private Text _timeoutDisplay;
     [SerializeField] private float _defaultTimeout = 30.0f;
+    [SerializeField] private float _gameStartsInDefault = 5.0f;
     [SerializeField] private float _minPlayers = -1;
 
     [SerializeField] private GameObject[] _players;
     [SerializeField] private Text[] _usernames;
 
+    private int _inGamePlayers = -1;
+
     private float _timeout = -1.0f;
+    private float _gameStartsIn = -1.0f;
 
     private void OnEnable() {
         _timeout = _defaultTimeout;
+
+        _timeoutDisplay.text = "Waiting for players...";
+        _gameStartsIn = _gameStartsInDefault;
     }
 
     private void Update() {
 
-        // If the minimum number of players are logged in and the timer runs out, start the game.
-        // Or if all four players are logged in, start the game.
-        if ((ServerConnection.Instance.InGamePlayers >= _minPlayers && _timeout <= 0.0f)) {
+        _inGamePlayers = ServerConnection.Instance.InGamePlayers;
 
-            GameManager.Instance.StartGame();
-            ServerConnection.Instance.EnableClientControls();
-            MapGenerator.Instance.GenerateMap();
-            ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+        if (_inGamePlayers >= _minPlayers && _inGamePlayers < ServerConnection.Instance.MaxConnections) {
+            if (_timeout > 0.0f) {
+                _timeout -= Time.deltaTime;
+                _timeoutDisplay.text = "Waiting for players: " + (int)_timeout;
+            }
+            else if (_timeout <= 0.0f) {
+                _timeoutDisplay.text = "Game starts in: " + (int)_gameStartsIn;
+                _gameStartsIn -= Time.deltaTime;
+
+                if (_gameStartsIn <= 0.0f) {
+                    GameManager.Instance.StartGame();
+                    ServerConnection.Instance.EnableClientControls();
+                    MapGenerator.Instance.GenerateMap();
+                    ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+                }
+            }
         }
+        else if (_inGamePlayers == ServerConnection.Instance.MaxConnections) {
+            _timeoutDisplay.text = "Game starts in: " + (int)_gameStartsIn;
+            _gameStartsIn -= Time.deltaTime;
 
-        // If all players leave, close out the lobby window.
-        else if (ServerConnection.Instance.InGamePlayers < 1) {
-            ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+            if (_gameStartsIn <= 0.0f) {
+                GameManager.Instance.StartGame();
+                ServerConnection.Instance.EnableClientControls();
+                MapGenerator.Instance.GenerateMap();
+                ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+            }
         }
-
-        _timeout -= Time.deltaTime;
-
-
+        else if (_inGamePlayers < _minPlayers) {
+            _timeoutDisplay.text = "Waiting for players...";
+            _gameStartsIn = _gameStartsInDefault;
+            _timeout = _defaultTimeout;
+        }
     }
 
     public void AddPlayerToLobby(string username) {
@@ -66,15 +91,15 @@ public class LobbyWindow : GenericWindow {
             _players[0].SetActive(false);
             _usernames[0].text = "";
         }
-        else if (_usernames[0].text == username) {
+        else if (_usernames[1].text == username) {
             _players[1].SetActive(false);
             _usernames[1].text = "";
         }
-        else if (_usernames[0].text == username) {
+        else if (_usernames[2].text == username) {
             _players[2].SetActive(false);
             _usernames[2].text = "";
         }
-        else if (_usernames[0].text == username) {
+        else if (_usernames[3].text == username) {
             _players[3].SetActive(false);
             _usernames[3].text = "";
         }

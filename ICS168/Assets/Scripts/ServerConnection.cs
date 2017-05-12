@@ -45,8 +45,7 @@ public class ServerConnection : Singleton<ServerConnection>
         public string username = "";
     }
 
-    [SerializeField]
-    private int _bufferSize = 3000;
+    [SerializeField] private int _bufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
     public int MaxConnections {
@@ -185,9 +184,9 @@ public class ServerConnection : Singleton<ServerConnection>
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        Debug.Log("Sending message of length " + messageBuffer.Length);
+        //Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
-            NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, _bufferSize, out error);
+            NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
     }
 
