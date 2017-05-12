@@ -36,6 +36,8 @@ public class LobbyWindow : GenericWindow {
         }
 
         _timeout -= Time.deltaTime;
+
+
     }
 
     public void AddPlayerToLobby(string username) {
