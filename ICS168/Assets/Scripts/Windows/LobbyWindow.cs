@@ -40,7 +40,7 @@ public class LobbyWindow : GenericWindow {
             else if (_timeout <= 0.0f) {
 
                 if (!_messageSent) {
-                    //todo
+                    ServerConnection.Instance.PreventDisconnects();
                     _messageSent = true;
                 }
 
@@ -58,7 +58,7 @@ public class LobbyWindow : GenericWindow {
         else if (_inGamePlayers == ServerConnection.Instance.MaxConnections) {
 
             if (!_messageSent) {
-                //todo
+                ServerConnection.Instance.PreventDisconnects();
                 _messageSent = true;
             }
 
