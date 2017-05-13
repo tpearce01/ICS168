@@ -11,6 +11,10 @@ public class OnlineStatusWindow : GenericWindow {
 
     private float _timer = 0.0f;
 
+    private void OnEnable() {
+        _timer = _defaultTimer;
+    }
+
     public void UpdateOnlineStatus(bool status) {
         _onlineStatus.text = status ? "ONLINE STATUS: ONLINE" : "ONLINE STATUS: OFFLINE";
 

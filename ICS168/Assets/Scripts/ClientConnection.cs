@@ -58,13 +58,15 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
+        _currentFrame = -1;
 
-		NetworkTransport.Init();
-		ConnectionConfig connectionConfig = new ConnectionConfig();
-		UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
-		HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
-		_socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
-		Connect();
+        NetworkTransport.Init();
+        ConnectionConfig connectionConfig = new ConnectionConfig();
+        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
+        _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
+
+        Connect();
 	}
 
 	private void Update() {
@@ -106,8 +108,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
 
+                    Debug.Log(JSONdata.frameNum);
                     // Latency Mitigation at its finest.
-                    if (_currentFrame < JSONdata.frameNum) {
+                    if (JSONdata.frameNum > _currentFrame) {
                         byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
                         gameTexture.LoadImage(textureByteArray);
                         _currentFrame = JSONdata.frameNum;
@@ -145,15 +148,17 @@ public class ClientConnection : Singleton<ClientConnection> {
 	}
 
 	public void Connect() {
-		byte error = 0;
+
+        byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
-	}
+
+    }
 
     private void SendJSONMessage(string JSONobject) {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
+        Debug.Log(NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error));
     }
 
     //Login
@@ -175,6 +180,5 @@ public class ClientConnection : Singleton<ClientConnection> {
         string jsonToBeSent = "2";
         jsonToBeSent += JsonUtility.ToJson(command);
         SendJSONMessage(jsonToBeSent);
-        Debug.Log("client: send message");
     }
 }
