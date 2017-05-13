@@ -34,6 +34,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 
     [SerializeField] private Canvas _gameCanvas;
 
+    private bool _connected = false;
+    public bool Connected {
+        get { return _connected; }
+    }
+
     [SerializeField] private string serverIP = "";		//Server IP address
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	private int _maxConnections = 1;	                //Maximum umber of connection
@@ -45,8 +50,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _socketPort = 8888;	//Port number
 
 	[SerializeField] private Image _renderTo;								//Image to render to
+    private int _currentFrame = -1;
 
     private ClientIO _clientIO;
+
+    [SerializeField] private OnlineStatusWindow _statusWindow;
 
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
@@ -63,6 +71,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 		int incomingSocketID = 0;
 		int incomingConnectionID = 0;
 		int incomingChannelID = 0;
+
+        // POSSIBLY MOVE THIS TO BE A PERMANENT VARIABLE TO SAVE ALLOCATION RESOURCES
 		byte[] incomingMessageBuffer = new byte[_bufferSize];
 		int dataSize = 0;
 		byte error;
@@ -76,6 +86,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 		    case NetworkEventType.ConnectEvent:
 			    Debug.Log("client incoming connection event received");
+                _connected = true;
+                _statusWindow.UpdateOnlineStatus(true);
 			    break;
 
             //0 for username/password info, 1 for PlayerIO
@@ -93,11 +105,14 @@ public class ClientConnection : Singleton<ClientConnection> {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
-                    byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
 
-
-                    gameTexture.LoadImage(textureByteArray);
-                    _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                    // Latency Mitigation at its finest.
+                    if (_currentFrame < JSONdata.frameNum) {
+                        byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
+                        gameTexture.LoadImage(textureByteArray);
+                        _currentFrame = JSONdata.frameNum;
+                        _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                    }
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
                     _clientIO.gameInSession = true;
@@ -118,14 +133,18 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 		    case NetworkEventType.DisconnectEvent:
 			    Debug.Log("client: remote client event disconnected");
+                _connected = false;
                 _gameCanvas.gameObject.SetActive(false);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
+                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
                 _clientIO.gameInSession = false;
+
+                _statusWindow.UpdateOnlineStatus(false);
                 break;
 		    }
 	}
 
-	private void Connect() {
+	public void Connect() {
 		byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
 	}
@@ -134,7 +153,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length/*_bufferSize*/, out error);
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
     }
 
     //Login

@@ -17,6 +17,13 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
+
+    public ServerObject(int currentFrame, string tex) {
+        frameNum = currentFrame;
+        texture = tex;
+    }
+
+    public int frameNum;
     public string texture;
 }
 
@@ -203,8 +210,8 @@ public class ServerConnection : Singleton<ServerConnection>
         byte[] image = tex.EncodeToPNG();
 
         // Create a new Server object and populate its attributes
-        ServerObject toBeSent = new ServerObject();
-        toBeSent.texture = Convert.ToBase64String(image);
+        ServerObject toBeSent = new ServerObject(Time.frameCount, Convert.ToBase64String(image));
+        //toBeSent.texture = Convert.ToBase64String(image);
 
         // Convert to JSON
         string jsonToBeSent = "1";

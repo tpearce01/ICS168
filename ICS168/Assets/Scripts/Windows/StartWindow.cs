@@ -7,6 +7,18 @@ public class StartWindow : GenericWindow {
     private WindowIDs _toClose = WindowIDs.StartWindow;
     private Button[] _buttons;  // used to store the buttons in a window
 
+    public void Update() {
+
+        if (_buttons != null) {
+            if (!ClientConnection.Instance.Connected) {
+                if (_buttons[0].gameObject.GetComponent<Button>().interactable) { _buttons[0].gameObject.GetComponent<Button>().interactable = false; }
+            }
+            else if (ClientConnection.Instance.Connected) {
+                if (!_buttons[0].gameObject.GetComponent<Button>().interactable) { _buttons[0].gameObject.GetComponent<Button>().interactable = true; }
+            }
+        }
+    }
+
     public override void Open() {
         base.Open();
 
