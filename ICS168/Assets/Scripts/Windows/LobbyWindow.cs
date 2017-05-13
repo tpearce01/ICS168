@@ -63,6 +63,9 @@ public class LobbyWindow : GenericWindow {
             _gameStartsIn = _gameStartsInDefault;
             _timeout = _defaultTimeout;
         }
+        else if (_inGamePlayers <= 0) {
+            ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+        }
     }
 
     public void AddPlayerToLobby(string username) {
