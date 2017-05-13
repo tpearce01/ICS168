@@ -18,12 +18,14 @@ public class LobbyWindow : GenericWindow {
 
     private float _timeout = -1.0f;
     private float _gameStartsIn = -1.0f;
+    private bool _messageSent = false;
 
     private void OnEnable() {
         _timeout = _defaultTimeout;
 
         _timeoutDisplay.text = "Waiting for players...";
         _gameStartsIn = _gameStartsInDefault;
+        _messageSent = false;
     }
 
     private void Update() {
@@ -36,6 +38,12 @@ public class LobbyWindow : GenericWindow {
                 _timeoutDisplay.text = "Waiting for players: " + (int)_timeout;
             }
             else if (_timeout <= 0.0f) {
+
+                if (!_messageSent) {
+                    //todo
+                    _messageSent = true;
+                }
+
                 _timeoutDisplay.text = "Game starts in: " + (int)_gameStartsIn;
                 _gameStartsIn -= Time.deltaTime;
 
@@ -48,6 +56,12 @@ public class LobbyWindow : GenericWindow {
             }
         }
         else if (_inGamePlayers == ServerConnection.Instance.MaxConnections) {
+
+            if (!_messageSent) {
+                //todo
+                _messageSent = true;
+            }
+
             _timeoutDisplay.text = "Game starts in: " + (int)_gameStartsIn;
             _gameStartsIn -= Time.deltaTime;
 

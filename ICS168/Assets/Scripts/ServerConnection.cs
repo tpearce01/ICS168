@@ -315,5 +315,10 @@ public class ServerConnection : Singleton<ServerConnection>
         string toBeSent = "2";
         SendJSONMessage(toBeSent);
     }
+
+    public void PreventDisconnects() {
+        string toBeSent = "3";
+        SendJSONMessage(toBeSent);
+    }
 }
 
