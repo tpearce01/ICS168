@@ -14,14 +14,22 @@ public class GameManager : Singleton<GameManager> {
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
     private int _numOfAlivePlayers;
+    public int NumOfAlivePlayers {
+        get { return _numOfAlivePlayers; }
+    }
 
     //Time tracking attributes
     //This attribute signifies the maximum time for the round.
-    [SerializeField]
-    private float _roundTime;
+    [SerializeField] private float _roundTime;
+    public float RoundTime {
+        get { return _roundTime; }
+    }
 
     //This attribute signifies the current time, it shouldn't be seen in the inspector.
     private float _currTime;
+    public float CurrentTime {
+        get { return _currTime; }
+    }
 
     //Game tracking attributes
     //This attribute is used to track if the game is over or not. Should not appear in the inspector.
@@ -94,19 +102,34 @@ public class GameManager : Singleton<GameManager> {
             }
         }
     }
+
+    public void PlayerActions(int playerID, PlayerIO command) {
+
+        // This check will prevent any null references to players which have been killed.
+        if (_players[playerID-1] != null) { _players[playerID - 1].RequestAction(command); }
+    }
+
     public void addPlayers() {
+
+        // The map generated the maximum amount of players the map can handle.
+        // It then finds all of them.
         GameObject[] tempPlayers = GameObject.FindGameObjectsWithTag("Player");
 
-        int numPlayers = ServerConnection.Instance.NumberOfConnections;
+        // Keep track of the number of active players.
+        _numOfAlivePlayers = ServerConnection.Instance.InGamePlayers;
 
-        for(int i = 0; i < numPlayers; i++) {
+        // Add the players to the list of players.
+        for(int i = 0; i < _numOfAlivePlayers; i++) {
             _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
         }
 
-        for(int i = numPlayers; i < tempPlayers.Length; i++) {
+        // For all extra players which were created, destroy the leftovers.
+        for(int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
             Destroy(tempPlayers[i]);
         }
     }
+
+
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>
@@ -118,33 +141,6 @@ public class GameManager : Singleton<GameManager> {
 		//}
 		////Is the game over?
   //  }
-
-    /// <summary>
-    /// Returns the number of players that are still alive in this game.
-    /// </summary>
-    /// <returns>int</returns>
-    public int getNumOfAlivePlayers()
-    {
-        return _numOfAlivePlayers;
-    }
-
-    /// <summary>
-    /// Returns the round time set.
-    /// </summary>
-    /// <returns>float</returns>
-    public float getRoundTime()
-    {
-        return _roundTime;
-    }
-
-    /// <summary>
-    /// Returns the current time in the match.
-    /// </summary>
-    /// <returns>float</returns>
-    public float getCurrentTime()
-    {
-        return _currTime;
-    }
 
     /// <summary>
     /// Returns a bool stating whether or not the game is over.
@@ -185,10 +181,4 @@ public class GameManager : Singleton<GameManager> {
     //    _victoryText.enabled = true;
     //    _victoryText.text = _winner.ToString() + " wins!";
     //}
-
-    public void PlayerActions(int playerID, PlayerIO command) {
-
-        _players[playerID - 1].RequestAction(command);
-    }
-
 }

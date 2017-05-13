@@ -13,7 +13,8 @@ public enum ServerCommands {
     VerifyLogin = 0,
     CreateAccount = 1,
     PlayerInput = 2,
-    SetUsername = 3
+    SetUsername = 3,
+    LeaveLobby = 4
 }
 
 public class ServerObject {
@@ -52,7 +53,7 @@ public class ServerConnection : Singleton<ServerConnection>
         public string username = "";
     }
 
-    [SerializeField] private int _bufferSize = 3000;
+    [SerializeField] private int _incomingBufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
     public int MaxConnections {
@@ -96,12 +97,12 @@ public class ServerConnection : Singleton<ServerConnection>
         int incomingSocketID = -1;
         int incomingConnectionID = -1;
         int incomingChannelID = -1;
-        byte[] incomingMessageBuffer = new byte[_bufferSize];
+        byte[] incomingMessageBuffer = new byte[_incomingBufferSize];
         int dataSize = 0;
         byte error;
 
         NetworkEventType incomingNetworkEvent = NetworkTransport.Receive(out incomingSocketID, out incomingConnectionID,
-            out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
+            out incomingChannelID, incomingMessageBuffer, _incomingBufferSize, out dataSize, out error);
 
         switch (incomingNetworkEvent) {
             case NetworkEventType.Nothing:
@@ -143,12 +144,23 @@ public class ServerConnection : Singleton<ServerConnection>
                 //process user game input
                 else if (prefix == (int)ServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
-                    Debug.Log(incomingConnectionID);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
                 }
 
                 else if (prefix == (int)ServerCommands.SetUsername) {
                     _clientSocketIDs[incomingConnectionID].username = message;
+                }
+                else if (prefix == (int)ServerCommands.LeaveLobby) {
+
+                    _inGamePlayers--;
+                    if (_lobby.gameObject.activeInHierarchy == true) {
+                        _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
+                    }
+
+                    if (_inGamePlayers < 1) {
+                        GameManager.Instance.ResetGameManager();
+                        SceneManager.LoadScene("Server Game Version");
+                    }
                 }
                 break;
 
@@ -177,7 +189,7 @@ public class ServerConnection : Singleton<ServerConnection>
                     _clientSocketIDs.Remove(clientToDelete.ConnectionID);
                 }
 
-                if (_inGamePlayers <= 1) {
+                if (_inGamePlayers < 1) {
                     GameManager.Instance.ResetGameManager();
                     SceneManager.LoadScene("Server Game Version");
                 }
@@ -232,7 +244,7 @@ public class ServerConnection : Singleton<ServerConnection>
         yield return verify;
 
         if (verify.text == "valid") {
-            WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.Lobby);
+            WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
 
             byte error;
             string jsonToBeSent = "0";

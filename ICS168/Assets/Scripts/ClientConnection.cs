@@ -158,7 +158,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        Debug.Log(NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error));
+        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
     }
 
     //Login
@@ -179,6 +179,12 @@ public class ClientConnection : Singleton<ClientConnection> {
     public void SendMessage(PlayerIO command) {
         string jsonToBeSent = "2";
         jsonToBeSent += JsonUtility.ToJson(command);
+        SendJSONMessage(jsonToBeSent);
+    }
+
+    public void LeaveLobby() {
+        string jsonToBeSent = "4";
+        jsonToBeSent += JsonUtility.ToJson("");
         SendJSONMessage(jsonToBeSent);
     }
 }

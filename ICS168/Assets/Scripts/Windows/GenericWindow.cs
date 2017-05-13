@@ -15,6 +15,7 @@ public enum WindowIDs {
     NewAccountSuccess = 7,
     Lobby = 8,
     OnlineStatus = 9,
+    ClientLobby = 10,
     None = -1
 }
 
