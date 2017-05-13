@@ -17,6 +17,9 @@ public class StartWindow : GenericWindow {
                 if (!_buttons[0].gameObject.GetComponent<Button>().interactable) { _buttons[0].gameObject.GetComponent<Button>().interactable = true; }
             }
         }
+        else {
+            _buttons = GetComponentsInChildren<Button>();
+        }
     }
 
     public override void Open() {
