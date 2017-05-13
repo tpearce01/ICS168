@@ -14,10 +14,11 @@ public enum ClientCommands {
     StartStream = 0,
     RenderGame = 1,
     SetGameInSession = 2,
+    CloseDisconnects = 3,
     AccountCreated = 6,
     PreExistingUser = 7,
     InvalidLogin = 8,
-    DoesNotExist = 9
+    DoesNotExist = 9,
 }
 
 public class PlayerIO {
@@ -55,6 +56,7 @@ public class ClientConnection : Singleton<ClientConnection> {
     private ClientIO _clientIO;
 
     [SerializeField] private OnlineStatusWindow _statusWindow;
+    [SerializeField] private ClientLobbyWindow _clientLobby;
 
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
@@ -100,7 +102,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 string newMessage = message.Substring(1);
 
                 if (prefix == (int)ClientCommands.StartStream) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.None);
+                    WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.ClientLobby);
                     _gameCanvas.gameObject.SetActive(true);
                 }
                 else if (prefix == (int)ClientCommands.RenderGame) {
@@ -118,6 +120,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                     }
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);
                     _clientIO.gameInSession = true;
                 }
                 else if (prefix == (int)ClientCommands.AccountCreated) {
@@ -131,6 +134,9 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.DoesNotExist) {
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
+                }
+                else if (prefix == (int)ClientCommands.CloseDisconnects) {
+                    _clientLobby.CannotDisconnect();
                 }
                 break;
 
