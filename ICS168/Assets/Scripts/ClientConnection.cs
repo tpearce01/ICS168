@@ -192,5 +192,6 @@ public class ClientConnection : Singleton<ClientConnection> {
         string jsonToBeSent = "4";
         jsonToBeSent += JsonUtility.ToJson("");
         SendJSONMessage(jsonToBeSent);
+        _gameCanvas.gameObject.SetActive(false);
     }
 }
