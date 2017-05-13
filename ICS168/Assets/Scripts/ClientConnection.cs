@@ -138,7 +138,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    Debug.Log("client: remote client event disconnected");
                 _connected = false;
                 _gameCanvas.gameObject.SetActive(false);
-                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
+                WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.StartWindow);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
                 _clientIO.gameInSession = false;
 
