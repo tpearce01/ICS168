@@ -115,6 +115,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 2
+  _whatToHit:
+    serializedVersion: 2
+    m_Bits: 512
+  _offSetValue: 0.5
+  _magnitude: 0.5
 --- !u!114 &114544170553689726
 MonoBehaviour:
   m_ObjectHideFlags: 1
