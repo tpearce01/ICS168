@@ -160,6 +160,7 @@ public class ServerConnection : Singleton<ServerConnection>
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
+                        WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
                     }
                 }
                 break;
@@ -192,6 +193,7 @@ public class ServerConnection : Singleton<ServerConnection>
                 if (_inGamePlayers < 1) {
                     GameManager.Instance.ResetGameManager();
                     SceneManager.LoadScene("Server Game Version");
+                    WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
                 }
                 break;
         }

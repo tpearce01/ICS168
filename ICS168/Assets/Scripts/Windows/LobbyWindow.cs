@@ -26,6 +26,14 @@ public class LobbyWindow : GenericWindow {
         _timeoutDisplay.text = "Waiting for players...";
         _gameStartsIn = _gameStartsInDefault;
         _messageSent = false;
+
+        foreach (GameObject player in _players) {
+            player.SetActive(false);
+        }
+
+        foreach (Text username in _usernames) {
+            username.text = "";
+        }
     }
 
     private void Update() {
