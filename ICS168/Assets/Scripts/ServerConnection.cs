@@ -19,16 +19,14 @@ public enum ServerCommands {
 
 public class ServerObject {
 
-    public ServerObject() { }
-
     //public ServerObject(int currentFrame, byte[] tex) {
     //    frameNum = currentFrame;
     //    frameChanges = tex;
     //}
 
     public int frameNum;
-    public Queue<ushort> changeIndex;
-    public Queue<byte> frameChanges;
+    public string changeIndex;
+    public string frameChanges;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -82,7 +80,10 @@ public class ServerConnection : Singleton<ServerConnection> {
 
     [SerializeField] private LobbyWindow _lobby;
 
+    private Queue<byte> previousFrameQ = new Queue<byte>();
     private byte[] previousFrame;
+    private Queue<ushort> _changeIndex = new Queue<ushort>();
+    private Queue<byte> _frameChanges = new Queue<byte>();
 
     private void OnEnable() {
         _cam = Camera.main;
@@ -226,30 +227,47 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         ServerObject toBeSent = new ServerObject();
 
-        if (previousFrame.Length != 0) {
+        if (previousFrame != null) {
+
             for (int i = 0; i < image.Length; ++i) {
-                if (previousFrame[i] != image[i]) {
-                    toBeSent.changeIndex.Enqueue((ushort)i);
-                    toBeSent.frameChanges.Enqueue(image[i]);
+                if (i < previousFrame.Length && previousFrame[i] != image[i]) {
+                    //toBeSent.changeIndex.Enqueue((ushort)i);
+                    //toBeSent.frameChanges.Enqueue(image[i]);
+                    _changeIndex.Enqueue((ushort)i);
+                    _frameChanges.Enqueue(image[i]);
                 }
             }
-        }
-        else if (previousFrame.Length == 0) {
+
+            // Update the previous frame
             previousFrame = image;
-            for (int i = 0; i < image.Length; ++i) {
-                toBeSent.changeIndex.Enqueue((ushort)i);
-                toBeSent.frameChanges.Enqueue(image[i]);
-            }
         }
-        
+        else if (previousFrame == null) {
+
+            previousFrame = image;
+
+            for (int i = 0; i < image.Length; ++i) {
+                //previousFrameQ.Enqueue(image[i]);
+                //toBeSent.changeIndex.Enqueue((ushort)i);
+                //toBeSent.frameChanges.Enqueue(image[i]);
+                _changeIndex.Enqueue((ushort)i);
+                _frameChanges.Enqueue(image[i]);
+            }
+
+        }
+
+        toBeSent.changeIndex = _changeIndex.ToString();
+        toBeSent.frameChanges = _frameChanges.ToString();
+
         //ServerObject toBeSent = new ServerObject(Time.frameCount, image);
+
+        
 
         // Convert to JSON
         string jsonToBeSent = "1";
         jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0) {
+        if (_inGamePlayers > 0 && toBeSent.changeIndex.Length > 0) {
             SendJSONMessage(jsonToBeSent);
         }
     }
