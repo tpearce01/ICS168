@@ -25,8 +25,7 @@ public class ServerObject {
     //}
 
     public int frameNum;
-    public string changeIndex;
-    public string frameChanges;
+    public Dictionary<int, byte> frameChanges;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -233,8 +232,9 @@ public class ServerConnection : Singleton<ServerConnection> {
                 if (i < previousFrame.Length && previousFrame[i] != image[i]) {
                     //toBeSent.changeIndex.Enqueue((ushort)i);
                     //toBeSent.frameChanges.Enqueue(image[i]);
-                    _changeIndex.Enqueue((ushort)i);
-                    _frameChanges.Enqueue(image[i]);
+                    //_changeIndex.Enqueue((ushort)i);
+                    //_frameChanges.Enqueue(image[i]);
+                    toBeSent.frameChanges.Add(i, image[i]);
                 }
             }
 
@@ -249,14 +249,15 @@ public class ServerConnection : Singleton<ServerConnection> {
                 //previousFrameQ.Enqueue(image[i]);
                 //toBeSent.changeIndex.Enqueue((ushort)i);
                 //toBeSent.frameChanges.Enqueue(image[i]);
-                _changeIndex.Enqueue((ushort)i);
-                _frameChanges.Enqueue(image[i]);
+                //_changeIndex.Enqueue((ushort)i);
+                //_frameChanges.Enqueue(image[i]);
+                toBeSent.frameChanges.Add(i, image[i]);
             }
 
         }
 
-        toBeSent.changeIndex = _changeIndex.ToString();
-        toBeSent.frameChanges = _frameChanges.ToString();
+        //toBeSent.changeIndex = _changeIndex.ToString();
+        //toBeSent.frameChanges = _frameChanges.ToString();
 
         //ServerObject toBeSent = new ServerObject(Time.frameCount, image);
 
@@ -267,7 +268,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0 && toBeSent.changeIndex.Length > 0) {
+        if (_inGamePlayers > 0) {
             SendJSONMessage(jsonToBeSent);
         }
     }

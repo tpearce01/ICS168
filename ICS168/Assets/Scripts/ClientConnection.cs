@@ -119,8 +119,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
 
-                    Debug.Log(JSONdata.changeIndex);
-                    _frameChanges = Convert.FromBase64String(JSONdata.frameChanges);
+                    foreach(KeyValuePair<int, byte> change in JSONdata.frameChanges) {
+                        Debug.Log(change);
+                    }
 
                     //if (_frameToRender.Length != 0) {
                     //    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
