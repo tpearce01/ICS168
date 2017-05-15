@@ -25,7 +25,7 @@ public class ServerObject {
     //}
 
     public int frameNum;
-    public string changeIndex;
+    public ushort[] changeIndex;
     public string frameChanges;
 }
 
@@ -255,7 +255,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         }
 
-        toBeSent.changeIndex = _changeIndex.ToString();
+        toBeSent.changeIndex = _changeIndex.ToArray();
         toBeSent.frameChanges = _frameChanges.ToString();
 
         //ServerObject toBeSent = new ServerObject(Time.frameCount, image);

@@ -117,12 +117,11 @@ public class ClientConnection : Singleton<ClientConnection> {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
-                    _changeIndex = JSONdata.changeIndex.ToArray();
-                    _frameChanges = JSONdata.frameChanges.ToArray();
+                    _frameChanges = Convert.FromBase64String(JSONdata.frameChanges);
 
                     if (_frameToRender.Length != 0) {
-                        for (int i = 0; i < _changeIndex.Length; ++i) {
-                            _frameToRender[_changeIndex[i]] = _frameChanges[i];
+                        for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
+                            _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
                         }
                     }
                     else {
