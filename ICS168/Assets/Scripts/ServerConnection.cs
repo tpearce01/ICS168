@@ -18,13 +18,17 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
-    public ServerObject(int currentFrame, string tex) {
-        frameNum = currentFrame;
-        texture = tex;
-    }
+
+    public ServerObject() { }
+
+    //public ServerObject(int currentFrame, byte[] tex) {
+    //    frameNum = currentFrame;
+    //    frameChanges = tex;
+    //}
 
     public int frameNum;
-    public string texture;
+    public Queue<ushort> changeIndex;
+    public Queue<byte> frameChanges;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -77,6 +81,9 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     [SerializeField] private LobbyWindow _lobby;
+
+    private byte[] previousFrame;
+
     private void OnEnable() {
         _cam = Camera.main;
     }
@@ -202,7 +209,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        //Debug.Log("Sending message of length " + messageBuffer.Length);
+        Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
             NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
@@ -217,10 +224,25 @@ public class ServerConnection : Singleton<ServerConnection> {
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
-        // Create a new Server object and populate its attributes
-        // Time.frameCount
-        ServerObject toBeSent = new ServerObject(Time.frameCount, Convert.ToBase64String(image));
-        //toBeSent.texture = Convert.ToBase64String(image);
+        ServerObject toBeSent = new ServerObject();
+
+        if (previousFrame.Length != 0) {
+            for (int i = 0; i < image.Length; ++i) {
+                if (previousFrame[i] != image[i]) {
+                    toBeSent.changeIndex.Enqueue((ushort)i);
+                    toBeSent.frameChanges.Enqueue(image[i]);
+                }
+            }
+        }
+        else if (previousFrame.Length == 0) {
+            previousFrame = image;
+            for (int i = 0; i < image.Length; ++i) {
+                toBeSent.changeIndex.Enqueue((ushort)i);
+                toBeSent.frameChanges.Enqueue(image[i]);
+            }
+        }
+        
+        //ServerObject toBeSent = new ServerObject(Time.frameCount, image);
 
         // Convert to JSON
         string jsonToBeSent = "1";

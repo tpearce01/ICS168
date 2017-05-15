@@ -51,14 +51,22 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _socketPort = 8888;	//Port number
 
 	[SerializeField] private Image _renderTo;								//Image to render to
+    private CanvasRenderer _canvasRenderer;
     private int _currentFrame = -1;
+    private byte[] _frameToRender;
+    private ushort[] _changeIndex;
+    private byte[] _frameChanges;
 
     private ClientIO _clientIO;
 
     [SerializeField] private OnlineStatusWindow _statusWindow;
     [SerializeField] private ClientLobbyWindow _clientLobby;
 
-	private void Start() {
+    private void OnEnable() {
+        _canvasRenderer = _renderTo.GetComponent<CanvasRenderer>();
+    }
+
+    private void Start() {
         _clientIO = GetComponent<ClientIO>();
         _currentFrame = -1;
 
@@ -109,15 +117,28 @@ public class ClientConnection : Singleton<ClientConnection> {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
+                    _changeIndex = JSONdata.changeIndex.ToArray();
+                    _frameChanges = JSONdata.frameChanges.ToArray();
 
-                    Debug.Log(JSONdata.frameNum);
-                    // Latency Mitigation at its finest.
-                    if (JSONdata.frameNum > _currentFrame) {
-                        byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
-                        gameTexture.LoadImage(textureByteArray);
-                        _currentFrame = JSONdata.frameNum;
-                        _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                    if (_frameToRender.Length != 0) {
+                        for (int i = 0; i < _changeIndex.Length; ++i) {
+                            _frameToRender[_changeIndex[i]] = _frameChanges[i];
+                        }
                     }
+                    else {
+                        _frameToRender = _frameChanges;
+                    }
+
+                    gameTexture.LoadImage(_frameToRender);
+                    _canvasRenderer.SetTexture(gameTexture);
+
+                    // Latency Mitigation at its finest.
+                    //if (JSONdata.frameNum > _currentFrame) {
+                    //byte[] textureByteArray = Convert.FromBase64String(JSONdata.frameChanges);
+                    //gameTexture.LoadImage(textureByteArray);
+                    //_currentFrame = JSONdata.frameNum;
+                    //_renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                    //}
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);
