@@ -19,10 +19,9 @@ public enum ServerCommands {
 
 public class ServerObject {
 
-    //public ServerObject(int currentFrame, byte[] tex) {
-    //    frameNum = currentFrame;
-    //    frameChanges = tex;
-    //}
+    public ServerObject() {
+        frameChanges = new Dictionary<int, byte>();
+    }
 
     public int frameNum;
     public Dictionary<int, byte> frameChanges;
@@ -230,10 +229,6 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             for (int i = 0; i < image.Length; ++i) {
                 if (i < previousFrame.Length && previousFrame[i] != image[i]) {
-                    //toBeSent.changeIndex.Enqueue((ushort)i);
-                    //toBeSent.frameChanges.Enqueue(image[i]);
-                    //_changeIndex.Enqueue((ushort)i);
-                    //_frameChanges.Enqueue(image[i]);
                     toBeSent.frameChanges.Add(i, image[i]);
                 }
             }
@@ -246,26 +241,14 @@ public class ServerConnection : Singleton<ServerConnection> {
             previousFrame = image;
 
             for (int i = 0; i < image.Length; ++i) {
-                //previousFrameQ.Enqueue(image[i]);
-                //toBeSent.changeIndex.Enqueue((ushort)i);
-                //toBeSent.frameChanges.Enqueue(image[i]);
-                //_changeIndex.Enqueue((ushort)i);
-                //_frameChanges.Enqueue(image[i]);
+                // let's consider sending the frame by itself instead of all the changes for the first frame.
                 toBeSent.frameChanges.Add(i, image[i]);
             }
-
         }
-
-        //toBeSent.changeIndex = _changeIndex.ToString();
-        //toBeSent.frameChanges = _frameChanges.ToString();
-
-        //ServerObject toBeSent = new ServerObject(Time.frameCount, image);
-
-        
 
         // Convert to JSON
         string jsonToBeSent = "1";
-        jsonToBeSent += JsonUtility.ToJson(toBeSent);
+        jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString<ServerObject>(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
         if (_inGamePlayers > 0) {

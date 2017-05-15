@@ -117,11 +117,9 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.RenderGame) {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
-                    ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
-
-                    foreach(KeyValuePair<int, byte> change in JSONdata.frameChanges) {
-                        Debug.Log(change);
-                    }
+                    ServerObject JSONdata = GameDevWare.Serialization.Json.Deserialize<ServerObject>(newMessage);
+                    Debug.Log(JSONdata);
+                    
 
                     //if (_frameToRender.Length != 0) {
                     //    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
