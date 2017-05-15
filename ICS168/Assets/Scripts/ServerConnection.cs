@@ -18,7 +18,6 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
-
     public ServerObject(int currentFrame, string tex) {
         frameNum = currentFrame;
         texture = tex;
@@ -28,8 +27,7 @@ public class ServerObject {
     public string texture;
 }
 
-public class ServerConnection : Singleton<ServerConnection>
-{
+public class ServerConnection : Singleton<ServerConnection> {
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
 
@@ -65,14 +63,14 @@ public class ServerConnection : Singleton<ServerConnection>
     [SerializeField] private int _socketPort = 8888;
     private int _connectionID = -1;
 
-    private Dictionary<int,ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
+    private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
     private int _numberOfConnections = -1;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
     }
 
     // Keep track of players which have successfully logged in and are ready to play
-    private int _inGamePlayers = 0;
+    [SerializeField] private int _inGamePlayers = 0;
     public int InGamePlayers {
         get { return _inGamePlayers; }
         set { _inGamePlayers = value; }
@@ -83,7 +81,7 @@ public class ServerConnection : Singleton<ServerConnection>
         _cam = Camera.main;
     }
 
-    void Start () {
+    void Start() {
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
         UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
@@ -91,7 +89,7 @@ public class ServerConnection : Singleton<ServerConnection>
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
     }
 
-	void Update () {
+    void Update() {
         CaptureFrame();
 
         int incomingSocketID = -1;
@@ -120,13 +118,13 @@ public class ServerConnection : Singleton<ServerConnection>
                 break;
 
             case NetworkEventType.DataEvent:
-                Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
+                //Debug.Log("server: Message received. Message size: " + incomingMessageBuffer.Length);
 
                 //Test Code
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
                 //End Test Code
 
-                int prefix = Convert.ToInt32(message.Substring(0,1));
+                int prefix = Convert.ToInt32(message.Substring(0, 1));
                 string newMessage = message.Substring(1);
 
                 //process login info
@@ -153,6 +151,7 @@ public class ServerConnection : Singleton<ServerConnection>
                 else if (prefix == (int)ServerCommands.LeaveLobby) {
 
                     _inGamePlayers--;
+                    if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                     if (_lobby.gameObject.activeInHierarchy == true) {
                         _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
                     }
@@ -160,7 +159,6 @@ public class ServerConnection : Singleton<ServerConnection>
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
-                        WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
                     }
                 }
                 break;
@@ -171,7 +169,9 @@ public class ServerConnection : Singleton<ServerConnection>
 
                 // Decrement the number of players and remove the player from the hashmap.
                 _inGamePlayers -= 1;
+                if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                 _numberOfConnections -= 1;
+                if (_numberOfConnections < 0) { _numberOfConnections = 0; }
 
                 // If the lobby is currently showing, make sure to update the information.
                 if (_lobby.gameObject.activeInHierarchy == true) {
@@ -180,7 +180,7 @@ public class ServerConnection : Singleton<ServerConnection>
 
                 ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
 
-                foreach(KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
+                foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
                     if (client.Value.ConnectionID == incomingConnectionID) {
                         clientToDelete = client.Value;
                     }
@@ -193,13 +193,10 @@ public class ServerConnection : Singleton<ServerConnection>
                 if (_inGamePlayers < 1) {
                     GameManager.Instance.ResetGameManager();
                     SceneManager.LoadScene("Server Game Version");
-                    WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
                 }
                 break;
         }
     }
-
-
 
     public void SendJSONMessage(string JSONobject) {
 
@@ -211,19 +208,17 @@ public class ServerConnection : Singleton<ServerConnection>
         }
     }
 
-
-
     void CaptureFrame() {
-
         RenderTexture.active = rt;
         Camera.main.Render();
 
         Texture2D tex = new Texture2D(_cam.targetTexture.width, _cam.targetTexture.height, TextureFormat.RGB24, false);
-        tex.ReadPixels(new Rect(0,0, _cam.targetTexture.width, _cam.targetTexture.height), 0,0);
+        tex.ReadPixels(new Rect(0, 0, _cam.targetTexture.width, _cam.targetTexture.height), 0, 0);
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
         // Create a new Server object and populate its attributes
+        // Time.frameCount
         ServerObject toBeSent = new ServerObject(Time.frameCount, Convert.ToBase64String(image));
         //toBeSent.texture = Convert.ToBase64String(image);
 
@@ -265,7 +260,8 @@ public class ServerConnection : Singleton<ServerConnection>
             // Tell the lobby to add this player so it shows in the lobby.
             _lobby.AddPlayerToLobby(username);
 
-        } else if (verify.text == "invalid") {
+        }
+        else if (verify.text == "invalid") {
 
             byte error;
             string jsonToBeSent = "8";
@@ -273,7 +269,8 @@ public class ServerConnection : Singleton<ServerConnection>
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
-        } else if (verify.text == "user not found") {
+        }
+        else if (verify.text == "user not found") {
 
             byte error;
             string jsonToBeSent = "9";
@@ -303,7 +300,8 @@ public class ServerConnection : Singleton<ServerConnection>
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
-        } else if (verify.text == "account created") {
+        }
+        else if (verify.text == "account created") {
             Debug.Log("account was created");
             byte error;
             string jsonToBeSent = "6";
