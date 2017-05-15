@@ -9,6 +9,7 @@ using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Linq;
 
 public enum ClientCommands {
     StartStream = 0,
@@ -117,19 +118,21 @@ public class ClientConnection : Singleton<ClientConnection> {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
+
+                    Debug.Log(JSONdata.changeIndex);
                     _frameChanges = Convert.FromBase64String(JSONdata.frameChanges);
 
-                    if (_frameToRender.Length != 0) {
-                        for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
-                            _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
-                        }
-                    }
-                    else {
-                        _frameToRender = _frameChanges;
-                    }
+                    //if (_frameToRender.Length != 0) {
+                    //    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
+                    //        _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
+                    //    }
+                    //}
+                    //else {
+                    //    _frameToRender = _frameChanges;
+                    //}
 
-                    gameTexture.LoadImage(_frameToRender);
-                    _canvasRenderer.SetTexture(gameTexture);
+                    //gameTexture.LoadImage(_frameToRender);
+                    //_canvasRenderer.SetTexture(gameTexture);
 
                     // Latency Mitigation at its finest.
                     //if (JSONdata.frameNum > _currentFrame) {
