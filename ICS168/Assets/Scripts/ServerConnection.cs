@@ -6,7 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.UI;
 using System;
+using System.Linq;
 using System.Text;
+using LgOctEngine.CoreClasses;
 using UnityEngine.SceneManagement;
 
 public enum ServerCommands {
@@ -18,16 +20,38 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
+    public ServerObject()
+    {
+        frameNum = Time.frameCount;
+    }
+    public int frameNum;
+    public byte[] image;
+}
 
-    public ServerObject() {
-        frameChanges = new Dictionary<int, byte>();
+public class SO2
+{
+    public SO2()
+    {
+        frameNum = Time.frameCount;
+    }
+
+    public SO2(int f, int[] i, byte[] c)
+    {
+        frameNum = f;
+        indexToChange = i;
+        changeToMake = c;
     }
 
     public int frameNum;
-    public Dictionary<int, byte> frameChanges;
+    public int imageSize;
+    public int[] indexToChange;
+    public byte[] changeToMake;
 }
 
-public class ServerConnection : Singleton<ServerConnection> {
+public class ServerConnection : Singleton<ServerConnection>
+{
+    private byte[] lastImage;
+
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
 
@@ -96,7 +120,10 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     void Update() {
-        CaptureFrame();
+        if (_inGamePlayers > 0)
+        {
+            CaptureFrame();
+        }
 
         int incomingSocketID = -1;
         int incomingConnectionID = -1;
@@ -208,13 +235,14 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        Debug.Log("Sending message of length " + messageBuffer.Length);
+        //Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
             NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
     }
 
-    void CaptureFrame() {
+    void CaptureFrame()
+    {
         RenderTexture.active = rt;
         Camera.main.Render();
 
@@ -223,6 +251,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
+        /*
         ServerObject toBeSent = new ServerObject();
 
         if (previousFrame != null) {
@@ -254,6 +283,90 @@ public class ServerConnection : Singleton<ServerConnection> {
         if (_inGamePlayers > 0) {
             SendJSONMessage(jsonToBeSent);
         }
+        */
+
+        //Create empty object to be sent
+        SO2 toBeSent = new SO2();
+
+        //Create empty dictionary of changes
+        Dictionary<int, byte> changelog = new Dictionary<int, byte>();
+
+        if (lastImage != null)
+        {
+            //Populate dictionary with changes
+            for (int i = 0; i < Mathf.Max(image.Length, lastImage.Length); i++)
+            {
+                if (i < Mathf.Min(image.Length, lastImage.Length))
+                {
+                    //Safe to check for changes
+                    if (image[i] != lastImage[i])
+                    {
+                        changelog.Add(i, image[i]);
+                    }
+                }
+                else if (image.Length > lastImage.Length)
+                {
+                    //Every byte is a change
+                    changelog.Add(i, (image[i]));
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        else
+        {
+            //Populate dictionary with changes
+            for (int i = 0; i < image.Length; i++)
+            {
+                changelog.Add(i, image[i]);
+            }
+        }
+
+        lastImage = image;
+
+        //If the original image is cheaper, send the original image
+        if (changelog.Count > image.Length/2)
+        {
+            Debug.Log("Sending image");
+            ServerObject toBeSent2 = new ServerObject();
+            toBeSent2.image = image;
+            string jsonToBeSent = "1";
+            jsonToBeSent += JsonUtility.ToJson(toBeSent2);
+            if (_inGamePlayers > 0)
+            {
+                SendJSONMessage(jsonToBeSent);
+            }
+        }
+        else
+        {
+            Debug.Log("Sending deltas");
+            //else if the deltas is cheaper, send the deltas
+
+            //Allocate space to add changes to object to be sent
+            toBeSent.indexToChange = new int[changelog.Count];
+            toBeSent.changeToMake = new byte[changelog.Count];
+            toBeSent.imageSize = image.Length;
+
+            //Populate object to be sent with changes
+            for (int i = 0; i < changelog.Count; i++)
+            {
+                toBeSent.indexToChange[i] = changelog.ElementAt(i).Key;
+                toBeSent.changeToMake[i] = changelog.ElementAt(i).Value;
+            }
+
+            //Sent the message
+            string jsonToBeSent = "4";
+            jsonToBeSent += JsonUtility.ToJson(toBeSent);
+            // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
+            if (_inGamePlayers > 0)
+            {
+                SendJSONMessage(jsonToBeSent);
+            }
+        }
+
+        changelog.Clear();
     }
 
     private IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {

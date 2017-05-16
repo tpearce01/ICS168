@@ -37,8 +37,8 @@ public class MapGenerator : Singleton<MapGenerator>
 
             //Generate each tile specified by the text file
             for (int y = 0; y < data.Length; y++) {
-            //int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
-            int dataYLength = data[y].Length;
+            int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
+            //int dataYLength = data[y].Length;
 
                 for (int x = 0; x < dataYLength; x++) {
                     if (Int32.Parse(data[y][x].ToString()) >= 5) {
