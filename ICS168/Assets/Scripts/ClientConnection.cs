@@ -130,7 +130,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
 
-                    Debug.Log(JSONdata.frameNum);
+                    //Debug.Log(JSONdata.frameNum);
                     // Latency Mitigation at its finest.
                     if (JSONdata.frameNum > _currentFrame) {
                         byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
@@ -159,7 +159,8 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
                     _clientLobby.CannotDisconnect();
-                } else if (prefix == (int)ClientCommands.GoBackToMain) {
+                }
+                else if (prefix == (int)ClientCommands.GoBackToMain) {
                     Debug.Log("Go back to main damn it!");
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
                 }
@@ -177,14 +178,25 @@ public class ClientConnection : Singleton<ClientConnection> {
                 break;
 		    }
 
-        if (GameManager.Instance.GameInSession && _slowConnectTimer >= _slowConnectThreshold) {
+        if ((WindowManager.Instance.currentWindow == WindowIDs.None || WindowManager.Instance.currentWindow == WindowIDs.ClientLobby) 
+            && _slowConnectTimer >= _slowConnectThreshold) {
+
+            Debug.Log("slow timer");
 
             _disconnectTimer += Time.deltaTime;
             if (_disconnectTimer >= _disconnectThreshold) {
-                Network.Disconnect();
+                //Network.Disconnect();
+                Debug.Log("disconnect from slow conection");
                 _gameCanvas.gameObject.SetActive(false);
                 _clientIO.gameInSession = false;
-                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.DisconnectWindow);
+
+                if (WindowManager.Instance.currentWindow == WindowIDs.ClientLobby) {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.DisconnectWindow);
+                }
+                else if (WindowManager.Instance.currentWindow == WindowIDs.None) {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.DisconnectWindow);
+
+                }
             }
         }
         else {
