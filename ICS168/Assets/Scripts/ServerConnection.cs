@@ -14,7 +14,8 @@ public enum ServerCommands {
     CreateAccount = 1,
     PlayerInput = 2,
     SetUsername = 3,
-    LeaveLobby = 4
+    LeaveLobby = 4,
+    LeaveGame = 5
 }
 
 public class ServerObject {
@@ -161,6 +162,17 @@ public class ServerConnection : Singleton<ServerConnection> {
                     if (_lobby.gameObject.activeInHierarchy == true) {
                         _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
                     }
+
+                    if (_inGamePlayers < 1) {
+                        GameManager.Instance.ResetGameManager();
+                        SceneManager.LoadScene("Server Game Version");
+                    }
+                }
+                else if (prefix == (int)ServerCommands.LeaveGame) {
+                    _inGamePlayers--;
+                    if (_inGamePlayers < 0) { _inGamePlayers = 0; }
+
+
 
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();

@@ -107,6 +107,10 @@ public class PlayerActions : MonoBehaviour {
         if (validMove) { gameObject.transform.position = _pos; }
     }
 
+    public void LeaveGame() {
+        Destroy(gameObject);
+    }
+
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("PowerUp")) {
             Destroy(other.gameObject);

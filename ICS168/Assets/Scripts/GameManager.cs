@@ -127,6 +127,11 @@ public class GameManager : Singleton<GameManager> {
         if (_players[playerID-1] != null) { _players[playerID - 1].RequestAction(command); }
     }
 
+    public void LeaveGame(int playerID) {
+        decAlivePlayers();
+        if (_players[playerID - 1] != null) { _players[playerID - 1].LeaveGame(); }
+    }
+
     public void addPlayers() {
 
         // The map generated the maximum amount of players the map can handle.

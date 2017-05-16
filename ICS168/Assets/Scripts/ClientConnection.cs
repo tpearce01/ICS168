@@ -195,11 +195,18 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (WindowManager.Instance.currentWindow == WindowIDs.None) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.DisconnectWindow);
-
+                    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
                 }
+
+                LeaveLobby();
             }
         }
         else {
+            _disconnectTimer = 0.0f;
+        }
+
+        if (WindowManager.Instance.currentWindow != WindowIDs.None && WindowManager.Instance.currentWindow != WindowIDs.ClientLobby) {
+            _slowConnectTimer = 0.0f;
             _disconnectTimer = 0.0f;
         }
 	}
