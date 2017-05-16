@@ -19,15 +19,20 @@ public enum ServerCommands {
 
 public class ServerObject {
 
-    public ServerObject() {
-        frameNum = 0;
-        changeIndex = new List<ushort>();
-        frameChanges = new List<byte>();
+    //public ServerObject() {
+    //    frameNum = 0;
+    //    changeIndex = new List<ushort>();
+    //    frameChanges = new List<byte>();
+    //}
+
+    public ServerObject(int size) {
+        changeIndex = new ushort[size];
+        frameChanges = new byte[size];
     }
 
     public int frameNum;
-    public List<ushort> changeIndex;
-    public List<byte> frameChanges;
+    public ushort[] changeIndex;
+    public byte[] frameChanges;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -231,15 +236,16 @@ public class ServerConnection : Singleton<ServerConnection> {
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
-        ServerObject toBeSent = new ServerObject();
+        Queue<ushort> indexQ = new Queue<ushort>();
+        Queue<byte> changeQ = new Queue<byte>();
 
         if (previousFrame != null) {
 
             for (ushort i = 0; i < image.Length; ++i) {
                 if (i < previousFrame.Length && previousFrame[i] != image[i]) {
                     //frameChanges.Add(new KeyValuePair<ushort, byte>(i, image[i]));
-                    toBeSent.changeIndex.Add(i);
-                    toBeSent.frameChanges.Add(image[i]);
+                    indexQ.Enqueue(i);
+                    changeQ.Enqueue(image[i]);
                 }
             }
 
@@ -253,17 +259,21 @@ public class ServerConnection : Singleton<ServerConnection> {
             for (ushort i = 0; i < image.Length; ++i) {
                 // let's consider sending the frame by itself instead of all the changes for the first frame.
                 //frameChanges.Add(new KeyValuePair<ushort, byte>(i, image[i]));
-                toBeSent.changeIndex.Add(i);
-                toBeSent.frameChanges.Add(image[i]);
+                indexQ.Enqueue(i);
+                changeQ.Enqueue(image[i]);
             }
         }
+
+        ServerObject toBeSent = new ServerObject(indexQ.Count);
+        toBeSent.changeIndex = indexQ.ToArray();
+        toBeSent.frameChanges = changeQ.ToArray();
 
         // Convert to JSON
         string jsonToBeSent = "1";
         //jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString(toBeSent);
-        jsonToBeSent += Newtonsoft.Json.JsonConvert.SerializeObject(toBeSent);
+        jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
-        Debug.Log(jsonToBeSent);
+        //Debug.Log(jsonToBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
         if (_inGamePlayers > 0) {
