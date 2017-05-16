@@ -248,7 +248,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         // Convert to JSON
         string jsonToBeSent = "1";
-        jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString<ServerObject>(toBeSent);
+        jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
         if (_inGamePlayers > 0) {

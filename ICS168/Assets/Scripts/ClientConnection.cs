@@ -10,6 +10,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Linq;
+using Newtonsoft.Json.Converters;
 
 public enum ClientCommands {
     StartStream = 0,
@@ -117,8 +118,8 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.RenderGame) {
                     Texture2D gameTexture = new Texture2D(0, 0);
 
-                    ServerObject JSONdata = GameDevWare.Serialization.Json.Deserialize<ServerObject>(newMessage);
-                    Debug.Log(JSONdata);
+                    ServerObject JSONdata = Newtonsoft.Json.JsonConvert.DeserializeObject<ServerObject>(newMessage);
+                    Debug.Log(JSONdata.frameChanges);
                     
 
                     //if (_frameToRender.Length != 0) {
