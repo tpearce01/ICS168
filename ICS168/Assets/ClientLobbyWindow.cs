@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class ClientLobbyWindow : GenericWindow {
 
-    [SerializeField] private Button _cancelButton;
+    private Button _cancelButton;
 
     private void OnEnable() {
+        _cancelButton = GetComponentInChildren<Button>();
         _cancelButton.interactable = true;
     }
 

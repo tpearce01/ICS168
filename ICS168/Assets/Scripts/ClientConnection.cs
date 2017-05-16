@@ -19,7 +19,7 @@ public enum ClientCommands {
     PreExistingUser = 7,
     InvalidLogin = 8,
     DoesNotExist = 9,
-    GoBackToMain = 10,
+    GoBackToMain = 10
 }
 
 public class PlayerIO {
@@ -59,6 +59,12 @@ public class ClientConnection : Singleton<ClientConnection> {
     [SerializeField] private OnlineStatusWindow _statusWindow;
     [SerializeField] private ClientLobbyWindow _clientLobby;
 
+    // Latency Thresholds
+    [SerializeField] private float _slowConnectThreshold;
+    [SerializeField] private float _disconnectThreshold;
+    private float _slowConnectTimer = 0.0f;
+    private float _disconnectTimer = 0.0f;
+
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
         _currentFrame = -1;
@@ -73,6 +79,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 	}
 
 	private void Update() {
+
+        _slowConnectTimer += Time.deltaTime;
+
 		int incomingSocketID = 0;
 		int incomingConnectionID = 0;
 		int incomingChannelID = 0;
@@ -112,6 +121,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 newMessage = message.Substring(index);
 
                 if (prefix == (int)ClientCommands.StartStream) {
+                    _currentFrame = -1;
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.ClientLobby);
                     _gameCanvas.gameObject.SetActive(true);
                 }
@@ -127,6 +137,8 @@ public class ClientConnection : Singleton<ClientConnection> {
                         gameTexture.LoadImage(textureByteArray);
                         _currentFrame = JSONdata.frameNum;
                         _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+
+                        _slowConnectTimer = 0.0f;
                     }
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
@@ -164,6 +176,20 @@ public class ClientConnection : Singleton<ClientConnection> {
                 _statusWindow.UpdateOnlineStatus(false);
                 break;
 		    }
+
+        if (GameManager.Instance.GameInSession && _slowConnectTimer >= _slowConnectThreshold) {
+
+            _disconnectTimer += Time.deltaTime;
+            if (_disconnectTimer >= _disconnectThreshold) {
+                Network.Disconnect();
+                _gameCanvas.gameObject.SetActive(false);
+                _clientIO.gameInSession = false;
+                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.DisconnectWindow);
+            }
+        }
+        else {
+            _disconnectTimer = 0.0f;
+        }
 	}
 
 	public void Connect() {

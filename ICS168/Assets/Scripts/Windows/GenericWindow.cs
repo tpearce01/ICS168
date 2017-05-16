@@ -16,6 +16,7 @@ public enum WindowIDs {
     Lobby = 8,
     OnlineStatus = 9,
     ClientLobby = 10,
+    DisconnectWindow = 11,
     None = -1
 }
 
