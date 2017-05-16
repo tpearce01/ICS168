@@ -97,6 +97,7 @@ public class LobbyWindow : GenericWindow {
             _players[0].SetActive(true);
             GameManager.Instance.setUsername(0, username);
             _usernames[0].text = username;
+            
         }
         else if (_players[1].activeInHierarchy == false) {
             _players[1].SetActive(true);

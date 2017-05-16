@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class VictoryWindow : GenericWindow {
-    public float redirectingSeconds = 5.0f;
+    float redirectingSeconds = 10.0f;
 
     private void Update() {
         redirectingSeconds -= Time.deltaTime;
-        gameObject.GetComponents<Text>()[1].text = "Remaining time " + redirectingSeconds + "...";
-
+        //gameObject.GetComponentsInChildren<Text>()[1].text = "Remaining time " + (int)redirectingSeconds + "...";
+        //Text[] txt = GetComponentsInChildren<Text>();
+        
         if(redirectingSeconds <= 0.0f) {
             ServerConnection.Instance.SendJSONMessage("10");
+            ToggleWindows(WindowIDs.Victory, WindowIDs.None);
+        }else {
+            GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";
         }
     }
 

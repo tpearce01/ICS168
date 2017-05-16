@@ -97,10 +97,19 @@ public class ClientConnection : Singleton<ClientConnection> {
 
             //0 for username/password info, 1 for PlayerIO
 		    case NetworkEventType.DataEvent:
-
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
-                int prefix = Convert.ToInt32(message.Substring(0, 1));
-                string newMessage = message.Substring(1);
+                int prefix = 0;
+                int index;
+                string newMessage = "";
+
+                // New parser now allows client commands to be > 1 digit
+                for(index = 0; index < message.Length; ++index) {
+                    if (message[index] == '{')
+                        break;
+                }
+
+                prefix = Convert.ToInt32(message.Substring(0, index));
+                newMessage = message.Substring(index);
 
                 if (prefix == (int)ClientCommands.StartStream) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.ClientLobby);
@@ -139,6 +148,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
                     _clientLobby.CannotDisconnect();
                 } else if (prefix == (int)ClientCommands.GoBackToMain) {
+                    Debug.Log("Go back to main damn it!");
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
                 }
                 break;

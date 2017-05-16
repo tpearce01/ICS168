@@ -19,6 +19,8 @@ TagManager:
   - ClientConnection
   - ServerConnection
   - DontDestroyOnLoad
+  - Bomb
+  - Explosion
   layers:
   - Default
   - TransparentFX

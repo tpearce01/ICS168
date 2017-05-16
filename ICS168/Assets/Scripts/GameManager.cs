@@ -80,15 +80,19 @@ public class GameManager : Singleton<GameManager> {
     public void StartGame() {
         if (GameObject.Find("Player1(Clone)") != null) {
             GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(0);
+            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerNumber = 0;
         }
         if (GameObject.Find("Player2(Clone)") != null) {
             GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(1);
+            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerNumber = 1;
         }
         if (GameObject.Find("Player3(Clone)") != null) {
             GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(2);
+            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerNumber = 2;
         }
         if (GameObject.Find("Player4(Clone)") != null) {
             GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(3);
+            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerNumber = 3;
         }
         
         _currTime = _roundTime;
@@ -109,10 +113,10 @@ public class GameManager : Singleton<GameManager> {
             //Count down the timer
             _currTime -= Time.deltaTime;
 
-            if (_currTime < 0.0f) {
-                WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
-                WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+            if (_currTime <= 0.0f || _numOfAlivePlayers == 1) {
+                findWinner();
                 DestroyEverything();
+                _gameInSession = false;
             }
         }
     }
@@ -150,9 +154,6 @@ public class GameManager : Singleton<GameManager> {
     /// </summary>
     public void decAlivePlayers() {
         _numOfAlivePlayers -= 1;
-        if (_numOfAlivePlayers <= 1) {
-            findWinner();
-        }
         //Is the game over?
     }
 
@@ -176,12 +177,12 @@ public class GameManager : Singleton<GameManager> {
 
         GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
 
-        if (ps.Length > 1) {
+        if (_numOfAlivePlayers > 1/*ps.Length > 1*/) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
             WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
             DestroyEverything();
         } 
-        else if (ps.Length == 1) {
+        else if (_numOfAlivePlayers == 1) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerScript>().PlayerName, true);
             WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
             DestroyEverything();
@@ -193,13 +194,18 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void DestroyEverything() {
+        GameObject[] allBombs               = GameObject.FindGameObjectsWithTag("Bomb");
+        GameObject[] allExplosions          = GameObject.FindGameObjectsWithTag("Explosion");
         GameObject[] allWalls               = GameObject.FindGameObjectsWithTag("Wall");
         GameObject[] allFloors              = GameObject.FindGameObjectsWithTag("Floor");
         GameObject[] allDestructableWalls   = GameObject.FindGameObjectsWithTag("Destructable");
         GameObject[] allPowerupWalls        = GameObject.FindGameObjectsWithTag("WallPowerUp");
         GameObject[] allRemainingPlayers    = GameObject.FindGameObjectsWithTag("Player");
 
-
+        for (int i = 0; i < allBombs.Length; ++i)
+            Destroy(allBombs[i]);
+        for (int i = 0; i < allExplosions.Length; ++i)
+            Destroy(allExplosions[i]);
         for (int i = 0; i < allWalls.Length; ++i)
             Destroy(allWalls[i]);
         for (int i = 0; i < allFloors.Length; ++i)

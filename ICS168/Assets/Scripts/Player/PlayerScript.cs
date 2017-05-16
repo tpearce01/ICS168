@@ -7,10 +7,11 @@ public class PlayerScript : MonoBehaviour {
     // Based on the player's number, it will color the sprite differently!
     // Player's number should be between 1 and 4.
     [SerializeField]
-    [Range(1,4)]
+    [Range(0,3)]
     private int _playerNumber;
     public int PlayerNumber {
         get { return _playerNumber; }
+        set { _playerNumber = value; }
     }
 
     private SpriteRenderer _sr;
@@ -39,16 +40,16 @@ public class PlayerScript : MonoBehaviour {
     {
         switch (_playerNumber)
         {
-            case 1:
+            case 0:
                 sr.material.SetColor("_Color", Color.red);
                 break;
-            case 2:
+            case 1:
                 sr.material.SetColor("_Color", Color.blue);
                 break;
-            case 3:
+            case 2:
                 sr.material.SetColor("_Color", Color.green);
                 break;
-            case 4:
+            case 3:
                 sr.material.SetColor("_Color", Color.yellow);
                 break;
         }

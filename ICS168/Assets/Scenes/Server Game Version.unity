@@ -531,10 +531,6 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1974672584}
-    - target: {fileID: 1232098829507536, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
-      propertyPath: m_Name
-      value: Redirecting
-      objectReference: {fileID: 0}
     - target: {fileID: 1637812908977612, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
       propertyPath: m_IsActive
       value: 0
