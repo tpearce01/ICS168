@@ -20,11 +20,14 @@ public enum ServerCommands {
 public class ServerObject {
 
     public ServerObject() {
-        frameChanges = new Dictionary<int, byte>();
+        frameNum = 0;
+        changeIndex = new List<ushort>();
+        frameChanges = new List<byte>();
     }
 
     public int frameNum;
-    public Dictionary<int, byte> frameChanges;
+    public List<ushort> changeIndex;
+    public List<byte> frameChanges;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -80,8 +83,12 @@ public class ServerConnection : Singleton<ServerConnection> {
 
     private Queue<byte> previousFrameQ = new Queue<byte>();
     private byte[] previousFrame;
-    private Queue<ushort> _changeIndex = new Queue<ushort>();
-    private Queue<byte> _frameChanges = new Queue<byte>();
+    //private Queue<ushort> _changeIndex = new Queue<ushort>();
+    //private Queue<byte> _frameChanges = new Queue<byte>();
+
+    //private List<KeyValuePair<ushort, byte>> frameChanges = new List<KeyValuePair<ushort, byte>>();
+    private List<ushort> _changeIndex = new List<ushort>();
+    private List<byte> _frameChanges = new List<byte>();
 
     private void OnEnable() {
         _cam = Camera.main;
@@ -208,7 +215,8 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        Debug.Log("Sending message of length " + messageBuffer.Length);
+
+        //Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
             NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
@@ -227,9 +235,11 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         if (previousFrame != null) {
 
-            for (int i = 0; i < image.Length; ++i) {
+            for (ushort i = 0; i < image.Length; ++i) {
                 if (i < previousFrame.Length && previousFrame[i] != image[i]) {
-                    toBeSent.frameChanges.Add(i, image[i]);
+                    //frameChanges.Add(new KeyValuePair<ushort, byte>(i, image[i]));
+                    toBeSent.changeIndex.Add(i);
+                    toBeSent.frameChanges.Add(image[i]);
                 }
             }
 
@@ -240,15 +250,20 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             previousFrame = image;
 
-            for (int i = 0; i < image.Length; ++i) {
+            for (ushort i = 0; i < image.Length; ++i) {
                 // let's consider sending the frame by itself instead of all the changes for the first frame.
-                toBeSent.frameChanges.Add(i, image[i]);
+                //frameChanges.Add(new KeyValuePair<ushort, byte>(i, image[i]));
+                toBeSent.changeIndex.Add(i);
+                toBeSent.frameChanges.Add(image[i]);
             }
         }
 
         // Convert to JSON
         string jsonToBeSent = "1";
-        jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString(toBeSent);
+        //jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString(toBeSent);
+        jsonToBeSent += Newtonsoft.Json.JsonConvert.SerializeObject(toBeSent);
+
+        Debug.Log(jsonToBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
         if (_inGamePlayers > 0) {
