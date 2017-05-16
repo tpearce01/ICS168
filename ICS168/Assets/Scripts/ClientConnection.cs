@@ -121,12 +121,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 				Texture2D gameTexture = new Texture2D (0, 0);
 
 				SO2 JSONdata = JsonUtility.FromJson<SO2> (newMessage);
-				//Debug.Log(JSONdata.frameNum);
-				//Dictionary<int, byte> testDic = new Dictionary<int, byte> ();
-				//for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
-				//	testDic.Add (JSONdata.indexToChange [i], JSONdata.changeToMake [i]);
-				//}
-				//Debug.Log (testDic.Count);
+
 				if (lastImage != null) {
 					if (JSONdata.imageSize == lastImage.Length) {
 						for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
@@ -171,34 +166,6 @@ public class ClientConnection : Singleton<ClientConnection> {
 				gameTexture.LoadImage (SO.image);
 				_renderTo.GetComponent<CanvasRenderer>().SetTexture (gameTexture);
 				lastImage = SO.image;
-				//SO2 JSONdata = JsonUtility.FromJson<SO2>(newMessage);
-				//Debug.Log(JSONdata.frameNum);
-				//Dictionary<int, byte> testDic = new Dictionary<int, byte> ();
-				//for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
-				//	testDic.Add (JSONdata.indexToChange [i], JSONdata.changeToMake [i]);
-				//}
-				//Debug.Log (testDic.Count);
-
-
-				//if (_frameToRender.Length != 0) {
-				//    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
-				//        _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
-				//    }
-				//}
-				//else {
-				//    _frameToRender = _frameChanges;
-				//}
-
-				//gameTexture.LoadImage(_frameToRender);
-				//_canvasRenderer.SetTexture(gameTexture);
-
-				// Latency Mitigation at its finest.
-				//if (JSONdata.frameNum > _currentFrame) {
-				//byte[] textureByteArray = Convert.FromBase64String(JSONdata.frameChanges);
-				//gameTexture.LoadImage(textureByteArray);
-				//_currentFrame = JSONdata.frameNum;
-				//_renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
-				//}
 			}
 			else if(prefix == (int)ClientCommands.SetGameInSession) {
 				WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);

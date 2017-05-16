@@ -251,85 +251,47 @@ public class ServerConnection : Singleton<ServerConnection>
         tex.Apply();
         byte[] image = tex.EncodeToPNG();
 
-        /*
-        ServerObject toBeSent = new ServerObject();
-
-        if (previousFrame != null) {
-
-            for (int i = 0; i < image.Length; ++i) {
-                if (i < previousFrame.Length && previousFrame[i] != image[i]) {
-                    toBeSent.frameChanges.Add(i, image[i]);
-                }
-            }
-
-            // Update the previous frame
-            previousFrame = image;
-        }
-        else if (previousFrame == null) {
-
-            previousFrame = image;
-
-            for (int i = 0; i < image.Length; ++i) {
-                // let's consider sending the frame by itself instead of all the changes for the first frame.
-                toBeSent.frameChanges.Add(i, image[i]);
-            }
-        }
-
-        // Convert to JSON
-        string jsonToBeSent = "1";
-        jsonToBeSent += GameDevWare.Serialization.Json.SerializeToString<ServerObject>(toBeSent);
-
-        // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0) {
-            SendJSONMessage(jsonToBeSent);
-        }
-        */
-
         //Create empty object to be sent
         SO2 toBeSent = new SO2();
 
         //Create empty dictionary of changes
         Dictionary<int, byte> changelog = new Dictionary<int, byte>();
 
-        if (lastImage != null)
+        if (lastImage != null) /*If lastImage exists, compare the last image with the new image and record the differences*/
         {
-            //Populate dictionary with changes
             for (int i = 0; i < Mathf.Max(image.Length, lastImage.Length); i++)
             {
-                if (i < Mathf.Min(image.Length, lastImage.Length))
+                if (i < Mathf.Min(image.Length, lastImage.Length)) /*When in bounds of both arrays, check all bytes for differences*/
                 {
-                    //Safe to check for changes
-                    if (image[i] != lastImage[i])
+                    if (image[i] != lastImage[i]) /*If the data is different, add it to the changelog*/
                     {
                         changelog.Add(i, image[i]);
                     }
                 }
-                else if (image.Length > lastImage.Length)
+                else if (image.Length > lastImage.Length) /*New image is larger. All excess bytes should be added to the changelog*/
                 {
-                    //Every byte is a change
                     changelog.Add(i, (image[i]));
                 }
-                else
+                else /*New image is smaller, break loop to avoid out of bounds errors*/
                 {
                     break;
                 }
             }
         }
-        else
+        else /*Last image does not exist, all data should be added to the changelog*/
         {
-            //Populate dictionary with changes
             for (int i = 0; i < image.Length; i++)
             {
                 changelog.Add(i, image[i]);
             }
         }
 
-        lastImage = image;
-
-        //If the original image is cheaper, send the original image
-        if (changelog.Count > image.Length/2)
+        lastImage = image; //Update last image to be up to date. We don't need old data anymore.
+        Debug.Log("Number of changes: " + changelog.Count);
+        Debug.Log("Image size: " + image.Length);
+        if (changelog.Count > image.Length/2) /*Roughly determine which method should be used to send an image*/
         {
-            Debug.Log("Sending image");
+            //Debug.Log("Sending image");
             ServerObject toBeSent2 = new ServerObject();
             toBeSent2.image = image;
             string jsonToBeSent = "1";
@@ -341,10 +303,7 @@ public class ServerConnection : Singleton<ServerConnection>
         }
         else
         {
-            Debug.Log("Sending deltas");
-            //else if the deltas is cheaper, send the deltas
-
-            //Allocate space to add changes to object to be sent
+            //Debug.Log("Sending deltas");
             toBeSent.indexToChange = new int[changelog.Count];
             toBeSent.changeToMake = new byte[changelog.Count];
             toBeSent.imageSize = image.Length;
@@ -356,17 +315,16 @@ public class ServerConnection : Singleton<ServerConnection>
                 toBeSent.changeToMake[i] = changelog.ElementAt(i).Value;
             }
 
-            //Sent the message
+            //Send the message
             string jsonToBeSent = "4";
             jsonToBeSent += JsonUtility.ToJson(toBeSent);
-            // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
             if (_inGamePlayers > 0)
             {
                 SendJSONMessage(jsonToBeSent);
             }
         }
 
-        changelog.Clear();
+        changelog.Clear();  //Clear the changelog in preparation for the next frame
     }
 
     private IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
