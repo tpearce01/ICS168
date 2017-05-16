@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager> {
 
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
-    private int _numOfAlivePlayers;
+    [SerializeField] private int _numOfAlivePlayers;
     public int NumOfAlivePlayers {
         get { return _numOfAlivePlayers; }
     }
@@ -59,14 +59,38 @@ public class GameManager : Singleton<GameManager> {
     [SerializeField]
     private float _timeToShowVictory;
 
+    /// <summary>
+    /// Used to store the usernames from login.
+    /// </summary>
+    private string[] usernameArray = new string[4];
+
+    public string getUsername(int index) {
+        return usernameArray[index];
+    }
+
+    public void setUsername(int index, string playerName) {
+        usernameArray[index] = playerName;
+    }
+
     private void OnEnable() {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 15;
     }
 
     public void StartGame() {
-        _numOfAlivePlayers = GameObject.FindGameObjectsWithTag("Player").Length;
-
+        if (GameObject.Find("Player1(Clone)") != null) {
+            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(0);
+        }
+        if (GameObject.Find("Player2(Clone)") != null) {
+            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(1);
+        }
+        if (GameObject.Find("Player3(Clone)") != null) {
+            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(2);
+        }
+        if (GameObject.Find("Player4(Clone)") != null) {
+            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(3);
+        }
+        
         _currTime = _roundTime;
         _isGameOver = false;
         _gameInSession = true;
@@ -82,23 +106,13 @@ public class GameManager : Singleton<GameManager> {
     void Update () {
 
         if (_gameInSession) {
-
             //Count down the timer
             _currTime -= Time.deltaTime;
 
             if (_currTime < 0.0f) {
-                _isGameOver = true;
-            }
-
-            if (_isGameOver) {
-                _timeToShowVictory -= Time.deltaTime;
-                //Do whatever you need to do once the game is over. 
-                //_winner = findWinner();
-                //displayVictor();
-                //After a few seconds, go to the next scene.
-                if (_timeToShowVictory < 0.0f) {
-                    SceneManager.LoadScene("UI and Controls Testing");
-                }
+                WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
+                WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+                DestroyEverything();
             }
         }
     }
@@ -127,20 +141,20 @@ public class GameManager : Singleton<GameManager> {
         for(int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
             Destroy(tempPlayers[i]);
         }
+        
     }
 
 
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>
-  //  public void decAlivePlayers()
-  //  {
-  //      _numOfAlivePlayers -= 1;
-		//if (_numOfAlivePlayers <= 1) {
-		//	findWinner ();
-		//}
-		////Is the game over?
-  //  }
+    public void decAlivePlayers() {
+        _numOfAlivePlayers -= 1;
+        if (_numOfAlivePlayers <= 1) {
+            findWinner();
+        }
+        //Is the game over?
+    }
 
     /// <summary>
     /// Returns a bool stating whether or not the game is over.
@@ -155,23 +169,48 @@ public class GameManager : Singleton<GameManager> {
     /// Returns the player number of the winner, 0 if there is a draw.
     /// </summary>
     /// <returns>int</returns>
-  //  int findWinner()
-  //  {
-		//if (OnEndGame != null) {
-		//	OnEndGame (WindowIDs.Game, WindowIDs.Victory);
-		//} 
+    void findWinner() {
+        if (OnEndGame != null) {
+            OnEndGame(WindowIDs.Game, WindowIDs.Victory);
+        }
 
-		//GameObject[] ps = GameObject.FindGameObjectsWithTag ("Player"); //Tells us the winners
+        GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
 
-		//if (ps.Length >= 1) {
-		//	return 0;
-		//} /*else if (ps.Length == 1) {
-		//	return ps [0].GetComponent<PlayerScript> ().PlayerNumber;
-		//} */else {
-		//	Debug.Log ("Wasted");
-		//	return 0;
-		//}
-  //  }
+        if (ps.Length > 1) {
+            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
+            WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+            DestroyEverything();
+        } 
+        else if (ps.Length == 1) {
+            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerScript>().PlayerName, true);
+            WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+            DestroyEverything();
+        } 
+        else {
+            Debug.Log("Wasted");
+            
+        }
+    }
+
+    private void DestroyEverything() {
+        GameObject[] allWalls               = GameObject.FindGameObjectsWithTag("Wall");
+        GameObject[] allFloors              = GameObject.FindGameObjectsWithTag("Floor");
+        GameObject[] allDestructableWalls   = GameObject.FindGameObjectsWithTag("Destructable");
+        GameObject[] allPowerupWalls        = GameObject.FindGameObjectsWithTag("WallPowerUp");
+        GameObject[] allRemainingPlayers    = GameObject.FindGameObjectsWithTag("Player");
+
+
+        for (int i = 0; i < allWalls.Length; ++i)
+            Destroy(allWalls[i]);
+        for (int i = 0; i < allFloors.Length; ++i)
+            Destroy(allFloors[i]);
+        for (int i = 0; i < allDestructableWalls.Length; ++i)
+            Destroy(allDestructableWalls[i]);
+        for (int i = 0; i < allPowerupWalls.Length; ++i)
+            Destroy(allPowerupWalls[i]);
+        for (int i = 0; i < allRemainingPlayers.Length; ++i)
+            Destroy(allRemainingPlayers[i]);
+    }
 
     /// <summary>
     /// Displays the victory text.

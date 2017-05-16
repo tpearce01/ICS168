@@ -19,6 +19,7 @@ public enum ClientCommands {
     PreExistingUser = 7,
     InvalidLogin = 8,
     DoesNotExist = 9,
+    GoBackToMain = 10,
 }
 
 public class PlayerIO {
@@ -137,6 +138,8 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
                     _clientLobby.CannotDisconnect();
+                } else if (prefix == (int)ClientCommands.GoBackToMain) {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
                 }
                 break;
 

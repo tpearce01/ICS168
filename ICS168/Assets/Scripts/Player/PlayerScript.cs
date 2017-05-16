@@ -19,6 +19,10 @@ public class PlayerScript : MonoBehaviour {
     /// The username of the player.
     /// </summary>
     public string playerName;
+    public string PlayerName {
+        get { return playerName;  }
+        set { playerName = value; }
+    }
 
 
 	// Use this for initialization

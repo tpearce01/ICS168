@@ -118,7 +118,6 @@ public class PlayerActions : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.gameObject.CompareTag("Player")) {
-            Debug.Log("I am Player");
             validMove = false;
         }
     }

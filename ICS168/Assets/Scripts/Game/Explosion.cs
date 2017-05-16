@@ -41,7 +41,7 @@ public class Explosion : MonoBehaviour {
 			SoundManager.Instance.PlaySound (destructableWallDestroyedSound);
         }
 		else if(other.CompareTag("Player")){
-            //other.GetComponent<PlayerScript>().Kill();
+            GameManager.Instance.decAlivePlayers();
             Destroy(other.gameObject);
 		}
         else if (other.CompareTag("WallPowerUp"))
