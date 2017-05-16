@@ -81,6 +81,9 @@ public class ServerConnection : Singleton<ServerConnection> {
         _cam = Camera.main;
     }
 
+
+    private float _timer = 0.0f;
+
     void Start() {
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
@@ -90,6 +93,9 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     void Update() {
+
+        _timer += Time.deltaTime;
+
         CaptureFrame();
 
         int incomingSocketID = -1;
@@ -227,7 +233,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0) {
+        if (_inGamePlayers > 0 && _timer <= 20.0f) {
             SendJSONMessage(jsonToBeSent);
         }
     }
