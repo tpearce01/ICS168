@@ -12,36 +12,39 @@ using System.Net.Sockets;
 using System.Linq;
 
 public enum ClientCommands {
-    StartStream = 0,
-    RenderGame = 1,
-    SetGameInSession = 2,
-    CloseDisconnects = 3,
-    AccountCreated = 6,
-    PreExistingUser = 7,
-    InvalidLogin = 8,
-    DoesNotExist = 9,
+	StartStream = 0,
+	RenderGame = 1,
+	SetGameInSession = 2,
+	CloseDisconnects = 3,
+	LargeRender = 4,
+	AccountCreated = 6,
+	PreExistingUser = 7,
+	InvalidLogin = 8,
+	DoesNotExist = 9,
 }
 
 public class PlayerIO {
-    public float time;
-    public ButtonEnum button;
+	public float time;
+	public ButtonEnum button;
 }
 
 public class LoginInfo {
-    public string username;
-    public string password;
+	public string username;
+	public string password;
 }
 
 public class ClientConnection : Singleton<ClientConnection> {
+	byte[] lastImage;
 
-    [SerializeField] private Canvas _gameCanvas;
 
-    private bool _connected = false;
-    public bool Connected {
-        get { return _connected; }
-    }
+	[SerializeField] private Canvas _gameCanvas;
 
-    [SerializeField] private string serverIP = "";		//Server IP address
+	private bool _connected = false;
+	public bool Connected {
+		get { return _connected; }
+	}
+
+	[SerializeField] private string serverIP = "";		//Server IP address
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	private int _maxConnections = 1;	                //Maximum umber of connection
 
@@ -52,32 +55,32 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _socketPort = 8888;	//Port number
 
 	[SerializeField] private Image _renderTo;								//Image to render to
-    private CanvasRenderer _canvasRenderer;
-    private int _currentFrame = -1;
-    private byte[] _frameToRender;
-    private ushort[] _changeIndex;
-    private byte[] _frameChanges;
+	private CanvasRenderer _canvasRenderer;
+	private int _currentFrame = -1;
+	private byte[] _frameToRender;
+	private ushort[] _changeIndex;
+	private byte[] _frameChanges;
 
-    private ClientIO _clientIO;
+	private ClientIO _clientIO;
 
-    [SerializeField] private OnlineStatusWindow _statusWindow;
-    [SerializeField] private ClientLobbyWindow _clientLobby;
+	[SerializeField] private OnlineStatusWindow _statusWindow;
+	[SerializeField] private ClientLobbyWindow _clientLobby;
 
-    private void OnEnable() {
-        _canvasRenderer = _renderTo.GetComponent<CanvasRenderer>();
-    }
+	private void OnEnable() {
+		_canvasRenderer = _renderTo.GetComponent<CanvasRenderer>();
+	}
 
-    private void Start() {
-        _clientIO = GetComponent<ClientIO>();
-        _currentFrame = -1;
+	private void Start() {
+		_clientIO = GetComponent<ClientIO>();
+		_currentFrame = -1;
 
-        NetworkTransport.Init();
-        ConnectionConfig connectionConfig = new ConnectionConfig();
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
-        HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
-        _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
+		NetworkTransport.Init();
+		ConnectionConfig connectionConfig = new ConnectionConfig();
+		UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+		HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
+		_socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
-        Connect();
+		Connect();
 	}
 
 	private void Update() {
@@ -85,7 +88,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 		int incomingConnectionID = 0;
 		int incomingChannelID = 0;
 
-        // POSSIBLY MOVE THIS TO BE A PERMANENT VARIABLE TO SAVE ALLOCATION RESOURCES
+		// POSSIBLY MOVE THIS TO BE A PERMANENT VARIABLE TO SAVE ALLOCATION RESOURCES
 		byte[] incomingMessageBuffer = new byte[_bufferSize];
 		int dataSize = 0;
 		byte error;
@@ -94,126 +97,182 @@ public class ClientConnection : Singleton<ClientConnection> {
 			out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
 
 		switch (incomingNetworkEvent) {
-		    case NetworkEventType.Nothing:
-			    break;
+		case NetworkEventType.Nothing:
+			break;
 
-		    case NetworkEventType.ConnectEvent:
-			    Debug.Log("client incoming connection event received");
-                _connected = true;
-                _statusWindow.UpdateOnlineStatus(true);
-			    break;
+		case NetworkEventType.ConnectEvent:
+			Debug.Log("client incoming connection event received");
+			_connected = true;
+			_statusWindow.UpdateOnlineStatus(true);
+			break;
 
-            //0 for username/password info, 1 for PlayerIO
-		    case NetworkEventType.DataEvent:
+			//0 for username/password info, 1 for PlayerIO
+		case NetworkEventType.DataEvent:
 
-                string message = Encoding.UTF8.GetString(incomingMessageBuffer);
-                int prefix = Convert.ToInt32(message.Substring(0, 1));
-                string newMessage = message.Substring(1);
+			string message = Encoding.UTF8.GetString (incomingMessageBuffer);
+			int prefix = Convert.ToInt32 (message.Substring (0, 1));
+			string newMessage = message.Substring (1);
 
-                if (prefix == (int)ClientCommands.StartStream) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.ClientLobby);
-                    _gameCanvas.gameObject.SetActive(true);
-                }
-                else if (prefix == (int)ClientCommands.RenderGame) {
-                    Texture2D gameTexture = new Texture2D(0, 0);
+			if (prefix == (int)ClientCommands.StartStream) {
+				WindowManager.Instance.ToggleWindows (WindowIDs.Login, WindowIDs.ClientLobby);
+				_gameCanvas.gameObject.SetActive (true);
+			} else if (prefix == (int)ClientCommands.LargeRender) {
+				Debug.Log ("Render deltas");
+				Texture2D gameTexture = new Texture2D (0, 0);
 
-                    ServerObject JSONdata = GameDevWare.Serialization.Json.Deserialize<ServerObject>(newMessage);
-                    Debug.Log(JSONdata);
-                    
+				SO2 JSONdata = JsonUtility.FromJson<SO2> (newMessage);
+				//Debug.Log(JSONdata.frameNum);
+				//Dictionary<int, byte> testDic = new Dictionary<int, byte> ();
+				//for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
+				//	testDic.Add (JSONdata.indexToChange [i], JSONdata.changeToMake [i]);
+				//}
+				//Debug.Log (testDic.Count);
+				if (lastImage != null) {
+					if (JSONdata.imageSize == lastImage.Length) {
+						for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
+							lastImage [JSONdata.indexToChange [i]] = JSONdata.changeToMake [i];
+						}
+						gameTexture.LoadImage (lastImage);
+						_renderTo.GetComponent<CanvasRenderer> ().SetTexture (gameTexture);
+					} else if (JSONdata.imageSize > lastImage.Length) {
+						byte[] temp = lastImage;
+						lastImage = new byte[JSONdata.imageSize];
+						for (int i = 0; i < temp.Length; i++) {
+							lastImage [i] = temp [i];
+						}
+						for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
+							lastImage [JSONdata.indexToChange [i]] = JSONdata.changeToMake [i];
+						}
+						gameTexture.LoadImage (lastImage);
+						_renderTo.GetComponent<CanvasRenderer> ().SetTexture (gameTexture);
 
-                    //if (_frameToRender.Length != 0) {
-                    //    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
-                    //        _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
-                    //    }
-                    //}
-                    //else {
-                    //    _frameToRender = _frameChanges;
-                    //}
+					} else {
+						//new image is smaller
+						byte[] temp = new byte[JSONdata.imageSize];
+						for (int i = 0; i < temp.Length; i++) {
+							temp [i] = lastImage [i];
+						}
+						for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
+							lastImage [JSONdata.indexToChange [i]] = JSONdata.changeToMake [i];
+						}
+						gameTexture.LoadImage (lastImage);
+						_renderTo.GetComponent<CanvasRenderer> ().SetTexture (gameTexture);
+					}
+				} else {
+					//null
 
-                    //gameTexture.LoadImage(_frameToRender);
-                    //_canvasRenderer.SetTexture(gameTexture);
+				}
 
-                    // Latency Mitigation at its finest.
-                    //if (JSONdata.frameNum > _currentFrame) {
-                    //byte[] textureByteArray = Convert.FromBase64String(JSONdata.frameChanges);
-                    //gameTexture.LoadImage(textureByteArray);
-                    //_currentFrame = JSONdata.frameNum;
-                    //_renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
-                    //}
-                }
-                else if(prefix == (int)ClientCommands.SetGameInSession) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);
-                    _clientIO.gameInSession = true;
-                }
-                else if (prefix == (int)ClientCommands.AccountCreated) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
-                }
-                else if (prefix == (int)ClientCommands.PreExistingUser) {
-                    GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
-                }
-                else if (prefix == (int)ClientCommands.InvalidLogin) {
-                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
-                }
-                else if (prefix == (int)ClientCommands.DoesNotExist) {
-                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
-                }
-                else if (prefix == (int)ClientCommands.CloseDisconnects) {
-                    _clientLobby.CannotDisconnect();
-                }
-                break;
+			}
+			else if (prefix == (int)ClientCommands.RenderGame) {
+				Debug.Log ("Render image");
+				Texture2D gameTexture = new Texture2D(0, 0);
+				ServerObject SO = JsonUtility.FromJson<ServerObject> (newMessage);
+				gameTexture.LoadImage (SO.image);
+				_renderTo.GetComponent<CanvasRenderer>().SetTexture (gameTexture);
+				lastImage = SO.image;
+				//SO2 JSONdata = JsonUtility.FromJson<SO2>(newMessage);
+				//Debug.Log(JSONdata.frameNum);
+				//Dictionary<int, byte> testDic = new Dictionary<int, byte> ();
+				//for (int i = 0; i < JSONdata.indexToChange.Length; i++) {
+				//	testDic.Add (JSONdata.indexToChange [i], JSONdata.changeToMake [i]);
+				//}
+				//Debug.Log (testDic.Count);
 
-		    case NetworkEventType.DisconnectEvent:
-			    Debug.Log("client: remote client event disconnected");
-                _connected = false;
-                _gameCanvas.gameObject.SetActive(false);
-                WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.StartWindow);
-                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
-                _clientIO.gameInSession = false;
 
-                _statusWindow.UpdateOnlineStatus(false);
-                break;
-		    }
+				//if (_frameToRender.Length != 0) {
+				//    for (int i = 0; i < JSONdata.changeIndex.Length; ++i) {
+				//        _frameToRender[JSONdata.changeIndex[i]] = _frameChanges[i];
+				//    }
+				//}
+				//else {
+				//    _frameToRender = _frameChanges;
+				//}
+
+				//gameTexture.LoadImage(_frameToRender);
+				//_canvasRenderer.SetTexture(gameTexture);
+
+				// Latency Mitigation at its finest.
+				//if (JSONdata.frameNum > _currentFrame) {
+				//byte[] textureByteArray = Convert.FromBase64String(JSONdata.frameChanges);
+				//gameTexture.LoadImage(textureByteArray);
+				//_currentFrame = JSONdata.frameNum;
+				//_renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+				//}
+			}
+			else if(prefix == (int)ClientCommands.SetGameInSession) {
+				WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);
+				_clientIO.gameInSession = true;
+			}
+			else if (prefix == (int)ClientCommands.AccountCreated) {
+				WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
+			}
+			else if (prefix == (int)ClientCommands.PreExistingUser) {
+				GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
+			}
+			else if (prefix == (int)ClientCommands.InvalidLogin) {
+				GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
+			}
+			else if (prefix == (int)ClientCommands.DoesNotExist) {
+				GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
+			}
+			else if (prefix == (int)ClientCommands.CloseDisconnects) {
+				_clientLobby.CannotDisconnect();
+			}
+			break;
+
+		case NetworkEventType.DisconnectEvent:
+			Debug.Log("client: remote client event disconnected");
+			_connected = false;
+			_gameCanvas.gameObject.SetActive(false);
+			WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.StartWindow);
+			WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
+			_clientIO.gameInSession = false;
+
+			_statusWindow.UpdateOnlineStatus(false);
+			break;
+		}
 	}
 
 	public void Connect() {
 
-        byte error = 0;
+		byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
 
-    }
+	}
 
-    private void SendJSONMessage(string JSONobject) {
-        byte error = 0;
-        byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
-    }
+	private void SendJSONMessage(string JSONobject) {
+		byte error = 0;
+		byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
+		//Debug.Log("Sending message of length " + messageBuffer.Length);
+		NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
+	}
 
-    //Login
-    public void SendMessage(LoginInfo info) {
-        string jsonToBeSent = "0";
-        jsonToBeSent += JsonUtility.ToJson(info);
-        SendJSONMessage(jsonToBeSent);
-    }
+	//Login
+	public void SendMessage(LoginInfo info) {
+		string jsonToBeSent = "0";
+		jsonToBeSent += JsonUtility.ToJson(info);
+		SendJSONMessage(jsonToBeSent);
+	}
 
-    //Create Account
-    public void SendMessageAccount(LoginInfo info) {
-        string jsonToBeSent = "1";
-        jsonToBeSent += JsonUtility.ToJson(info);
-        SendJSONMessage(jsonToBeSent);
-    }
+	//Create Account
+	public void SendMessageAccount(LoginInfo info) {
+		string jsonToBeSent = "1";
+		jsonToBeSent += JsonUtility.ToJson(info);
+		SendJSONMessage(jsonToBeSent);
+	}
 
-    //Player IO
-    public void SendMessage(PlayerIO command) {
-        string jsonToBeSent = "2";
-        jsonToBeSent += JsonUtility.ToJson(command);
-        SendJSONMessage(jsonToBeSent);
-    }
+	//Player IO
+	public void SendMessage(PlayerIO command) {
+		string jsonToBeSent = "2";
+		jsonToBeSent += JsonUtility.ToJson(command);
+		SendJSONMessage(jsonToBeSent);
+	}
 
-    public void LeaveLobby() {
-        string jsonToBeSent = "4";
-        jsonToBeSent += JsonUtility.ToJson("");
-        SendJSONMessage(jsonToBeSent);
-        _gameCanvas.gameObject.SetActive(false);
-    }
+	public void LeaveLobby() {
+		string jsonToBeSent = "4";
+		jsonToBeSent += JsonUtility.ToJson("");
+		SendJSONMessage(jsonToBeSent);
+		_gameCanvas.gameObject.SetActive(false);
+	}
 }
