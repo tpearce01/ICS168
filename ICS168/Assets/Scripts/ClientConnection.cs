@@ -136,7 +136,7 @@ public class ClientConnection : Singleton<ClientConnection>
                 }
                 else if (prefix == (int)ClientCommands.RenderGame) {
                     Debug.Log("Render Image");
-                    Texture2D gameTexture = new Texture2D(0, 0);
+                    lastImage = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
 
@@ -144,14 +144,14 @@ public class ClientConnection : Singleton<ClientConnection>
                     // Latency Mitigation at its finest.
                     if (JSONdata.frameNum > _currentFrame) {
                         byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
-                        gameTexture.LoadImage(textureByteArray);
+                        lastImage.LoadImage(textureByteArray);
                         _currentFrame = JSONdata.frameNum;
-                        _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
+                        _renderTo.GetComponent<CanvasRenderer>().SetTexture(lastImage);
 
                         //_slowConnectTimer = 0.0f;
                     }
                 }
-                else if (prefix == (int) ClientCommands.RenderDeltas)
+                else if (prefix == (int) ClientCommands.RenderDeltas && lastImage != null)
                 {
                     Debug.Log("Render Deltas");
                     //Texture2D lastImage;
