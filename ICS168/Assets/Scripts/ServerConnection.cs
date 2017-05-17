@@ -240,7 +240,7 @@ public class ServerConnection : Singleton<ServerConnection>
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
-        //Debug.Log("Sending message of length " + messageBuffer.Length);
+        Debug.Log("Sending message of length " + messageBuffer.Length);
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
             NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
@@ -267,13 +267,13 @@ public class ServerConnection : Singleton<ServerConnection>
             {
                 SendJSONMessage(jsonToBeSent);
             }
+
         }
         else
         {
             tImage temp = new tImage();
             temp.CompressDelta(lastTex, tex);
             SO2 toSend = new SO2();
-            toSend.frameNum = Time.frameCount;
             toSend.data = Convert.ToBase64String(temp.data);
             string jsonToBeSent = "4";
             jsonToBeSent += JsonUtility.ToJson(toSend);

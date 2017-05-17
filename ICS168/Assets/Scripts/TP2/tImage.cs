@@ -13,6 +13,16 @@ public class tImage {
 
 	}
 
+    public void CompressEmpty()
+    {
+        Color[] pixels = new Color[tImageMetaData.Instance.imageHeight * tImageMetaData.Instance.imageWidth];
+        byte[] imgData = new byte[tImageMetaData.Instance.imageHeight * tImageMetaData.Instance.imageWidth];
+        for (int i = 0; i < imgData.Length; i++)
+        {
+            imgData[i] = (int) ColorEnum.white;
+        }
+    }
+
 	public void Compress(Texture2D img){
 		Color[] pixels = img.GetPixels ();
 		byte[] imgData = new byte[pixels.Length];
@@ -40,6 +50,15 @@ public class tImage {
 				 * any irregular colors to the best fitting color, and render it as 
 				 * such.
 				*/
+                //interpolate black/white
+			    if (pixels[i].r < .5f && pixels[i].g < .5f && pixels[i].b < .5f)
+			    {
+			        imgData[i] = (int) ColorEnum.black;
+			    }
+			    else
+			    {
+			        imgData[i] = (int) ColorEnum.white;
+			    }
 			}
 		}
 	}
@@ -78,11 +97,19 @@ public class tImage {
 					delta [i] = (int)ColorEnum.yellow;
 					//numYellow++;
 				} else {
-					/* Else: No valid color assigned. In this case we should interpolate 
+                    /* Else: No valid color assigned. In this case we should interpolate 
 					 * any irregular colors to the best fitting color, and render it as 
 					 * such.
 					*/
-				}
+                    if (curr[i].r < .7f && curr[i].g < .7f && curr[i].b < .7f)
+                    {
+                        delta[i] = (int)ColorEnum.black;
+                    }
+                    else
+                    {
+                        delta[i] = (int)ColorEnum.white;
+                    }
+                }
 			}
 		}
 
