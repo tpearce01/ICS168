@@ -47,11 +47,11 @@ public class PlayerActions : MonoBehaviour {
             //MissingReferenceException: The object of type 'Tile' has been destroyed but you are still trying to access it.
             Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
             if (tile.type == TileType.Wall || tile.type == TileType.Destructable || tile.type == TileType.WallPowerUp) {
-                Debug.Log("I am a wall");
+               // Debug.Log("I am a wall");
                 validMove = false;
             }
             else {
-                Debug.Log("validMove is true");
+                //Debug.Log("validMove is true");
                 validMove = true;
             }
         }

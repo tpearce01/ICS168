@@ -12,6 +12,7 @@ public class VictoryWindow : GenericWindow {
         //Text[] txt = GetComponentsInChildren<Text>();
         
         if(redirectingSeconds <= 0.0f) {
+            ServerConnection.Instance.InGamePlayers = 0;
             ServerConnection.Instance.SendJSONMessage("10");
             ToggleWindows(WindowIDs.Victory, WindowIDs.None);
         }else {

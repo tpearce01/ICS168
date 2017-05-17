@@ -374,6 +374,11 @@ Prefab:
       propertyPath: _incomingBufferSize
       value: 1024
       objectReference: {fileID: 0}
+    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
+        type: 2}
+      propertyPath: _numberOfConnections
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
   m_IsPrefabParent: 0
@@ -663,6 +668,10 @@ Prefab:
         type: 2}
       propertyPath: _minPlayers
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1890922138322000, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}

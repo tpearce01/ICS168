@@ -14,8 +14,6 @@ public class LobbyWindow : GenericWindow {
     [SerializeField] private GameObject[] _players;
     [SerializeField] private Text[] _usernames;
 
-    private int _inGamePlayers = -1;
-
     private float _timeout = -1.0f;
     private float _gameStartsIn = -1.0f;
     private bool _messageSent = false;
@@ -38,9 +36,7 @@ public class LobbyWindow : GenericWindow {
 
     private void Update() {
 
-        _inGamePlayers = ServerConnection.Instance.InGamePlayers;
-
-        if (_inGamePlayers >= _minPlayers && _inGamePlayers < ServerConnection.Instance.MaxConnections) {
+        if (ServerConnection.Instance.InGamePlayers >= _minPlayers && ServerConnection.Instance.InGamePlayers < ServerConnection.Instance.MaxConnections) {
             if (_timeout > 0.0f) {
                 _timeout -= Time.deltaTime;
                 _timeoutDisplay.text = "Waiting for players: " + (int)_timeout;
@@ -64,7 +60,7 @@ public class LobbyWindow : GenericWindow {
                 }
             }
         }
-        else if (_inGamePlayers == ServerConnection.Instance.MaxConnections) {
+        else if (ServerConnection.Instance.InGamePlayers == ServerConnection.Instance.MaxConnections) {
 
             if (!_messageSent) {
                 ServerConnection.Instance.PreventDisconnects();
@@ -81,12 +77,12 @@ public class LobbyWindow : GenericWindow {
                 ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
             }
         }
-        else if (_inGamePlayers < _minPlayers) {
+        else if (ServerConnection.Instance.InGamePlayers < _minPlayers) {
             _timeoutDisplay.text = "Waiting for players...";
             _gameStartsIn = _gameStartsInDefault;
             _timeout = _defaultTimeout;
         }
-        else if (_inGamePlayers <= 0) {
+        else if (ServerConnection.Instance.InGamePlayers <= 0) {
             ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
         }
     }

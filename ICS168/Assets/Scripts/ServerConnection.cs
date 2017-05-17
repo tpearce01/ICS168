@@ -55,6 +55,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     [SerializeField] private int _incomingBufferSize = 3000;
     [SerializeField] private int _maxConnections = 0;
 
+    
     public int MaxConnections {
         get { return _maxConnections; }
     }
@@ -65,7 +66,8 @@ public class ServerConnection : Singleton<ServerConnection> {
     private int _connectionID = -1;
 
     private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
-    private int _numberOfConnections = -1;
+
+    [SerializeField] private int _numberOfConnections = 0;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
     }
@@ -119,6 +121,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                 clientInfo.ConnectionID = incomingConnectionID;
                 clientInfo.ChannelID = incomingChannelID;
                 _clientSocketIDs.Add(incomingConnectionID, clientInfo);
+
                 _numberOfConnections = _clientSocketIDs.Count;
                 break;
 
@@ -167,6 +170,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                     }
                 }
                 else if (prefix == (int)ServerCommands.LeaveGame) {
+
                     _inGamePlayers--;
                     if (_inGamePlayers < 0) { _inGamePlayers = 0; }
 
@@ -186,7 +190,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                 // Decrement the number of players and remove the player from the hashmap.
                 _inGamePlayers -= 1;
                 if (_inGamePlayers < 0) { _inGamePlayers = 0; }
-                _numberOfConnections -= 1;
+                _numberOfConnections--;
                 if (_numberOfConnections < 0) { _numberOfConnections = 0; }
 
                 // If the lobby is currently showing, make sure to update the information.

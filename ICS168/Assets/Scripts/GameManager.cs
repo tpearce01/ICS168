@@ -159,7 +159,6 @@ public class GameManager : Singleton<GameManager> {
     /// </summary>
     public void decAlivePlayers() {
         _numOfAlivePlayers -= 1;
-        //Is the game over?
     }
 
     /// <summary>
@@ -184,18 +183,20 @@ public class GameManager : Singleton<GameManager> {
 
         if (_numOfAlivePlayers > 1/*ps.Length > 1*/) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
-            WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
-            DestroyEverything();
+            //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+            //DestroyEverything();
         } 
         else if (_numOfAlivePlayers == 1) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerScript>().PlayerName, true);
-            WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
-            DestroyEverything();
+            //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+            //DestroyEverything();
         } 
         else {
-            Debug.Log("Wasted");
-            
+            Debug.Log("Wasted");         
         }
+
+        WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+        DestroyEverything();
     }
 
     private void DestroyEverything() {
