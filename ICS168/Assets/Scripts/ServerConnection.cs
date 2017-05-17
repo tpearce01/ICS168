@@ -70,8 +70,6 @@ public class ServerConnection : Singleton<ServerConnection> {
         get { return _numberOfConnections; }
     }
 
-    private List<NetworkPlayer> _networkPlayers = new List<NetworkPlayer>();
-
     // Keep track of players which have successfully logged in and are ready to play
     [SerializeField] private int _inGamePlayers = 0;
     public int InGamePlayers {

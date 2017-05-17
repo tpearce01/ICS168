@@ -60,10 +60,10 @@ public class ClientConnection : Singleton<ClientConnection> {
     [SerializeField] private ClientLobbyWindow _clientLobby;
 
     // Latency Thresholds
-    [SerializeField] private float _slowConnectThreshold;
-    [SerializeField] private float _disconnectThreshold;
-    private float _slowConnectTimer = 0.0f;
+    [SerializeField] private int _RTT_Threshold;
+    [SerializeField] private float _timeThreshold;
     private float _disconnectTimer = 0.0f;
+    private int _currentRTT = -1;
 
 
 	private void Start() {
@@ -85,7 +85,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         //_slowConnectTimer += Time.deltaTime;
         if (_connectionID != -1) {
-            Debug.Log( NetworkTransport.GetCurrentRTT(_socketID, _connectionID, out error) );
+            _currentRTT = NetworkTransport.GetCurrentRTT(_socketID, _connectionID, out error);
+            Debug.Log( _currentRTT );
         }
 
 		int incomingSocketID = 0;
@@ -143,7 +144,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                         _currentFrame = JSONdata.frameNum;
                         _renderTo.GetComponent<CanvasRenderer>().SetTexture(gameTexture);
 
-                        _slowConnectTimer = 0.0f;
+                        //_slowConnectTimer = 0.0f;
                     }
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
@@ -178,18 +179,18 @@ public class ClientConnection : Singleton<ClientConnection> {
                 WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.StartWindow);
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.OnlineStatus);
                 _clientIO.gameInSession = false;
+                _connectionID = -1;
 
                 _statusWindow.UpdateOnlineStatus(false);
                 break;
 		    }
 
         if ((WindowManager.Instance.currentWindow == WindowIDs.None || WindowManager.Instance.currentWindow == WindowIDs.ClientLobby) 
-            && _slowConnectTimer >= _slowConnectThreshold) {
-
-           // Debug.Log("slow timer");
+            && _currentRTT >= _RTT_Threshold) {
 
             _disconnectTimer += Time.deltaTime;
-            if (_disconnectTimer >= _disconnectThreshold) {
+
+            if (_disconnectTimer >= _timeThreshold) {
                 //Network.Disconnect();
                 Debug.Log("disconnect from slow conection");
                 _gameCanvas.gameObject.SetActive(false);
@@ -207,12 +208,7 @@ public class ClientConnection : Singleton<ClientConnection> {
             }
         }
         else {
-            //_disconnectTimer = 0.0f;
-        }
-
-        if (WindowManager.Instance.currentWindow != WindowIDs.None && WindowManager.Instance.currentWindow != WindowIDs.ClientLobby) {
-            //_slowConnectTimer = 0.0f;
-           // _disconnectTimer = 0.0f;
+            _disconnectTimer = 0.0f;
         }
 	}
 
