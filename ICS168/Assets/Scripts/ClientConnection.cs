@@ -65,6 +65,8 @@ public class ClientConnection : Singleton<ClientConnection> {
     private float _slowConnectTimer = 0.0f;
     private float _disconnectTimer = 0.0f;
 
+    private NetworkPlayer _server;
+
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
         _currentFrame = -1;
@@ -80,7 +82,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 	private void Update() {
 
-        _slowConnectTimer += Time.deltaTime;
+        //_slowConnectTimer += Time.deltaTime;
+
+        if (_server != null) {
+            Debug.Log(Network.GetAveragePing(_server));
+        }
 
 		int incomingSocketID = 0;
 		int incomingConnectionID = 0;
@@ -102,6 +108,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    Debug.Log("client incoming connection event received");
                 _connected = true;
                 _statusWindow.UpdateOnlineStatus(true);
+                _server = new NetworkPlayer(serverIP, _socketPort);
 			    break;
 
             //0 for username/password info, 1 for PlayerIO
@@ -181,7 +188,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         if ((WindowManager.Instance.currentWindow == WindowIDs.None || WindowManager.Instance.currentWindow == WindowIDs.ClientLobby) 
             && _slowConnectTimer >= _slowConnectThreshold) {
 
-            Debug.Log("slow timer");
+           // Debug.Log("slow timer");
 
             _disconnectTimer += Time.deltaTime;
             if (_disconnectTimer >= _disconnectThreshold) {
@@ -202,12 +209,12 @@ public class ClientConnection : Singleton<ClientConnection> {
             }
         }
         else {
-            _disconnectTimer = 0.0f;
+            //_disconnectTimer = 0.0f;
         }
 
         if (WindowManager.Instance.currentWindow != WindowIDs.None && WindowManager.Instance.currentWindow != WindowIDs.ClientLobby) {
-            _slowConnectTimer = 0.0f;
-            _disconnectTimer = 0.0f;
+            //_slowConnectTimer = 0.0f;
+           // _disconnectTimer = 0.0f;
         }
 	}
 

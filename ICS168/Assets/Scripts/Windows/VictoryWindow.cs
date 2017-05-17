@@ -12,10 +12,10 @@ public class VictoryWindow : GenericWindow {
         //Text[] txt = GetComponentsInChildren<Text>();
         
         if(redirectingSeconds <= 0.0f) {
-            //ServerConnection.Instance.SendJSONMessage("10");
-            //ToggleWindows(WindowIDs.Victory, WindowIDs.None);
+            ServerConnection.Instance.SendJSONMessage("10");
+            ToggleWindows(WindowIDs.Victory, WindowIDs.None);
         }else {
-            //GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";
+            GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";
         }
     }
 

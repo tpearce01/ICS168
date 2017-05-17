@@ -70,6 +70,8 @@ public class ServerConnection : Singleton<ServerConnection> {
         get { return _numberOfConnections; }
     }
 
+    private List<NetworkPlayer> _networkPlayers = new List<NetworkPlayer>();
+
     // Keep track of players which have successfully logged in and are ready to play
     [SerializeField] private int _inGamePlayers = 0;
     public int InGamePlayers {
@@ -94,8 +96,6 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     void Update() {
-
-        _timer += Time.deltaTime;
 
         CaptureFrame();
 
@@ -245,7 +245,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         jsonToBeSent += JsonUtility.ToJson(toBeSent);
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0 && _timer <= 20.0f) {
+        if (_inGamePlayers > 0) {
             SendJSONMessage(jsonToBeSent);
         }
     }
