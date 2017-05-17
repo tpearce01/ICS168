@@ -15,6 +15,7 @@ public enum ClientCommands {
     RenderGame = 1,
     SetGameInSession = 2,
     CloseDisconnects = 3,
+    RenderDeltas = 4,
     AccountCreated = 6,
     PreExistingUser = 7,
     InvalidLogin = 8,
@@ -32,7 +33,9 @@ public class LoginInfo {
     public string password;
 }
 
-public class ClientConnection : Singleton<ClientConnection> {
+public class ClientConnection : Singleton<ClientConnection>
+{
+    private Texture2D lastImage;
 
     [SerializeField] private Canvas _gameCanvas;
 
@@ -132,6 +135,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                     _gameCanvas.gameObject.SetActive(true);
                 }
                 else if (prefix == (int)ClientCommands.RenderGame) {
+                    Debug.Log("Render Image");
                     Texture2D gameTexture = new Texture2D(0, 0);
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
@@ -146,6 +150,54 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                         //_slowConnectTimer = 0.0f;
                     }
+                }
+                else if (prefix == (int) ClientCommands.RenderDeltas)
+                {
+                    Debug.Log("Render Deltas");
+                    //Texture2D lastImage;
+                    SO2 JSONdata = JsonUtility.FromJson<SO2>(newMessage);
+                    byte[] deltaData = Convert.FromBase64String(JSONdata.data);
+                    Color[] last = lastImage.GetPixels();
+                    tImage tImageData = new tImage();
+                    tImageData.data = deltaData;
+                    byte[] fullDelta = tImageData.DecompressDelta();
+
+                    bool dataFound = false;
+
+                    for (int i = 0; i < fullDelta.Length; i++)
+                    {
+                        switch (fullDelta[i])
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                last[i] = Color.black;
+                                break;
+                            case 2:
+                                last[i] = Color.white;
+                                break;
+                            case 3:
+                                last[i] = Color.red;
+                                break;
+                            case 4:
+                                last[i] = Color.blue;
+                                break;
+                            case 5:
+                                last[i] = Color.green;
+                                break;
+                            case 6:
+                                last[i] = Color.yellow;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    //lastImage.SetPixels (last);
+                    //lastImage.Apply(true);
+                    Texture2D temp = new Texture2D(320, 180);
+                    temp.SetPixels(last);
+                    temp.Apply();
+                    _renderTo.GetComponent<CanvasRenderer>().SetTexture(temp);
                 }
                 else if(prefix == (int)ClientCommands.SetGameInSession) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);

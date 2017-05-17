@@ -19,6 +19,10 @@ public enum ServerCommands {
 }
 
 public class ServerObject {
+    public ServerObject()
+    {
+        frameNum = Time.frameCount;
+    }
     public ServerObject(int currentFrame, string tex) {
         frameNum = currentFrame;
         texture = tex;
@@ -28,7 +32,19 @@ public class ServerObject {
     public string texture;
 }
 
-public class ServerConnection : Singleton<ServerConnection> {
+public class SO2
+{
+    public SO2()
+    {
+        frameNum = Time.frameCount;
+    }
+    public int frameNum;
+    public string data;
+}
+
+public class ServerConnection : Singleton<ServerConnection>
+{
+    private Texture2D lastTex;
     [SerializeField] private RenderTexture rt;    //Target render texture
     [SerializeField] private Camera _cam;          //Camera to render from
 
@@ -96,8 +112,10 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     void Update() {
-
-        CaptureFrame();
+        if (_inGamePlayers > 0)
+        {
+            CaptureFrame();
+        }
 
         int incomingSocketID = -1;
         int incomingConnectionID = -1;
@@ -232,24 +250,39 @@ public class ServerConnection : Singleton<ServerConnection> {
         RenderTexture.active = rt;
         Camera.main.Render();
 
-        Texture2D tex = new Texture2D(_cam.targetTexture.width, _cam.targetTexture.height, TextureFormat.RGB24, false);
+        Texture2D tex = new Texture2D(_cam.targetTexture.width, _cam.targetTexture.height, TextureFormat.RGB24,
+                false);
         tex.ReadPixels(new Rect(0, 0, _cam.targetTexture.width, _cam.targetTexture.height), 0, 0);
         tex.Apply();
-        byte[] image = tex.EncodeToPNG();
 
-        // Create a new Server object and populate its attributes
-        // Time.frameCount
-        ServerObject toBeSent = new ServerObject(Time.frameCount, Convert.ToBase64String(image));
-        //toBeSent.texture = Convert.ToBase64String(image);
-
-        // Convert to JSON
-        string jsonToBeSent = "1";
-        jsonToBeSent += JsonUtility.ToJson(toBeSent);
-
-        // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
-        if (_inGamePlayers > 0) {
-            SendJSONMessage(jsonToBeSent);
+        if (lastTex == null)
+        {
+            lastTex = tex;
+            ServerObject toBeSent = new ServerObject();
+            toBeSent.texture = Convert.ToBase64String(tex.EncodeToPNG());
+            string jsonToBeSent = "1";
+            jsonToBeSent += JsonUtility.ToJson(toBeSent);
+            Debug.Log(jsonToBeSent.Length);
+            if (_numberOfConnections > 0)
+            {
+                SendJSONMessage(jsonToBeSent);
+            }
         }
+        else
+        {
+            tImage temp = new tImage();
+            temp.CompressDelta(lastTex, tex);
+            SO2 toSend = new SO2();
+            toSend.frameNum = Time.frameCount;
+            toSend.data = Convert.ToBase64String(temp.data);
+            string jsonToBeSent = "4";
+            jsonToBeSent += JsonUtility.ToJson(toSend);
+            if (_numberOfConnections > 0)
+            {
+                SendJSONMessage(jsonToBeSent);
+            }
+        }
+
     }
 
     private IEnumerator verifyLogin(string username, string password, int socketID, int connectionID, int channelID) {
