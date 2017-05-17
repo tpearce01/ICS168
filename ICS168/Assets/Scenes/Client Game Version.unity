@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameCanvas: {fileID: 688920990}
-  serverIP: 174.67.249.246
+  serverIP: 10.0.1.3
   _bufferSize: 15000
   _connectionID: -1
   _socketID: -1
