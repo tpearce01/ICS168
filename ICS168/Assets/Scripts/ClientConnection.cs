@@ -46,7 +46,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 	private int _maxConnections = 1;	                //Maximum umber of connection
 
 	private int UDP_ChannelIDFrag = -1;					//UDP communication channel for large messages
-	private int _connectionID = -1;						//Connection ID
+	[SerializeField] private int _connectionID = -1;						//Connection ID
 
 	[SerializeField] private int _socketID = -1;		//Socket ID
 	[SerializeField] private int _socketPort = 8888;	//Port number
@@ -65,7 +65,6 @@ public class ClientConnection : Singleton<ClientConnection> {
     private float _slowConnectTimer = 0.0f;
     private float _disconnectTimer = 0.0f;
 
-    private NetworkPlayer _server;
 
 	private void Start() {
         _clientIO = GetComponent<ClientIO>();
@@ -82,10 +81,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 	private void Update() {
 
-        //_slowConnectTimer += Time.deltaTime;
+        byte error;
 
-        if (_server != null) {
-            Debug.Log(Network.GetAveragePing(_server));
+        //_slowConnectTimer += Time.deltaTime;
+        if (_connectionID != -1) {
+            Debug.Log( NetworkTransport.GetCurrentRTT(_socketID, _connectionID, out error) );
         }
 
 		int incomingSocketID = 0;
@@ -95,7 +95,6 @@ public class ClientConnection : Singleton<ClientConnection> {
         // POSSIBLY MOVE THIS TO BE A PERMANENT VARIABLE TO SAVE ALLOCATION RESOURCES
 		byte[] incomingMessageBuffer = new byte[_bufferSize];
 		int dataSize = 0;
-		byte error;
 
 		NetworkEventType incomingNetworkEvent = NetworkTransport.Receive(out incomingSocketID, out incomingConnectionID,
 			out incomingChannelID, incomingMessageBuffer, _bufferSize, out dataSize, out error);
@@ -108,8 +107,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    Debug.Log("client incoming connection event received");
                 _connected = true;
                 _statusWindow.UpdateOnlineStatus(true);
-                _server = new NetworkPlayer(serverIP, _socketPort);
-			    break;
+                break;
 
             //0 for username/password info, 1 for PlayerIO
 		    case NetworkEventType.DataEvent:
@@ -222,7 +220,6 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         byte error = 0;
 		_connectionID = NetworkTransport.Connect(_socketID, serverIP, _socketPort, 0, out error);
-
     }
 
     private void SendJSONMessage(string JSONobject) {
