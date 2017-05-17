@@ -50,10 +50,10 @@ public class MapGenerator : Singleton<MapGenerator>
                     temp.y = y;
                     temp.SetLocation();
 
-                    // Check if the created gameObject is a player object.
-                    if (temp.GetComponent<PlayerActions>() != null) {
-                        _players.Add(temp.GetComponent<PlayerActions>());
-                    }
+                    //// Check if the created gameObject is a player object.
+                    //if (temp.GetComponent<PlayerActions>() != null) {
+                    //    _players.Add(temp.GetComponent<PlayerActions>());
+                    //}
 
                     base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
                     base_temp.x = x;
@@ -80,7 +80,7 @@ public class MapGenerator : Singleton<MapGenerator>
         // }
 
         //GameManager.Instance.addPlayers();
-        GameManager.Instance.AssignPlayer(_players);
+        GameManager.Instance.AssignPlayer();
     }
 
     void RandomizeWalls(string fileName) {

@@ -9,9 +9,9 @@ public class GameManager : Singleton<GameManager> {
 	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
 	public static event GameManagerEvent OnEndGame;
 
-    //[SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
-    private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
-    private List<int> _playerIDs = new List<int>();
+    [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
+    //private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
+    //private List<int> _playerIDs = new List<int>();
 
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
@@ -145,7 +145,7 @@ public class GameManager : Singleton<GameManager> {
     //    }
     //}
 
-    public void AssignPlayer(List<PlayerActions> playerObject) {
+    public void AssignPlayer() {
 
         //List<int> IDs = new List<int>();
 
@@ -173,7 +173,7 @@ public class GameManager : Singleton<GameManager> {
 
         // Add the players to the list of players.
         for (int i = 0; i < _numOfAlivePlayers; i++) {
-            //_players.Add(tempPlayers[i].GetComponent<PlayerActions>());
+            _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
         }
 
         // For all extra players which were created, destroy the leftovers.

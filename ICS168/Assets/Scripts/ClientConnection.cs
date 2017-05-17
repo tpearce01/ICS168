@@ -168,6 +168,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.GoBackToMain) {
                     Debug.Log("Go back to main damn it!");
+                    _gameCanvas.gameObject.SetActive(false);
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
                 }
                 break;
