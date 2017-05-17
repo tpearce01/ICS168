@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 2
+  _playerNum: 1
   _whatToHit:
     serializedVersion: 2
     m_Bits: 512

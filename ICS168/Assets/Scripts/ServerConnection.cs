@@ -162,6 +162,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                     if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                     if (_lobby.gameObject.activeInHierarchy == true) {
                         _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
+                        //GameManager.Instance.RemovePlayer(_connectionID);
                     }
 
                     if (_inGamePlayers < 1) {
@@ -188,7 +189,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                 Debug.Log("server: remote client event disconnected");
 
                 // Decrement the number of players and remove the player from the hashmap.
-                _inGamePlayers -= 1;
+                _inGamePlayers--;
                 if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                 _numberOfConnections--;
                 if (_numberOfConnections < 0) { _numberOfConnections = 0; }
@@ -279,6 +280,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             // Tell the lobby to add this player so it shows in the lobby.
             _lobby.AddPlayerToLobby(username);
+            //GameManager.Instance.AddPlayer(connectionID);
 
         }
         else if (verify.text == "invalid") {

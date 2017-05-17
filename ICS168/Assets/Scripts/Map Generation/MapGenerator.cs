@@ -12,6 +12,8 @@ public class MapGenerator : Singleton<MapGenerator>
 	public Map mapToLoad;
     //private bool _isGenerated = false;
 
+    private List<PlayerActions> _players = new List<PlayerActions>();
+
 	void Start ()
 	{
         //Uncomment to randomize walls
@@ -40,39 +42,45 @@ public class MapGenerator : Singleton<MapGenerator>
             //int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
             int dataYLength = data[y].Length;
 
-                for (int x = 0; x < dataYLength; x++) {
-                    if (Int32.Parse(data[y][x].ToString()) >= 5) {
-                        temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
-                        //Set tile location
-                        temp.x = x;
-                        temp.y = y;
-                        temp.SetLocation();
+            for (int x = 0; x < dataYLength; x++) {
+                if (Int32.Parse(data[y][x].ToString()) >= 5) {
+                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                    //Set tile location
+                    temp.x = x;
+                    temp.y = y;
+                    temp.SetLocation();
 
-                        base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
-                        base_temp.x = x;
-                        base_temp.y = y;
-                        base_temp.SetLocation();
-
-                        tileMap[x, y] = base_temp.GetComponent<Tile>();
-                    } else {
-                        temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
-
-                        //Set tile location
-                        temp.x = x;
-                        temp.y = y;
-                        temp.SetLocation();
-
-                        tileMap[x, y] = temp.GetComponent<Tile>();
+                    // Check if the created gameObject is a player object.
+                    if (temp.GetComponent<PlayerActions>() != null) {
+                        _players.Add(temp.GetComponent<PlayerActions>());
                     }
+
+                    base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
+                    base_temp.x = x;
+                    base_temp.y = y;
+                    base_temp.SetLocation();
+
+                    tileMap[x, y] = base_temp.GetComponent<Tile>();
+                } else {
+                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+
+                    //Set tile location
+                    temp.x = x;
+                    temp.y = y;
+                    temp.SetLocation();
+
+                    tileMap[x, y] = temp.GetComponent<Tile>();
                 }
             }
+        }
 
             //Move camera to middle position
             GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
         //Need to change camera size based on tile dimensions
         // }
 
-        GameManager.Instance.addPlayers();
+        //GameManager.Instance.addPlayers();
+        GameManager.Instance.AssignPlayer(_players);
     }
 
     void RandomizeWalls(string fileName) {

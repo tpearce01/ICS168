@@ -9,7 +9,9 @@ public class GameManager : Singleton<GameManager> {
 	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
 	public static event GameManagerEvent OnEndGame;
 
-    [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
+    //[SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
+    private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
+    private List<int> _playerIDs = new List<int>();
 
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
@@ -113,7 +115,7 @@ public class GameManager : Singleton<GameManager> {
             //Count down the timer
             _currTime -= Time.deltaTime;
 
-            if (_currTime <= 0.0f || _numOfAlivePlayers == 1) {
+            if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
                 findWinner();
                 DestroyEverything();
                 _gameInSession = false;
@@ -132,7 +134,35 @@ public class GameManager : Singleton<GameManager> {
         if (_players[playerID - 1] != null) { _players[playerID - 1].LeaveGame(); }
     }
 
-    public void addPlayers() {
+    //public void AddPlayer(int playerID) {
+    //    _players.Add(playerID, null);
+    //}
+
+    //public void RemovePlayer(int playerID) {
+
+    //    if (_players.ContainsKey(playerID)) {
+    //        _players.Remove(playerID);
+    //    }
+    //}
+
+    public void AssignPlayer(List<PlayerActions> playerObject) {
+
+        //List<int> IDs = new List<int>();
+
+        //foreach(KeyValuePair<int, PlayerActions> player in _players) {
+        //    if (player.Value == null) {
+        //        IDs.Add(player.Key);
+        //    }
+        //}
+
+        //for (int i = 0; i < IDs.Count; ++i) {
+        //    _players[IDs[i]] = playerObject[i];
+        //}
+
+        //int playerCount = playerObject.Count;
+        //for (int i = IDs.Count; i < playerCount; ++i) {
+        //    Destroy(playerObject[i]);
+        //}
 
         // The map generated the maximum amount of players the map can handle.
         // It then finds all of them.
@@ -142,15 +172,15 @@ public class GameManager : Singleton<GameManager> {
         _numOfAlivePlayers = ServerConnection.Instance.InGamePlayers;
 
         // Add the players to the list of players.
-        for(int i = 0; i < _numOfAlivePlayers; i++) {
-            _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
+        for (int i = 0; i < _numOfAlivePlayers; i++) {
+            //_players.Add(tempPlayers[i].GetComponent<PlayerActions>());
         }
 
         // For all extra players which were created, destroy the leftovers.
-        for(int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
+        for (int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
             Destroy(tempPlayers[i]);
         }
-        
+
     }
 
 
@@ -181,7 +211,7 @@ public class GameManager : Singleton<GameManager> {
 
         GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
 
-        if (_numOfAlivePlayers > 1/*ps.Length > 1*/) {
+        if (_numOfAlivePlayers > 1 || _numOfAlivePlayers == 0) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
             //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
             //DestroyEverything();

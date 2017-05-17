@@ -11,7 +11,11 @@ public class PlayerActions : MonoBehaviour {
     public int range = 2;
 
     //private ControllableObject _inputHandler;
-    private int _playerNum = 1;
+    [SerializeField] private int _playerNum = -1;
+    public int PlayerNum {
+        get { return _playerNum; }
+    }
+
     private Vector2 _pos;
 
     private bool validMove = false;
