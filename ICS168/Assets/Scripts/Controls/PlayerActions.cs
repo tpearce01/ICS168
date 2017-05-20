@@ -7,20 +7,9 @@ using UnityEngine;
 /// </summary>
 public class PlayerActions : MonoBehaviour {
 
-    //possibly vectors in the future for each specific client accessing different index
-    public int range = 2;
-
-    //private ControllableObject _inputHandler;
-    [SerializeField] private int _playerNum = -1;
-    public int PlayerNum {
-        get { return _playerNum; }
-    }
-
-    private Vector2 _pos;
-
-    private bool validMove = false;
-
-    [SerializeField] private LayerMask _whatToHit;
+    // Variables to prevent players from moving through each other
+    [SerializeField]
+    private LayerMask _whatToHit;
     private Vector2 _offset;
     private RaycastHit2D _hitUp;
     private RaycastHit2D _hitRight;
@@ -29,33 +18,84 @@ public class PlayerActions : MonoBehaviour {
     private Vector2 _direction;
     [SerializeField]
     private float _offSetValue = 0.0f;
-    [SerializeField] private float _magnitude = 1.0f;
+    [SerializeField]
+    private float _magnitude = 1.0f;
     private Vector2 _movingTowards;
+
+    //Power up
+    public int range = 2;
+
+    //Checks player moves
+    private Vector2 _pos;
+    private bool validMove = false;
+
+    //Player's identifier, used for keeping track of usernames and colors
+    [SerializeField] private int _playerNum = -1;
+    public int PlayerNum {
+        get { return _playerNum; }
+        set { _playerNum = value; }
+    }
+    
+    [SerializeField]
+    [Range(0, 3)]
+    private int _playerID;
+    public int PlayerNumber {
+        get { return _playerID; }
+        set { _playerID = value; }
+    }
+
+    private SpriteRenderer _sr;
+
+    // Username
+    public string playerName;
+    public string PlayerName {
+        get { return playerName; }
+        set { playerName = value; }
+    }
 
     private void OnEnable() {
         _movingTowards = new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f) + Vector2.up;
         _direction = (_movingTowards - new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f)).normalized;
     }
 
+    // Use this for initialization
+    void Start() {
+        _sr = gameObject.GetComponent<SpriteRenderer>();
+        setPlayerColor(_sr);
+    }
+    
     private void Update() {
         Debug.DrawLine(new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f),
             new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f) + (Vector2.up * _magnitude * _direction.y), Color.yellow);
     }
 
+    void setPlayerColor(SpriteRenderer sr) {
+        switch (_playerID) {
+            case 0:
+                sr.material.SetColor("_Color", Color.red);
+                break;
+            case 1:
+                sr.material.SetColor("_Color", Color.blue);
+                break;
+            case 2:
+                sr.material.SetColor("_Color", Color.green);
+                break;
+            case 3:
+                sr.material.SetColor("_Color", Color.yellow);
+                break;
+        }
+    }
 
     void ValidPos(Vector3 pos) {
 
         Tile[,] tileMap = MapGenerator.Instance.tileMap;
 
         if (tileMap != null) {
-            //MissingReferenceException: The object of type 'Tile' has been destroyed but you are still trying to access it.
             Tile tile = tileMap[(int)pos.x, (int)pos.y].GetComponent<Tile>();
             if (tile.type == TileType.Wall || tile.type == TileType.Destructable || tile.type == TileType.WallPowerUp) {
-               // Debug.Log("I am a wall");
                 validMove = false;
             }
             else {
-                //Debug.Log("validMove is true");
                 validMove = true;
             }
         }
@@ -63,7 +103,6 @@ public class PlayerActions : MonoBehaviour {
     }
 
     public void RequestAction(PlayerIO command) {
-        //MissingReferenceException: The object of type 'PlayerActions' has been destroyed but you are still trying to access it.
         validMove = false;
         _pos = gameObject.transform.position;
 

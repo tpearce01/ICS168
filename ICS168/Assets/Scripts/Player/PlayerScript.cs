@@ -54,28 +54,4 @@ public class PlayerScript : MonoBehaviour {
                 break;
         }
     }
-
-    ///// <summary>
-    ///// Returns a bool that represents whether or not the player is alive.
-    ///// </summary>
-    ///// <returns>bool</returns>
-    //public bool isAlive()
-    //{
-    //    return _isAlive;
-    //}
-
-    ///// <summary>
-    ///// Returns the player's number, it is a value between 1 and 4.
-    ///// </summary>
-    ///// <returns>int</returns>
-    //public int getPlayerNumber()
-    //{
-    //    return playerNumber;
-    //}
-
-	public void Kill(){
-		//I'm dead
-		//GameManager.Instance.decAlivePlayers();
-		//Destroy (gameObject);
-	}
 }

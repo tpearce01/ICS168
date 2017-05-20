@@ -81,20 +81,20 @@ public class GameManager : Singleton<GameManager> {
 
     public void StartGame() {
         if (GameObject.Find("Player1(Clone)") != null) {
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(0);
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerNumber = 0;
+            GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(0);
+            GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerNumber = 0;
         }
         if (GameObject.Find("Player2(Clone)") != null) {
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(1);
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerNumber = 1;
+            GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(1);
+            GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerNumber = 1;
         }
         if (GameObject.Find("Player3(Clone)") != null) {
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(2);
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerNumber = 2;
+            GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(2);
+            GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerNumber = 2;
         }
         if (GameObject.Find("Player4(Clone)") != null) {
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(3);
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerNumber = 3;
+            GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(3);
+            GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerNumber = 3;
         }
         
         _currTime = _roundTime;
@@ -217,7 +217,7 @@ public class GameManager : Singleton<GameManager> {
             //DestroyEverything();
         } 
         else if (_numOfAlivePlayers == 1) {
-            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerScript>().PlayerName, true);
+            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerActions>().PlayerName, true);
             //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
             //DestroyEverything();
         } 
