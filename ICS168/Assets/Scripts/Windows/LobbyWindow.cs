@@ -55,7 +55,6 @@ public class LobbyWindow : GenericWindow {
                     ServerConnection.Instance.EnableClientControls();
                     MapGenerator.Instance.GenerateMap();
                     GameManager.Instance.StartGame();
-
                     ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
                 }
             }
@@ -87,52 +86,24 @@ public class LobbyWindow : GenericWindow {
         }
     }
 
-    public void AddPlayerToLobby(string username) {
-
-        if (_players[0].activeInHierarchy == false) {
-            _players[0].SetActive(true);
-            GameManager.Instance.setUsername(0, username);
-            _usernames[0].text = username;
-            
-        }
-        else if (_players[1].activeInHierarchy == false) {
-            _players[1].SetActive(true);
-            GameManager.Instance.setUsername(1, username);
-            _usernames[1].text = username;
-        }
-        else if (_players[2].activeInHierarchy == false) {
-            _players[2].SetActive(true);
-            GameManager.Instance.setUsername(2, username);
-            _usernames[2].text = username;
-        }
-        else if (_players[3].activeInHierarchy == false) {
-            _players[3].SetActive(true);
-            GameManager.Instance.setUsername(3, username);
-            _usernames[3].text = username;
+    // Adds player to lobby and sets both that player's color and username based on playerNum (which is connectionID)
+    public void AddPlayerToLobby(string username, int playerNum) {
+        int actualPlayerNum = playerNum % 4;
+        
+        if (_players[actualPlayerNum].activeInHierarchy == false) {
+            _players[actualPlayerNum].SetActive(true);
+            _usernames[actualPlayerNum].text = username;
+            MapGenerator.Instance.AddPlayerToMap(actualPlayerNum, username);
         }
     }
 
-    public void RemovePlayerFromLobby(string username) {
+    public void RemovePlayerFromLobby(int playerNum) {
+        int actualPlayerNum = playerNum % 4;
 
-        if (_usernames[0].text == username) {
-            _players[0].SetActive(false);
-            GameManager.Instance.setUsername(0, "");
-            _usernames[0].text = "";
-        }
-        else if (_usernames[1].text == username) {
-            _players[1].SetActive(false);
-            GameManager.Instance.setUsername(1, "");
-            _usernames[1].text = "";
-        }
-        else if (_usernames[2].text == username) {
-            _players[2].SetActive(false);
-            GameManager.Instance.setUsername(2, "");
-            _usernames[2].text = "";
-        }
-        else if (_usernames[3].text == username) {
-            _players[3].SetActive(false);
-            GameManager.Instance.setUsername(3, "");
-            _usernames[3].text = "";
+        if (_players[actualPlayerNum].activeInHierarchy == true) {
+            _players[actualPlayerNum].SetActive(false);
+            _usernames[actualPlayerNum].text = "";
+            MapGenerator.Instance.RemovePlayerFromMap(actualPlayerNum);
         }
     }
 

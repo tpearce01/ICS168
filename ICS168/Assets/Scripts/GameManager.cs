@@ -9,9 +9,15 @@ public class GameManager : Singleton<GameManager> {
 	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
 	public static event GameManagerEvent OnEndGame;
 
+    private class PlayerInfo {
+        public string username;
+        public int playerNum;
+    }
+
+    private List<PlayerInfo> _listOfPlayers = new List<PlayerInfo>();
+
     [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
-    //private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
-    //private List<int> _playerIDs = new List<int>();
+    private List<GameObject> playerReferences = new List<GameObject>(); //references to the player game objects that the mapgenerator instantiated
 
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
@@ -43,36 +49,7 @@ public class GameManager : Singleton<GameManager> {
         set { _gameInSession = value; }
     }
 
-    //Player attributes.
-    /* These attributes are used to track the game objects that will represent the players.
-     * I'm guessing that we will be having 4 players in the networked version, similar to the normal bomberman game.
-     *
-     * I'll have 4 slots in there for now, but we can leave the other three empty OR have them be dummy characters the player needs to kill.
-    */
-
     private int _winner = 0;
-
-    [SerializeField]
-    private Text _victoryText;
-
-    /// <summary>
-    /// Time that the victory screen will be shown.
-    /// </summary>
-    [SerializeField]
-    private float _timeToShowVictory;
-
-    /// <summary>
-    /// Used to store the usernames from login.
-    /// </summary>
-    private string[] usernameArray = new string[4];
-
-    public string getUsername(int index) {
-        return usernameArray[index];
-    }
-
-    public void setUsername(int index, string playerName) {
-        usernameArray[index] = playerName;
-    }
 
     private void OnEnable() {
         QualitySettings.vSyncCount = 0;
@@ -80,23 +57,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void StartGame() {
-        if (GameObject.Find("Player1(Clone)") != null) {
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(0);
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerScript>().PlayerNumber = 0;
-        }
-        if (GameObject.Find("Player2(Clone)") != null) {
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(1);
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerScript>().PlayerNumber = 1;
-        }
-        if (GameObject.Find("Player3(Clone)") != null) {
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(2);
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerScript>().PlayerNumber = 2;
-        }
-        if (GameObject.Find("Player4(Clone)") != null) {
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerName = getUsername(3);
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerScript>().PlayerNumber = 3;
-        }
-        
+        _numOfAlivePlayers = playerReferences.Count;
         _currTime = _roundTime;
         _isGameOver = false;
         _gameInSession = true;
@@ -110,9 +71,7 @@ public class GameManager : Singleton<GameManager> {
 
     // Update is called once per frame
     void Update () {
-
         if (_gameInSession) {
-            //Count down the timer
             _currTime -= Time.deltaTime;
 
             if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
@@ -124,82 +83,24 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void PlayerActions(int playerID, PlayerIO command) {
-
         // This check will prevent any null references to players which have been killed.
-        if (_players[playerID-1] != null) { _players[playerID - 1].RequestAction(command); }
+        if (playerReferences[playerID-1] != null) { playerReferences[playerID - 1].GetComponent<PlayerActions>().RequestAction(command); }
     }
 
     public void LeaveGame(int playerID) {
-        decAlivePlayers();
+        _numOfAlivePlayers--;
         if (_players[playerID - 1] != null) { _players[playerID - 1].LeaveGame(); }
     }
-
-    //public void AddPlayer(int playerID) {
-    //    _players.Add(playerID, null);
-    //}
-
-    //public void RemovePlayer(int playerID) {
-
-    //    if (_players.ContainsKey(playerID)) {
-    //        _players.Remove(playerID);
-    //    }
-    //}
-
-    public void AssignPlayer() {
-
-        //List<int> IDs = new List<int>();
-
-        //foreach(KeyValuePair<int, PlayerActions> player in _players) {
-        //    if (player.Value == null) {
-        //        IDs.Add(player.Key);
-        //    }
-        //}
-
-        //for (int i = 0; i < IDs.Count; ++i) {
-        //    _players[IDs[i]] = playerObject[i];
-        //}
-
-        //int playerCount = playerObject.Count;
-        //for (int i = IDs.Count; i < playerCount; ++i) {
-        //    Destroy(playerObject[i]);
-        //}
-
-        // The map generated the maximum amount of players the map can handle.
-        // It then finds all of them.
-        GameObject[] tempPlayers = GameObject.FindGameObjectsWithTag("Player");
-
-        // Keep track of the number of active players.
-        _numOfAlivePlayers = ServerConnection.Instance.InGamePlayers;
-
-        // Add the players to the list of players.
-        for (int i = 0; i < _numOfAlivePlayers; i++) {
-            _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
-        }
-
-        // For all extra players which were created, destroy the leftovers.
-        for (int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
-            Destroy(tempPlayers[i]);
-        }
-
+    public void getPlayerReferences() {
+        playerReferences.AddRange(GameObject.FindGameObjectsWithTag("Player"));
     }
-
-
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>
     public void decAlivePlayers() {
         _numOfAlivePlayers -= 1;
     }
-
-    /// <summary>
-    /// Returns a bool stating whether or not the game is over.
-    /// </summary>
-    /// <returns>bool</returns>
-    //public bool getIsGameOver()
-    //{
-    //    return _isGameOver;
-    //}
-
+    
     /// <summary>
     /// Returns the player number of the winner, 0 if there is a draw.
     /// </summary>
@@ -209,17 +110,12 @@ public class GameManager : Singleton<GameManager> {
             OnEndGame(WindowIDs.Game, WindowIDs.Victory);
         }
 
-        GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
-
         if (_numOfAlivePlayers > 1 || _numOfAlivePlayers == 0) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
-            //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
-            //DestroyEverything();
+           
         } 
         else if (_numOfAlivePlayers == 1) {
-            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerScript>().PlayerName, true);
-            //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
-            //DestroyEverything();
+            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<PlayerActions>().playerName, true);
         } 
         else {
             Debug.Log("Wasted");         
@@ -236,6 +132,7 @@ public class GameManager : Singleton<GameManager> {
         GameObject[] allFloors              = GameObject.FindGameObjectsWithTag("Floor");
         GameObject[] allDestructableWalls   = GameObject.FindGameObjectsWithTag("Destructable");
         GameObject[] allPowerupWalls        = GameObject.FindGameObjectsWithTag("WallPowerUp");
+        GameObject[] allPowerups            = GameObject.FindGameObjectsWithTag("PowerUp");
         GameObject[] allRemainingPlayers    = GameObject.FindGameObjectsWithTag("Player");
 
         for (int i = 0; i < allBombs.Length; ++i)
@@ -250,16 +147,9 @@ public class GameManager : Singleton<GameManager> {
             Destroy(allDestructableWalls[i]);
         for (int i = 0; i < allPowerupWalls.Length; ++i)
             Destroy(allPowerupWalls[i]);
+        for (int i = 0; i < allPowerups.Length; ++i)
+            Destroy(allPowerups[i]);
         for (int i = 0; i < allRemainingPlayers.Length; ++i)
             Destroy(allRemainingPlayers[i]);
     }
-
-    /// <summary>
-    /// Displays the victory text.
-    /// </summary>
-    //void displayVictor()
-    //{ 
-    //    _victoryText.enabled = true;
-    //    _victoryText.text = _winner.ToString() + " wins!";
-    //}
 }

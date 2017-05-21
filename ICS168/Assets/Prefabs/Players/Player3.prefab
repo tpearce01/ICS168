@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212547946284542662}
   - component: {fileID: 61127113700374806}
   - component: {fileID: 50508535013128218}
-  - component: {fileID: 114693559396439584}
   - component: {fileID: 114347556142964978}
   - component: {fileID: 114827265647017162}
   m_Layer: 9
@@ -101,26 +100,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb09477252aa6fa45baf979cf2d5443f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 2
-  _playerNum: 3
   _whatToHit:
     serializedVersion: 2
     m_Bits: 512
   _offSetValue: 0.5
   _magnitude: 0.5
---- !u!114 &114693559396439584
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1762564262200382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 207ceeeef5c461545b22547fcde77702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerNumber: 3
-  playerName: Daniel
+  range: 2
+  _playerNum: 3
+  _playerID: 0
+  playerName: 
 --- !u!114 &114827265647017162
 MonoBehaviour:
   m_ObjectHideFlags: 1

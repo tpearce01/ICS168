@@ -53,6 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
   _cam: {fileID: 0}
-  _bufferSize: 10000
+  _incomingBufferSize: 1024
   _maxConnections: 3
   _socketPort: 8888
+  _numberOfConnections: 0
+  _inGamePlayers: 0
+  _lobby: {fileID: 0}
