@@ -273,6 +273,8 @@ public class ServerConnection : Singleton<ServerConnection> {
             
             _clientSocketIDs[connectionID].username = username;
             _clientSocketIDs[connectionID].playerNum = InGamePlayers; //InGamePlayer number is that player's number to determine which player they are
+
+            Debug.Log("Username: " + _clientSocketIDs[connectionID].username + " | ID: " + _clientSocketIDs[connectionID].playerNum);
             
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {

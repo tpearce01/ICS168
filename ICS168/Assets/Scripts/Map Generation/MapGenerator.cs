@@ -28,32 +28,34 @@ public class MapGenerator : Singleton<MapGenerator>
     //Gets called when game is about to start
     public void GenerateMap(/*string fileName*/)
     {
-        //if (!_isGenerated) {
-           // _isGenerated = true;
-            TextAsset txt = Resources.Load(mapToLoad.ToString()) as TextAsset;  //Load text file
+        TextAsset txt = Resources.Load(mapToLoad.ToString()) as TextAsset;  //Load text file
 
-            string[] data = txt.text.Split('\n');           //Split text file by line
-            Tile temp;                                      //Used to store tile temporarily
-            Tile base_temp;
+        string[] data = txt.text.Split('\n');           //Split text file by line
+        Tile temp;                                      //Used to store tile temporarily
+        Tile base_temp;
 
-            tileMap = new Tile[data[0].Length, data.Length]; //Allocate tileMap
+        tileMap = new Tile[data[0].Length, data.Length]; //Allocate tileMap
 
-            //Generate each tile specified by the text file
-            for (int y = 0; y < data.Length; y++) {
+        //Generate each tile specified by the text file
+        for (int y = 0; y < data.Length; y++) {
             int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
             //int dataYLength = data[y].Length;
 
             for (int x = 0; x < dataYLength; x++) {
                 int tileNum = Int32.Parse(data[y][x].ToString());
 
+                Debug.Log("TileNum: " + tileNum);
+
                 //Only instantiates a player if the txt file has 5-8 in it and that number exists in the playerArray
                 if (tileNum >= 5 && playerArray.ContainsKey(tileNum)) {
-                    temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
+                    Debug.Log("playerArray[tileNum] : " + playerArray[tileNum]);
 
+                    temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
+                    Debug.Log("Instantiating a Player");
                     //Sets the player's playernumber and username
                     //% 5 is there because the playerNumber range is 0-3 and the player tile range is 5-8. Need to convert 5-8 to 0-3
                     temp.GetComponent<PlayerActions>().PlayerNumber = tileNum % 5;
-                    temp.GetComponent<PlayerActions>().PlayerName = playerArray[tileNum % 5];
+                    temp.GetComponent<PlayerActions>().PlayerName = playerArray[tileNum];
                     
                     //Set tile location
                     temp.x = x;
@@ -93,11 +95,14 @@ public class MapGenerator : Singleton<MapGenerator>
 
     // Gets called when players are logging into lobby
     public void AddPlayerToMap(int playerNum, string username) {
-        playerArray.Add(playerNum+5, username);
+        int newNum = playerNum + 5;
+        Debug.Log("Adding player to map: " + newNum);
+        playerArray.Add(newNum, username);
     }
 
     // Gets called when player leaves lobby
     public void RemovePlayerFromMap(int playerNum) {
+        Debug.Log("Removing player from map");
         playerArray.Remove(playerNum+5);
     }
     

@@ -17,6 +17,7 @@ public class LobbyWindow : GenericWindow {
     private float _timeout = -1.0f;
     private float _gameStartsIn = -1.0f;
     private bool _messageSent = false;
+    private int _numPlayersInLobby = 0;
 
     private void OnEnable() {
         _timeout = _defaultTimeout;
@@ -95,6 +96,7 @@ public class LobbyWindow : GenericWindow {
             MapGenerator.Instance.AddPlayerToMap(actualPlayerNum, username);
         }
 
+        _numPlayersInLobby++;
         /*
         if (_players[0].activeInHierarchy == false) {
             _players[0].SetActive(true);
@@ -129,6 +131,7 @@ public class LobbyWindow : GenericWindow {
             MapGenerator.Instance.RemovePlayerFromMap(actualPlayerNum);
         }
 
+        _numPlayersInLobby--;
         //if (_usernames[0].text == username) {
         //    _players[0].SetActive(false);
         //    GameManager.Instance.setUsername(0, "");

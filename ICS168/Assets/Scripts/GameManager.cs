@@ -90,7 +90,7 @@ public class GameManager : Singleton<GameManager> {
         //    GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(3);
         //    GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerNumber = 3;
         //}
-        
+        _numOfAlivePlayers = playerReferences.Count;
         _currTime = _roundTime;
         _isGameOver = false;
         _gameInSession = true;
@@ -106,7 +106,6 @@ public class GameManager : Singleton<GameManager> {
     void Update () {
 
         if (_gameInSession) {
-            //Count down the timer
             _currTime -= Time.deltaTime;
 
             if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
@@ -118,13 +117,12 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void PlayerActions(int playerID, PlayerIO command) {
-
         // This check will prevent any null references to players which have been killed.
         if (_players[playerID-1] != null) { _players[playerID - 1].RequestAction(command); }
     }
 
     public void LeaveGame(int playerID) {
-        decAlivePlayers();
+        _numOfAlivePlayers--;
         if (_players[playerID - 1] != null) { _players[playerID - 1].LeaveGame(); }
     }
 
@@ -207,7 +205,7 @@ public class GameManager : Singleton<GameManager> {
             OnEndGame(WindowIDs.Game, WindowIDs.Victory);
         }
 
-        GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
+        //GameObject[] ps = GameObject.FindGameObjectsWithTag("Player"); //Tells us the winners
 
         if (_numOfAlivePlayers > 1 || _numOfAlivePlayers == 0) {
             WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText("", false);
@@ -215,7 +213,7 @@ public class GameManager : Singleton<GameManager> {
             //DestroyEverything();
         } 
         else if (_numOfAlivePlayers == 1) {
-            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(ps[0].GetComponent<PlayerActions>().PlayerName, true);
+            WindowManager.Instance.GetComponentInChildren<VictoryWindow>().setText(playerReferences[0].GetComponent<PlayerActions>().playerName, true);
             //WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
             //DestroyEverything();
         } 
