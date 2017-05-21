@@ -53,6 +53,8 @@ public class LobbyWindow : GenericWindow {
 
                 if (_gameStartsIn <= 0.0f) {
                     ServerConnection.Instance.EnableClientControls();
+
+                    // do MapGenerator.Instance.CanGenerateMap = true; After generating map, MapGenerator starts the game
                     MapGenerator.Instance.GenerateMap();
                     GameManager.Instance.StartGame();
 
@@ -87,8 +89,24 @@ public class LobbyWindow : GenericWindow {
         }
     }
 
-    public void AddPlayerToLobby(string username) {
+    public void AddPlayerToLobby(string username, int playerNum) {
+        int playerWho = 0;
 
+        // This if makes sure that this player is part of this group
+        if (playerNum > 3) {
+            playerWho = playerNum % 4;
+        }else {
+            playerWho = playerNum;
+        }
+
+        if (_players[playerNum].activeInHierarchy == false) {
+            _players[playerNum].SetActive(true);
+            //GameManager.Instance.setUsername(0, username);
+            //AddPlayer
+            _usernames[playerNum].text = username;
+        }
+
+        /*
         if (_players[0].activeInHierarchy == false) {
             _players[0].SetActive(true);
             GameManager.Instance.setUsername(0, username);
@@ -110,6 +128,7 @@ public class LobbyWindow : GenericWindow {
             GameManager.Instance.setUsername(3, username);
             _usernames[3].text = username;
         }
+        */
     }
 
     public void RemovePlayerFromLobby(string username) {

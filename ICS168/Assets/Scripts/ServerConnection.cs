@@ -50,6 +50,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         public int ConnectionID = -1;
         public int ChannelID = -1;
         public string username = "";
+        public int playerNum = -1;
     }
 
     [SerializeField] private int _incomingBufferSize = 3000;
@@ -272,6 +273,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             _inGamePlayers++;
             _clientSocketIDs[connectionID].username = username;
+            _clientSocketIDs[connectionID].playerNum = InGamePlayers; //InGamePlayer number is that player's number to determine which player they are
 
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {
@@ -279,7 +281,8 @@ public class ServerConnection : Singleton<ServerConnection> {
             }
 
             // Tell the lobby to add this player so it shows in the lobby.
-            _lobby.AddPlayerToLobby(username);
+            //_lobby.AddPlayerToLobby(username);
+            _lobby.AddPlayerToLobby(_clientSocketIDs[connectionID].username, _clientSocketIDs[connectionID].playerNum);
             //GameManager.Instance.AddPlayer(connectionID);
 
         }

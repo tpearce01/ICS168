@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 212554867038650764}
   - component: {fileID: 61706097846339898}
   - component: {fileID: 50957595751527940}
-  - component: {fileID: 114693326413869868}
   - component: {fileID: 114022654432681400}
   - component: {fileID: 114795207397998284}
   m_Layer: 9
@@ -101,26 +100,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb09477252aa6fa45baf979cf2d5443f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 2
-  _playerNum: 4
   _whatToHit:
     serializedVersion: 2
     m_Bits: 512
   _offSetValue: 0.5
   _magnitude: 0.5
---- !u!114 &114693326413869868
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1301107187008938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 207ceeeef5c461545b22547fcde77702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerNumber: 4
-  playerName: Ney
+  range: 2
+  _playerNum: 4
+  _playerID: 0
+  playerName: 
 --- !u!114 &114795207397998284
 MonoBehaviour:
   m_ObjectHideFlags: 1

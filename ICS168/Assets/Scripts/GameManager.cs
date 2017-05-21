@@ -9,9 +9,17 @@ public class GameManager : Singleton<GameManager> {
 	public delegate void GameManagerEvent(WindowIDs close, WindowIDs open);
 	public static event GameManagerEvent OnEndGame;
 
+    private class PlayerInfo {
+        public string username;
+        public int playerNum;
+    }
+
+    private List<PlayerInfo> _listOfPlayers = new List<PlayerInfo>();
+
     [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
     //private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
     //private List<int> _playerIDs = new List<int>();
+
 
     //This variable is used to track the number of players that are still alive internally.
     //It should not be visible for any reason on the inspector.
@@ -183,7 +191,11 @@ public class GameManager : Singleton<GameManager> {
 
     }
 
+    public void AddPlayer(string username, int playerNum) {
 
+        
+
+    }
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
     /// </summary>

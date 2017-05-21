@@ -36,6 +36,7 @@ public class PlayerActions : MonoBehaviour {
         set { _playerNum = value; }
     }
     
+    // Uh I have no idea what this is for yet
     [SerializeField]
     [Range(0, 3)]
     private int _playerID;

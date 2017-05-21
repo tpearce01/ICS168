@@ -171,7 +171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &688920988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,29 +356,9 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
         type: 2}
-      propertyPath: _bufferSize
-      value: 1024
-      objectReference: {fileID: 0}
-    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
-        type: 2}
-      propertyPath: _maxConnections
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
-        type: 2}
       propertyPath: _lobby
       value: 
       objectReference: {fileID: 937385007}
-    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
-        type: 2}
-      propertyPath: _incomingBufferSize
-      value: 1024
-      objectReference: {fileID: 0}
-    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
-        type: 2}
-      propertyPath: _numberOfConnections
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
   m_IsPrefabParent: 0

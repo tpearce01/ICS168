@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System.IO;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
@@ -12,18 +13,20 @@ public class MapGenerator : Singleton<MapGenerator>
 	public Map mapToLoad;
     //private bool _isGenerated = false;
 
-    private List<PlayerActions> _players = new List<PlayerActions>();
+    public List<int> playerNumArray = new List<int>();
 
 	void Start ()
 	{
-        //Uncomment to randomize walls
-        //RandomizeWalls(mapToLoad.ToString());
-        //GenerateMap(mapToLoad.ToString());
+        playerNumArray.Add(5);
+        playerNumArray.Add(6);
+        EditGameMap();
+        
+        //if (canGenerateMap) {
+        //    GenerateMap();
+        //    _isGenerated = true;
+        //}
 	}
-
-    //public void GenerateMap() {
-    //    GenerateMap(mapToLoad.ToString());
-    //}
+    
     //Creates tiles and sets them to the appropriate locations
     public void GenerateMap(/*string fileName*/)
     {
@@ -39,8 +42,8 @@ public class MapGenerator : Singleton<MapGenerator>
 
             //Generate each tile specified by the text file
             for (int y = 0; y < data.Length; y++) {
-            //int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
-            int dataYLength = data[y].Length;
+            int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
+            //int dataYLength = data[y].Length;
 
             for (int x = 0; x < dataYLength; x++) {
                 if (Int32.Parse(data[y][x].ToString()) >= 5) {
@@ -74,13 +77,80 @@ public class MapGenerator : Singleton<MapGenerator>
             }
         }
 
-            //Move camera to middle position
-            GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
+        //Move camera to middle position
+        GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
         //Need to change camera size based on tile dimensions
         // }
 
         //GameManager.Instance.addPlayers();
-        GameManager.Instance.AssignPlayer();
+        //GameManager.Instance.AssignPlayer(); //needs to take in playernumber
+    }
+
+    // Gets called when players are logging into lobby
+    void AddPlayersToMap(int playerNum) {
+        playerNumArray.Add(playerNum + 5);
+    }
+
+    // Gets called when player leaves lobby
+    void RemovePlayersFromMap(int playerNum) {
+        playerNumArray.Remove(playerNum + 5);
+    }
+
+    // Only gets called when countdown to game is starting, when players can't leave lobby
+    void EditGameMap() {
+        String newMap = (Resources.Load("GameMap") as TextAsset).text;
+        StringBuilder sb = new StringBuilder(newMap);
+
+        //Reset players
+        sb[16] = '1';
+        sb[26] = '1';
+        sb[106] = '1';
+        sb[116] = '1';
+
+        for (int i = 0; i < playerNumArray.Count; ++i) {
+            if (playerNumArray[i] == 5) {
+                sb[16] = '5';
+            }
+            if (playerNumArray[i] == 6) {
+                sb[26] = '6';
+            }
+            if (playerNumArray[i] == 7) {
+                sb[106] = '7';
+            }
+            if (playerNumArray[i] == 8) {
+                sb[116] = '8';
+            }
+        }
+        
+        File.WriteAllText("Assets/Resources/GameMap.txt", sb.ToString());
+
+        FileInfo mapFile = new FileInfo("Assets/Resources/GameMap.txt");
+        Debug.Log("Last write time: " + mapFile.LastWriteTime);
+        while (IsFileLocked(mapFile)) {
+            Debug.Log("Is file locked? " + (IsFileLocked(mapFile) ? "yes" : "no"));
+        }
+        Debug.Log("I guess file isn't locked?");
+        GenerateMap();
+    }
+
+    private bool IsFileLocked(FileInfo file) {
+        FileStream stream = null;
+
+        try {
+            stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        } catch (IOException) {
+            //the file is unavailable because it is:
+            //still being written to
+            //or being processed by another thread
+            //or does not exist (has already been processed)
+            return true;
+        } finally {
+            if (stream != null)
+                stream.Close();
+        }
+
+        //file is not locked
+        return false;
     }
 
     void RandomizeWalls(string fileName) {
@@ -118,5 +188,6 @@ public class MapGenerator : Singleton<MapGenerator>
 [System.Serializable]
 public enum Map{
 	TestMap,
-    TestRandomWalls
+    TestRandomWalls,
+    GameMap,
 }
