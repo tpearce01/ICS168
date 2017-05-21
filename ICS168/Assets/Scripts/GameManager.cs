@@ -17,6 +17,8 @@ public class GameManager : Singleton<GameManager> {
     private List<PlayerInfo> _listOfPlayers = new List<PlayerInfo>();
 
     [SerializeField] private List<PlayerActions> _players = new List<PlayerActions>();
+    private List<GameObject> playerReferences = new List<GameObject>(); //references to the player game objects that the mapgenerator instantiated
+
     //private Dictionary<int, PlayerActions> _players = new Dictionary<int, PlayerActions>();
     //private List<int> _playerIDs = new List<int>();
 
@@ -51,23 +53,7 @@ public class GameManager : Singleton<GameManager> {
         set { _gameInSession = value; }
     }
 
-    //Player attributes.
-    /* These attributes are used to track the game objects that will represent the players.
-     * I'm guessing that we will be having 4 players in the networked version, similar to the normal bomberman game.
-     *
-     * I'll have 4 slots in there for now, but we can leave the other three empty OR have them be dummy characters the player needs to kill.
-    */
-
     private int _winner = 0;
-
-    [SerializeField]
-    private Text _victoryText;
-
-    /// <summary>
-    /// Time that the victory screen will be shown.
-    /// </summary>
-    [SerializeField]
-    private float _timeToShowVictory;
 
     /// <summary>
     /// Used to store the usernames from login.
@@ -88,22 +74,22 @@ public class GameManager : Singleton<GameManager> {
     }
 
     public void StartGame() {
-        if (GameObject.Find("Player1(Clone)") != null) {
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(0);
-            GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerNumber = 0;
-        }
-        if (GameObject.Find("Player2(Clone)") != null) {
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(1);
-            GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerNumber = 1;
-        }
-        if (GameObject.Find("Player3(Clone)") != null) {
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(2);
-            GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerNumber = 2;
-        }
-        if (GameObject.Find("Player4(Clone)") != null) {
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(3);
-            GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerNumber = 3;
-        }
+        //if (GameObject.Find("Player1(Clone)") != null) {
+        //    GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(0);
+        //    GameObject.Find("Player1(Clone)").GetComponent<PlayerActions>().PlayerNumber = 0;
+        //}
+        //if (GameObject.Find("Player2(Clone)") != null) {
+        //    GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(1);
+        //    GameObject.Find("Player2(Clone)").GetComponent<PlayerActions>().PlayerNumber = 1;
+        //}
+        //if (GameObject.Find("Player3(Clone)") != null) {
+        //    GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(2);
+        //    GameObject.Find("Player3(Clone)").GetComponent<PlayerActions>().PlayerNumber = 2;
+        //}
+        //if (GameObject.Find("Player4(Clone)") != null) {
+        //    GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerName = getUsername(3);
+        //    GameObject.Find("Player4(Clone)").GetComponent<PlayerActions>().PlayerNumber = 3;
+        //}
         
         _currTime = _roundTime;
         _isGameOver = false;
@@ -174,27 +160,27 @@ public class GameManager : Singleton<GameManager> {
 
         // The map generated the maximum amount of players the map can handle.
         // It then finds all of them.
-        GameObject[] tempPlayers = GameObject.FindGameObjectsWithTag("Player");
+        //GameObject[] tempPlayers = GameObject.FindGameObjectsWithTag("Player");
+        
+        
 
         // Keep track of the number of active players.
         _numOfAlivePlayers = ServerConnection.Instance.InGamePlayers;
 
         // Add the players to the list of players.
-        for (int i = 0; i < _numOfAlivePlayers; i++) {
-            _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
-        }
+        //for (int i = 0; i < _numOfAlivePlayers; i++) {
+        //    _players.Add(tempPlayers[i].GetComponent<PlayerActions>());
+        //}
 
         // For all extra players which were created, destroy the leftovers.
-        for (int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
-            Destroy(tempPlayers[i]);
-        }
+        //for (int i = _numOfAlivePlayers; i < tempPlayers.Length; i++) {
+        //    Destroy(tempPlayers[i]);
+        //}
 
     }
 
-    public void AddPlayer(string username, int playerNum) {
-
-        
-
+    public void getPlayerReferences() {
+        playerReferences.AddRange(GameObject.FindGameObjectsWithTag("Player"));
     }
     /// <summary>
     /// Call this function to decrement the number of alive players by 1.
@@ -265,13 +251,4 @@ public class GameManager : Singleton<GameManager> {
         for (int i = 0; i < allRemainingPlayers.Length; ++i)
             Destroy(allRemainingPlayers[i]);
     }
-
-    /// <summary>
-    /// Displays the victory text.
-    /// </summary>
-    //void displayVictor()
-    //{ 
-    //    _victoryText.enabled = true;
-    //    _victoryText.text = _winner.ToString() + " wins!";
-    //}
 }

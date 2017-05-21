@@ -162,7 +162,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                     _inGamePlayers--;
                     if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                     if (_lobby.gameObject.activeInHierarchy == true) {
-                        _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
+                        _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
                         //GameManager.Instance.RemovePlayer(_connectionID);
                     }
 
@@ -197,7 +197,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
                 // If the lobby is currently showing, make sure to update the information.
                 if (_lobby.gameObject.activeInHierarchy == true) {
-                    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].username);
+                    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
                 }
 
                 ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
@@ -270,11 +270,10 @@ public class ServerConnection : Singleton<ServerConnection> {
             jsonToBeSent += JsonUtility.ToJson(verify.text);
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
-
-            _inGamePlayers++;
+            
             _clientSocketIDs[connectionID].username = username;
             _clientSocketIDs[connectionID].playerNum = InGamePlayers; //InGamePlayer number is that player's number to determine which player they are
-
+            
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {
                 WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
@@ -284,7 +283,7 @@ public class ServerConnection : Singleton<ServerConnection> {
             //_lobby.AddPlayerToLobby(username);
             _lobby.AddPlayerToLobby(_clientSocketIDs[connectionID].username, _clientSocketIDs[connectionID].playerNum);
             //GameManager.Instance.AddPlayer(connectionID);
-
+            _inGamePlayers++;
         }
         else if (verify.text == "invalid") {
 

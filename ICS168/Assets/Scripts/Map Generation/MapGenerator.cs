@@ -12,15 +12,12 @@ public class MapGenerator : Singleton<MapGenerator>
     public Tile[,] tileMap;             //Stores all tiles
 	public Map mapToLoad;
     //private bool _isGenerated = false;
-
-    public List<int> playerNumArray = new List<int>();
+    
+    //Dictionary of playerNum and username, gets updated whenever a player enters or leaves the lobby
+    public Dictionary<int, string> playerArray = new Dictionary<int, string>();
 
 	void Start ()
-	{
-        playerNumArray.Add(5);
-        playerNumArray.Add(6);
-        EditGameMap();
-        
+	{        
         //if (canGenerateMap) {
         //    GenerateMap();
         //    _isGenerated = true;
@@ -28,6 +25,7 @@ public class MapGenerator : Singleton<MapGenerator>
 	}
     
     //Creates tiles and sets them to the appropriate locations
+    //Gets called when game is about to start
     public void GenerateMap(/*string fileName*/)
     {
         //if (!_isGenerated) {
@@ -46,17 +44,21 @@ public class MapGenerator : Singleton<MapGenerator>
             //int dataYLength = data[y].Length;
 
             for (int x = 0; x < dataYLength; x++) {
-                if (Int32.Parse(data[y][x].ToString()) >= 5) {
-                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                int tileNum = Int32.Parse(data[y][x].ToString());
+
+                //Only instantiates a player if the txt file has 5-8 in it and that number exists in the playerArray
+                if (tileNum >= 5 && playerArray.ContainsKey(tileNum)) {
+                    temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
+
+                    //Sets the player's playernumber and username
+                    //% 5 is there because the playerNumber range is 0-3 and the player tile range is 5-8. Need to convert 5-8 to 0-3
+                    temp.GetComponent<PlayerActions>().PlayerNumber = tileNum % 5;
+                    temp.GetComponent<PlayerActions>().PlayerName = playerArray[tileNum % 5];
+                    
                     //Set tile location
                     temp.x = x;
                     temp.y = y;
                     temp.SetLocation();
-
-                    //// Check if the created gameObject is a player object.
-                    //if (temp.GetComponent<PlayerActions>() != null) {
-                    //    _players.Add(temp.GetComponent<PlayerActions>());
-                    //}
 
                     base_temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>(); ;
                     base_temp.x = x;
@@ -64,8 +66,10 @@ public class MapGenerator : Singleton<MapGenerator>
                     base_temp.SetLocation();
 
                     tileMap[x, y] = base_temp.GetComponent<Tile>();
-                } else {
-                    temp = (Instantiate(tileTypes[Int32.Parse(data[y][x].ToString())]) as GameObject).GetComponent<Tile>();
+                }
+
+                if (tileNum < 5) {
+                    temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
 
                     //Set tile location
                     temp.x = x;
@@ -84,75 +88,19 @@ public class MapGenerator : Singleton<MapGenerator>
 
         //GameManager.Instance.addPlayers();
         //GameManager.Instance.AssignPlayer(); //needs to take in playernumber
+        GameManager.Instance.getPlayerReferences(); 
     }
 
     // Gets called when players are logging into lobby
-    void AddPlayersToMap(int playerNum) {
-        playerNumArray.Add(playerNum + 5);
+    public void AddPlayerToMap(int playerNum, string username) {
+        playerArray.Add(playerNum+5, username);
     }
 
     // Gets called when player leaves lobby
-    void RemovePlayersFromMap(int playerNum) {
-        playerNumArray.Remove(playerNum + 5);
+    public void RemovePlayerFromMap(int playerNum) {
+        playerArray.Remove(playerNum+5);
     }
-
-    // Only gets called when countdown to game is starting, when players can't leave lobby
-    void EditGameMap() {
-        String newMap = (Resources.Load("GameMap") as TextAsset).text;
-        StringBuilder sb = new StringBuilder(newMap);
-
-        //Reset players
-        sb[16] = '1';
-        sb[26] = '1';
-        sb[106] = '1';
-        sb[116] = '1';
-
-        for (int i = 0; i < playerNumArray.Count; ++i) {
-            if (playerNumArray[i] == 5) {
-                sb[16] = '5';
-            }
-            if (playerNumArray[i] == 6) {
-                sb[26] = '6';
-            }
-            if (playerNumArray[i] == 7) {
-                sb[106] = '7';
-            }
-            if (playerNumArray[i] == 8) {
-                sb[116] = '8';
-            }
-        }
-        
-        File.WriteAllText("Assets/Resources/GameMap.txt", sb.ToString());
-
-        FileInfo mapFile = new FileInfo("Assets/Resources/GameMap.txt");
-        Debug.Log("Last write time: " + mapFile.LastWriteTime);
-        while (IsFileLocked(mapFile)) {
-            Debug.Log("Is file locked? " + (IsFileLocked(mapFile) ? "yes" : "no"));
-        }
-        Debug.Log("I guess file isn't locked?");
-        GenerateMap();
-    }
-
-    private bool IsFileLocked(FileInfo file) {
-        FileStream stream = null;
-
-        try {
-            stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-        } catch (IOException) {
-            //the file is unavailable because it is:
-            //still being written to
-            //or being processed by another thread
-            //or does not exist (has already been processed)
-            return true;
-        } finally {
-            if (stream != null)
-                stream.Close();
-        }
-
-        //file is not locked
-        return false;
-    }
-
+    
     void RandomizeWalls(string fileName) {
         System.Random random = new System.Random();
         int randNum = 0;
@@ -189,5 +137,4 @@ public class MapGenerator : Singleton<MapGenerator>
 public enum Map{
 	TestMap,
     TestRandomWalls,
-    GameMap,
 }

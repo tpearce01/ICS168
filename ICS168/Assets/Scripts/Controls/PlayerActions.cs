@@ -29,22 +29,15 @@ public class PlayerActions : MonoBehaviour {
     private Vector2 _pos;
     private bool validMove = false;
 
-    //Player's identifier, used for keeping track of usernames and colors
-    [SerializeField] private int _playerNum = -1;
-    public int PlayerNum {
+    //Player's identifier, used for keeping track of which player is which
+    [SerializeField]
+    private int _playerNum;
+    public int PlayerNumber {
         get { return _playerNum; }
         set { _playerNum = value; }
     }
-    
-    // Uh I have no idea what this is for yet
-    [SerializeField]
-    [Range(0, 3)]
-    private int _playerID;
-    public int PlayerNumber {
-        get { return _playerID; }
-        set { _playerID = value; }
-    }
 
+    //For coloring the players
     private SpriteRenderer _sr;
 
     // Username
@@ -71,7 +64,7 @@ public class PlayerActions : MonoBehaviour {
     }
 
     void setPlayerColor(SpriteRenderer sr) {
-        switch (_playerID) {
+        switch (_playerNum) {
             case 0:
                 sr.material.SetColor("_Color", Color.red);
                 break;
@@ -164,11 +157,11 @@ public class PlayerActions : MonoBehaviour {
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.CompareTag("Player")) {
-            validMove = false;
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision) {
+    //    if (collision.gameObject.CompareTag("Player")) {
+    //        validMove = false;
+    //    }
+    //}
 
     //On Power Up Pick Up, replaces the tile with a basic tile.
     void ReplaceWithBasicTile() {
