@@ -135,7 +135,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
                 int prefix = Convert.ToInt32(message.Substring(0, 1));
                 string newMessage = message.Substring(1);
-
+                
                 //process login info
                 if (prefix == (int)ServerCommands.VerifyLogin) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
@@ -151,6 +151,7 @@ public class ServerConnection : Singleton<ServerConnection> {
                 //process user game input
                 else if (prefix == (int)ServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
+                    Debug.Log(incomingConnectionID + " is moving " + input.button);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
                 }
 
@@ -163,7 +164,6 @@ public class ServerConnection : Singleton<ServerConnection> {
                     if (_inGamePlayers < 0) { _inGamePlayers = 0; }
                     if (_lobby.gameObject.activeInHierarchy == true) {
                         _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
-                        //GameManager.Instance.RemovePlayer(_connectionID);
                     }
 
                     if (_inGamePlayers < 1) {
@@ -175,9 +175,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
                     _inGamePlayers--;
                     if (_inGamePlayers < 0) { _inGamePlayers = 0; }
-
-
-
+                    
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
@@ -272,9 +270,11 @@ public class ServerConnection : Singleton<ServerConnection> {
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
             
             _clientSocketIDs[connectionID].username = username;
-            _clientSocketIDs[connectionID].playerNum = InGamePlayers; //InGamePlayer number is that player's number to determine which player they are
+            _clientSocketIDs[connectionID].playerNum = connectionID-1; //InGamePlayer number is that player's number to determine which player they are
 
-            Debug.Log("Username: " + _clientSocketIDs[connectionID].username + " | ID: " + _clientSocketIDs[connectionID].playerNum);
+            Debug.Log(username + " logged in with connection id: " + connectionID);
+            Debug.Log(username + " playerNum is " + _clientSocketIDs[connectionID].playerNum);
+            //Debug.Log("Username: " + _clientSocketIDs[connectionID].username + " | ID: " + _clientSocketIDs[connectionID].playerNum);
             
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {
@@ -282,9 +282,7 @@ public class ServerConnection : Singleton<ServerConnection> {
             }
 
             // Tell the lobby to add this player so it shows in the lobby.
-            //_lobby.AddPlayerToLobby(username);
             _lobby.AddPlayerToLobby(_clientSocketIDs[connectionID].username, _clientSocketIDs[connectionID].playerNum);
-            //GameManager.Instance.AddPlayer(connectionID);
             _inGamePlayers++;
         }
         else if (verify.text == "invalid") {
