@@ -185,6 +185,7 @@ public class ServerConnection : Singleton<ServerConnection> {
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
                 GameManager.Instance.LeaveGame(incomingConnectionID);
+                _clientSocketIDs.Remove(incomingConnectionID);
 
                 // Decrement the number of players and remove the player from the hashmap.
                 _inGamePlayers--;

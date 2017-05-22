@@ -37,8 +37,8 @@ public class MapGenerator : Singleton<MapGenerator>
                 if (tileNum >= 5 && playerArray.ContainsKey(tileNum)) {
 
                     temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
-                    // Sets the player's playernumber and username
-                    // % 5 is there because the playerNumber range is 0-3 and the player tile range is 5-8. Need to convert 5-8 to 0-3
+
+                    // Sets the player's playernumber and username, % 5 because need to convert 5-8 to 0-3
                     temp.GetComponent<PlayerActions>().PlayerNumber = tileNum % 5;
                     temp.GetComponent<PlayerActions>().PlayerName = playerArray[tileNum];
                     
@@ -86,8 +86,7 @@ public class MapGenerator : Singleton<MapGenerator>
 
     // Gets called when players are logging into lobby
     public void AddPlayerToMap(int playerNum, string username) {
-        //int newNum = playerNum + 5;
-        Debug.Log("Adding " + username + "(" + (playerNum+5) + " to map");
+        Debug.Log("Adding " + username + "(" + (playerNum+5) + ") to map");
         playerArray.Add(playerNum + 5, username);
     }
 
