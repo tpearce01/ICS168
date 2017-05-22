@@ -8,8 +8,6 @@ public class VictoryWindow : GenericWindow {
 
     private void Update() {
         redirectingSeconds -= Time.deltaTime;
-        //gameObject.GetComponentsInChildren<Text>()[1].text = "Remaining time " + (int)redirectingSeconds + "...";
-        //Text[] txt = GetComponentsInChildren<Text>();
         
         if(redirectingSeconds <= 0.0f) {
             ServerConnection.Instance.InGamePlayers = 0;
@@ -26,5 +24,4 @@ public class VictoryWindow : GenericWindow {
         else
             gameObject.GetComponentInChildren<Text>().text = "Draw!";
     }
-    //placeholder
 }

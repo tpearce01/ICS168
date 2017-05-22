@@ -18,6 +18,7 @@ public class LobbyWindow : GenericWindow {
     private float _gameStartsIn = -1.0f;
     private bool _messageSent = false;
 
+    // Sets lobby timer
     private void OnEnable() {
         _timeout = _defaultTimeout;
 
@@ -25,6 +26,7 @@ public class LobbyWindow : GenericWindow {
         _gameStartsIn = _gameStartsInDefault;
         _messageSent = false;
 
+        // Disables the boxes and sets usernames to blank
         foreach (GameObject player in _players) {
             player.SetActive(false);
         }
@@ -35,7 +37,6 @@ public class LobbyWindow : GenericWindow {
     }
 
     private void Update() {
-
         if (ServerConnection.Instance.InGamePlayers >= _minPlayers && ServerConnection.Instance.InGamePlayers < ServerConnection.Instance.MaxConnections) {
             if (_timeout > 0.0f) {
                 _timeout -= Time.deltaTime;
@@ -96,7 +97,8 @@ public class LobbyWindow : GenericWindow {
             MapGenerator.Instance.AddPlayerToMap(actualPlayerNum, username);
         }
     }
-
+    
+    // Removes player from lobby based on playerNum that was passed in
     public void RemovePlayerFromLobby(int playerNum) {
         int actualPlayerNum = playerNum % 4;
 

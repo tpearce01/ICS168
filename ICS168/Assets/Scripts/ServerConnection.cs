@@ -29,17 +29,18 @@ public class ServerObject {
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
-    [SerializeField] private RenderTexture rt;    //Target render texture
-    [SerializeField] private Camera _cam;          //Camera to render from
+    /*** RENDER VARIABLES ***/
+    [SerializeField] private RenderTexture rt;  //Target render texture
+    [SerializeField] private Camera _cam;       //Camera to render from
 
+    /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
 
+    /*** CLIENT VARIABLES ***/
+    // Encapsulated client info
     private class ClientInfo {
-        // Default Constructor
         public ClientInfo() { }
-
-        // Override default constructor
         public ClientInfo(int socket, int connection, int channel) {
             socketID = socket;
             ConnectionID = connection;
@@ -53,28 +54,27 @@ public class ServerConnection : Singleton<ServerConnection> {
         public int playerNum = -1;
     }
 
-    [SerializeField] private int _incomingBufferSize = 3000;
-    [SerializeField] private int _maxConnections = 0;
+    // Maps connectionID with ClientInfo
+    private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
 
-    
+    /*** SERVER VARIABLES ***/
+    [SerializeField] private int _incomingBufferSize = 3000;    // max buffer size
+    [SerializeField] private int _maxConnections = 0;           // max number of connections
     public int MaxConnections {
         get { return _maxConnections; }
     }
 
-    private int UDP_ChannelIDFrag = -1;             // This channel should be reserved for larger messages
+    private int UDP_ChannelIDFrag = -1;                         // This channel should be reserved for larger messages
     private int _socketID = -1;
-    [SerializeField] private int _socketPort = 8888;
     private int _connectionID = -1;
-
-    private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
-
+    [SerializeField] private int _socketPort = 8888;
     [SerializeField] private int _numberOfConnections = 0;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
     }
 
-    // Keep track of players which have successfully logged in and are ready to play
-    [SerializeField] private int _inGamePlayers = 0;
+    /*** PLAYER VARIABLES ***/
+    [SerializeField] private int _inGamePlayers = 0;            // Players who have successfully logged in
     public int InGamePlayers {
         get { return _inGamePlayers; }
         set { _inGamePlayers = value; }
@@ -85,19 +85,18 @@ public class ServerConnection : Singleton<ServerConnection> {
         _cam = Camera.main;
     }
 
-
-    private float _timer = 0.0f;
-
+    // Initialization
     void Start() {
         NetworkTransport.Init();
+
         ConnectionConfig connectionConfig = new ConnectionConfig();
         UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
     }
 
     void Update() {
-
         CaptureFrame();
 
         int incomingSocketID = -1;
@@ -184,8 +183,8 @@ public class ServerConnection : Singleton<ServerConnection> {
                 break;
 
             case NetworkEventType.DisconnectEvent:
-
                 Debug.Log("server: remote client event disconnected");
+                GameManager.Instance.LeaveGame(incomingConnectionID);
 
                 // Decrement the number of players and remove the player from the hashmap.
                 _inGamePlayers--;
@@ -238,9 +237,7 @@ public class ServerConnection : Singleton<ServerConnection> {
         byte[] image = tex.EncodeToPNG();
 
         // Create a new Server object and populate its attributes
-        // Time.frameCount
         ServerObject toBeSent = new ServerObject(Time.frameCount, Convert.ToBase64String(image));
-        //toBeSent.texture = Convert.ToBase64String(image);
 
         // Convert to JSON
         string jsonToBeSent = "1";
@@ -270,11 +267,10 @@ public class ServerConnection : Singleton<ServerConnection> {
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
             
             _clientSocketIDs[connectionID].username = username;
-            _clientSocketIDs[connectionID].playerNum = connectionID-1; //InGamePlayer number is that player's number to determine which player they are
+            _clientSocketIDs[connectionID].playerNum = connectionID-1; // decremented so the range starts with 0 and not 1
 
             Debug.Log(username + " logged in with connection id: " + connectionID);
             Debug.Log(username + " playerNum is " + _clientSocketIDs[connectionID].playerNum);
-            //Debug.Log("Username: " + _clientSocketIDs[connectionID].username + " | ID: " + _clientSocketIDs[connectionID].playerNum);
             
             // IF the lobby is not loaded, load it.
             if (WindowManager.Instance.currentWindow == WindowIDs.None) {
@@ -305,8 +301,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     private IEnumerator CreateUser(string username, string password, int socketID, int connectionID, int channelID) {
-
-        Debug.Log(username + " " + password);
+        Debug.Log(username + " created an account with password " + password);
 
         WWWForm form = new WWWForm();
         form.AddField("usernamePost", username);
@@ -317,7 +312,6 @@ public class ServerConnection : Singleton<ServerConnection> {
         yield return verify; ;
 
         if (verify.text == "username exists") {
-
             byte error;
             string jsonToBeSent = "7";
             jsonToBeSent += JsonUtility.ToJson(verify.text);

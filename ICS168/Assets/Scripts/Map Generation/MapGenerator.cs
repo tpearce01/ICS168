@@ -7,28 +7,25 @@ using System.IO;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
-    //public static MapGenerator i;
     public List<GameObject> tileTypes;  //List of tile prefabs
     public Tile[,] tileMap;             //Stores all tiles
 	public Map mapToLoad;
-    //private bool _isGenerated = false;
     
-    //Dictionary of playerNum and username, gets updated whenever a player enters or leaves the lobby
+    // Dictionary of playerNum and username, gets updated whenever a player enters or leaves the lobby
     public Dictionary<int, string> playerArray = new Dictionary<int, string>();
     
-    //Creates tiles and sets them to the appropriate locations
-    //Gets called when game is about to start
+    // Creates tiles and sets them to the appropriate locations, gets called when game is about to start
     public void GenerateMap()
     {
-        TextAsset txt = Resources.Load(mapToLoad.ToString()) as TextAsset;  //Load text file
+        TextAsset txt = Resources.Load(mapToLoad.ToString()) as TextAsset;  // Load text file
 
-        string[] data = txt.text.Split('\n');           //Split text file by line
-        Tile temp;                                      //Used to store tile temporarily
+        string[] data = txt.text.Split('\n');           // Split text file by line
+        Tile temp;                                      // Used to store tile temporarily
         Tile base_temp;
 
-        tileMap = new Tile[data[0].Length, data.Length]; //Allocate tileMap
+        tileMap = new Tile[data[0].Length, data.Length]; // Allocate tileMap
 
-        //Generate each tile specified by the text file
+        // Generate each tile specified by the text file
         for (int y = 0; y < data.Length; y++) {
             int dataYLength = SystemInfo.operatingSystem.Substring(0, 3) == "Mac" ? data[y].Length : data[y].Length - 1;
             //int dataYLength = data[y].Length;
@@ -36,16 +33,16 @@ public class MapGenerator : Singleton<MapGenerator>
             for (int x = 0; x < dataYLength; x++) {
                 int tileNum = Int32.Parse(data[y][x].ToString());
 
-                //Only instantiates a player if the txt file has 5-8 in it and that number exists in the playerArray
+                // Only instantiates a player if the 5-8 number on txt file exists in the playerArray, else just instantiate a basic tile
                 if (tileNum >= 5 && playerArray.ContainsKey(tileNum)) {
 
                     temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
-                    //Sets the player's playernumber and username
-                    //% 5 is there because the playerNumber range is 0-3 and the player tile range is 5-8. Need to convert 5-8 to 0-3
+                    // Sets the player's playernumber and username
+                    // % 5 is there because the playerNumber range is 0-3 and the player tile range is 5-8. Need to convert 5-8 to 0-3
                     temp.GetComponent<PlayerActions>().PlayerNumber = tileNum % 5;
                     temp.GetComponent<PlayerActions>().PlayerName = playerArray[tileNum];
                     
-                    //Set tile location
+                    // Set tile location
                     temp.x = x;
                     temp.y = y;
                     temp.SetLocation();
@@ -59,8 +56,7 @@ public class MapGenerator : Singleton<MapGenerator>
                 }
                 else {
                     temp = (Instantiate(tileTypes[1]) as GameObject).GetComponent<Tile>();
-
-                    //Set tile location
+                    
                     temp.x = x;
                     temp.y = y;
                     temp.SetLocation();
@@ -68,10 +64,10 @@ public class MapGenerator : Singleton<MapGenerator>
                     tileMap[x, y] = temp.GetComponent<Tile>();
                 }
 
+                // For other non-player tiles
                 if (tileNum < 5) {
                     temp = (Instantiate(tileTypes[tileNum]) as GameObject).GetComponent<Tile>();
-
-                    //Set tile location
+                    
                     temp.x = x;
                     temp.y = y;
                     temp.SetLocation();
@@ -83,8 +79,6 @@ public class MapGenerator : Singleton<MapGenerator>
 
         //Move camera to middle position
         GameObject.Find("Main Camera").transform.position = new Vector3((data[0].Length) / 2f, (data.Length) / 2f, -10);
-        //Need to change camera size based on tile dimensions
-        // }
         
         GameManager.Instance.getPlayerReferences();
         playerArray.Clear();
@@ -92,9 +86,9 @@ public class MapGenerator : Singleton<MapGenerator>
 
     // Gets called when players are logging into lobby
     public void AddPlayerToMap(int playerNum, string username) {
-        int newNum = playerNum + 5;
-        Debug.Log("Adding player to map: " + newNum);
-        playerArray.Add(newNum, username);
+        //int newNum = playerNum + 5;
+        Debug.Log("Adding " + username + "(" + (playerNum+5) + " to map");
+        playerArray.Add(playerNum + 5, username);
     }
 
     // Gets called when player leaves lobby
