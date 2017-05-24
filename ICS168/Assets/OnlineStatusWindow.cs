@@ -23,7 +23,6 @@ public class OnlineStatusWindow : GenericWindow {
     }
 
     private void Update() {
-        
         if (!ClientConnection.Instance.Connected) {
 
             if (_timer > 0.0f) {

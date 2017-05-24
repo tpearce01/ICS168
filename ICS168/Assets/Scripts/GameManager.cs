@@ -83,7 +83,10 @@ public class GameManager : Singleton<GameManager> {
     // Called by ServerConnection when the client disconnects from an ongoing game
     public void LeaveGame(int playerID) {
         decAlivePlayers();
-        if (playerReferences[playerID - 1] != null) { playerReferences[playerID - 1].GetComponent<PlayerActions>().LeaveGame(); }
+        if (playerReferences[playerID - 1] != null)
+        {
+            playerReferences[playerID - 1].GetComponent<PlayerActions>().LeaveGame();
+        }
     }
 
     // Called by MapGenerator after map is generated. Gets references to the instantiated players on the map.

@@ -17,6 +17,7 @@ public enum WindowIDs {
     OnlineStatus = 9,
     ClientLobby = 10,
     DisconnectWindow = 11,
+    NotificationArea = 12,
     None = -1
 }
 
@@ -26,22 +27,33 @@ public abstract class GenericWindow : MonoBehaviour {
     public delegate void GenericWindowEvent(WindowIDs close, WindowIDs open);
     public static event GenericWindowEvent OnToggleWindows;
 
-    // Changes which game object (window) is active in the hierarchy
+    /// <summary>
+    /// Changes which game object (window) is active in the hierarchy
+    /// </summary>
+    /// <param name="value"></param>
     protected virtual void Display(bool value) {
         gameObject.SetActive(value);
     }
 
-    // If a window is set to open, this function will display it
+    /// <summary>
+    /// If a window is set to open, this function will display it
+    /// </summary>
     public virtual void Open() {
         Display(true);
     }
 
-    // If a window is set to close, this function will un-display(?) it
+    /// <summary>
+    /// If a window is set to close, this function will un-display(?) it
+    /// </summary>
     public virtual void Close() {
         Display(false);
     }
 
-    // A method that allows all windows derived from GenericWindow to have access to the ToggleWindows method in the WindowManager
+    /// <summary>
+    /// A method that allows all windows derived from GenericWindow to have access to the ToggleWindows method in the WindowManager
+    /// </summary>
+    /// <param name="close"></param>
+    /// <param name="open"></param>
     protected virtual void ToggleWindows(WindowIDs close, WindowIDs open) {
         if (OnToggleWindows != null) { OnToggleWindows(close, open); }
     }

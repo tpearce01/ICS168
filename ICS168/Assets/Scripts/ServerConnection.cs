@@ -33,6 +33,12 @@ public class ServerConnection : Singleton<ServerConnection> {
     [SerializeField] private RenderTexture rt;  //Target render texture
     [SerializeField] private Camera _cam;       //Camera to render from
 
+    /*** Apache Variables ***/
+    /// <summary>
+    /// The port of the authentication server, defaults to 80
+    /// </summary>
+    public string apachePort;
+
     /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
@@ -60,6 +66,8 @@ public class ServerConnection : Singleton<ServerConnection> {
     /*** SERVER VARIABLES ***/
     [SerializeField] private int _incomingBufferSize = 3000;    // max buffer size
     [SerializeField] private int _maxConnections = 0;           // max number of connections
+
+
     public int MaxConnections {
         get { return _maxConnections; }
     }
@@ -81,6 +89,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     [SerializeField] private LobbyWindow _lobby;
+    [SerializeField] private NotificationArea _notifArea;
     private void OnEnable() {
         _cam = Camera.main;
     }
@@ -88,6 +97,12 @@ public class ServerConnection : Singleton<ServerConnection> {
     // Initialization
     void Start() {
         NetworkTransport.Init();
+
+        if (apachePort != "80" || apachePort != "")
+        {
+            _LoginURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
+            _CreateAccountURL = "http://localhost:" + apachePort + "/teamnewport/CreateAccount.php";
+        }
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
         UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
@@ -115,7 +130,6 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("server: new client connected");
-
                 ClientInfo clientInfo = new ClientInfo();
                 clientInfo.socketID = incomingSocketID;
                 clientInfo.ConnectionID = incomingConnectionID;
@@ -156,6 +170,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
                 else if (prefix == (int)ServerCommands.SetUsername) {
                     _clientSocketIDs[incomingConnectionID].username = message;
+                    _notifArea.playerEntered(message);
                 }
                 else if (prefix == (int)ServerCommands.LeaveLobby) {
 
@@ -184,6 +199,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
+                _notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
                 GameManager.Instance.LeaveGame(incomingConnectionID);
                 _clientSocketIDs.Remove(incomingConnectionID);
 
