@@ -43,16 +43,6 @@ public class ServerConnection : Singleton<ServerConnection> {
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
 
-    private void Awake()
-    {
-        if (apachePort != "80" || apachePort != "")
-        {
-            _LoginURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
-            _CreateAccountURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
-        }
-        
-    }
-
     /*** CLIENT VARIABLES ***/
     // Encapsulated client info
     private class ClientInfo {
@@ -107,6 +97,12 @@ public class ServerConnection : Singleton<ServerConnection> {
     // Initialization
     void Start() {
         NetworkTransport.Init();
+
+        if (apachePort != "80" || apachePort != "")
+        {
+            _LoginURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
+            _CreateAccountURL = "http://localhost:" + apachePort + "/teamnewport/CreateAccount.php";
+        }
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
         UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
