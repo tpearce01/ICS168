@@ -331,6 +331,14 @@ Prefab:
       value: 
       objectReference: {fileID: 12800000, guid: ce8ae4cea0db12a4fbd06e7b9fff38a2,
         type: 3}
+    - target: {fileID: 1794747052142092, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1685356947389036, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
   m_IsPrefabParent: 0
@@ -534,7 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameCanvas: {fileID: 688920990}
-  serverIP: 174.67.249.246
+  serverIP: 68.4.188.216
   _bufferSize: 15000
   _connectionID: -1
   _socketID: -1

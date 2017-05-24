@@ -32,7 +32,6 @@ public class ServerConnection : Singleton<ServerConnection> {
     /*** RENDER VARIABLES ***/
     [SerializeField] private RenderTexture rt;  //Target render texture
     [SerializeField] private Camera _cam;       //Camera to render from
-
     /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
@@ -118,7 +117,6 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("server: new client connected");
-
                 ClientInfo clientInfo = new ClientInfo();
                 clientInfo.socketID = incomingSocketID;
                 clientInfo.ConnectionID = incomingConnectionID;
@@ -159,6 +157,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
                 else if (prefix == (int)ServerCommands.SetUsername) {
                     _clientSocketIDs[incomingConnectionID].username = message;
+                    _notifArea.playerEntered(message);
                 }
                 else if (prefix == (int)ServerCommands.LeaveLobby) {
 
@@ -187,7 +186,6 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
-                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.NotificationArea);
                 _notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
                 GameManager.Instance.LeaveGame(incomingConnectionID);
                 _clientSocketIDs.Remove(incomingConnectionID);
