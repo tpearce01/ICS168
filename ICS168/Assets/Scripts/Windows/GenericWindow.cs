@@ -18,6 +18,7 @@ public enum WindowIDs {
     ClientLobby = 10,
     DisconnectWindow = 11,
     NotificationArea = 12,
+    ServerLobbyWindow = 13,
     None = -1
 }
 
