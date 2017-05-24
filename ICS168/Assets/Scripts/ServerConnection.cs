@@ -60,6 +60,8 @@ public class ServerConnection : Singleton<ServerConnection> {
     /*** SERVER VARIABLES ***/
     [SerializeField] private int _incomingBufferSize = 3000;    // max buffer size
     [SerializeField] private int _maxConnections = 0;           // max number of connections
+
+
     public int MaxConnections {
         get { return _maxConnections; }
     }
@@ -81,6 +83,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     }
 
     [SerializeField] private LobbyWindow _lobby;
+    [SerializeField] private NotificationArea _notifArea;
     private void OnEnable() {
         _cam = Camera.main;
     }
@@ -184,6 +187,8 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
+                WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.NotificationArea);
+                _notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
                 GameManager.Instance.LeaveGame(incomingConnectionID);
                 _clientSocketIDs.Remove(incomingConnectionID);
 
