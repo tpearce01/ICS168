@@ -32,9 +32,26 @@ public class ServerConnection : Singleton<ServerConnection> {
     /*** RENDER VARIABLES ***/
     [SerializeField] private RenderTexture rt;  //Target render texture
     [SerializeField] private Camera _cam;       //Camera to render from
+
+    /*** Apache Variables ***/
+    /// <summary>
+    /// The port of the authentication server, defaults to 80
+    /// </summary>
+    public string apachePort;
+
     /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
+
+    private void Awake()
+    {
+        if (apachePort != "80" || apachePort != "")
+        {
+            _LoginURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
+            _CreateAccountURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
+        }
+        
+    }
 
     /*** CLIENT VARIABLES ***/
     // Encapsulated client info

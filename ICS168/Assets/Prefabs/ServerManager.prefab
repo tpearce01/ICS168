@@ -59,3 +59,4 @@ MonoBehaviour:
   _numberOfConnections: 0
   _inGamePlayers: 0
   _lobby: {fileID: 0}
+  _notifArea: {fileID: 0}
