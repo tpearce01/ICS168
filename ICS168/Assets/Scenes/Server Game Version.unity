@@ -478,7 +478,12 @@ Prefab:
     - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
         type: 2}
       propertyPath: apachePort
-      value: 80
+      value: 29920
+      objectReference: {fileID: 0}
+    - target: {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c,
+        type: 2}
+      propertyPath: _socketPort
+      value: 8888
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
@@ -678,6 +683,7 @@ GameObject:
   - component: {fileID: 1974672582}
   - component: {fileID: 1974672581}
   - component: {fileID: 1974672586}
+  - component: {fileID: 1974672587}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -764,5 +770,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0727b57dcd058ab409ddf326cb859e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1974672587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1974672580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff2761f7ae56c0e499b6ca17e1149b33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

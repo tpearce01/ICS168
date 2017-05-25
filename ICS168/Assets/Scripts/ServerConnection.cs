@@ -109,7 +109,25 @@ public class ServerConnection : Singleton<ServerConnection> {
         UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
 
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
-        _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
+        int portDelta = 0;
+        while (portDelta < 10)
+        {
+            try {_socketID = NetworkTransport.AddHost(hostTopology, _socketPort + portDelta);
+                if (_socketID < 0)
+                    throw new Exception();
+                else
+                    break;
+            }
+            catch (Exception e)
+            {
+                Debug.Log("GOTCHA BITCH. The exception was: " + e);
+                portDelta++;
+            }
+        }
+
+        Debug.Log("Port: " + (_socketPort + portDelta));
+
+        
     }
 
     void Update() {
