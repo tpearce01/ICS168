@@ -101,24 +101,75 @@ public class tImage {
 					 * any irregular colors to the best fitting color, and render it as 
 					 * such.
 					*/
-                    if (curr[i].r < .7f && curr[i].g < .7f && curr[i].b < .7f)
-                    {
-                        delta[i] = (int)ColorEnum.black;
-                    }
-                    else
-                    {
-                        delta[i] = (int)ColorEnum.white;
-                    }
+
+				    if (curr[i].r < .3f)
+				    {
+				        if (curr[i].g < .3f)
+				        {
+				            if (curr[i].b < .3f)
+				            {
+				                //(0,0,0)
+				                delta[i] = (int) ColorEnum.white;
+				            }
+				            else if(curr[i].b > .7f)
+				            {
+				                //(0,0,1)
+				                delta[i] = (int) ColorEnum.blue;
+				            }
+
+				        }
+				        else if(curr[i].g > .7f)
+				        {
+				            if (curr[i].b < .3f)
+				            {
+				                //(0,1,0)
+				                delta[i] = (int) ColorEnum.green;
+				            }
+				            else if(curr[i].b > .7f)
+				            {
+				                //(0,1,1)
+				                //delta[i] = (int) ColorEnum.cyan;
+				            }
+				        }
+				    }
+				    else if (curr[i].r > .7f)
+				    {
+				        if (curr[i].g < .3f)
+				        {
+				            if (curr[i].b < .3f)
+				            {
+				                //(1,0,0)
+				                delta[i] = (int) ColorEnum.red;
+				            }
+				            else if (curr[i].b > .7f)
+				            {
+				                //(1,0,1)
+				                //delta[i] = (int)ColorEnum.magenta;
+				            }
+
+				        }
+				        else if (curr[i].g > .7f)
+				        {
+				            if (curr[i].b < .3f)
+				            {
+				                //(1,1,0)
+				                delta[i] = (int) ColorEnum.yellow;
+				            }
+				            else if (curr[i].b > .7f)
+				            {
+				                //(1,1,1)
+				                delta[i] = (int) ColorEnum.black;
+				            }
+				        }
+				    }
+				    else
+				    {
+				        //delta[i] = (int) ColorEnum.gray;
+				    }
+
                 }
 			}
 		}
-
-		/*Debug.Log ("Black: " + numBlack);
-		Debug.Log ("White: " + numWhite);
-		Debug.Log ("Red: " + numRed);
-		Debug.Log ("Blue: " + numBlue);
-		Debug.Log ("Green: " + numGreen);
-		Debug.Log ("Yellow: " + numYellow);*/
 
 		MemoryStream ms = new MemoryStream ();
 		DeflateStream ds = new DeflateStream (ms, CompressionMode.Compress);
@@ -126,29 +177,7 @@ public class tImage {
 		ds.Flush();
 		ds.Close();
 		data = ms.ToArray ();
-		//Testing
-		//Debug.Log ("Compressed delta size: " + data.Length);
-		//DecompressDelta ();
-		//End Testing
 	}
-
-	/*
-	public void Compress(Texture2D toCompress){
-		Compress (toCompress.GetPixels());
-	}
-
-	public void Compress(Color[] toCompress){
-		int cmX = (int)(320f/tImageMetaData.Instance.imageWidth);
-		int cmY = (int)(180f/tImageMetaData.Instance.imageHeight);
-
-		data = new byte[cmX*cmY];
-
-		for (int x = 0; x < cmX; x++) {
-			for (int y = 0; y < cmY; y++) {
-				
-			}
-		}
-	}*/
 
 	public byte[] DecompressDelta(){
 		byte[] delta = new byte[57600];
