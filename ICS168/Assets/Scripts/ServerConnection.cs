@@ -271,7 +271,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     public void sendOccupancy(int socketID, int connectionID, int channelID)
     {
         string jsonToBeSent;
-        if (_numberOfConnections == 4)
+        if (_numberOfConnections == _maxConnections)
             jsonToBeSent = "12";
         else
             jsonToBeSent = "11";
