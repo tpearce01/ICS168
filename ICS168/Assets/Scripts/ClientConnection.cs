@@ -19,7 +19,9 @@ public enum ClientCommands {
     PreExistingUser = 7,
     InvalidLogin = 8,
     DoesNotExist = 9,
-    GoBackToMain = 10
+    GoBackToMain = 10,
+    Occupancy = 11,
+    NoOccupancy = 12
 }
 
 public class PlayerIO {
@@ -171,6 +173,14 @@ public class ClientConnection : Singleton<ClientConnection> {
                     _gameCanvas.gameObject.SetActive(false);
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
                 }
+                else if (prefix == (int)ClientCommands.Occupancy)
+                {
+
+                }
+                else if (prefix == (int)ClientCommands.NoOccupancy)
+                {
+
+                }
                 break;
 
 		    case NetworkEventType.DisconnectEvent:
@@ -252,5 +262,15 @@ public class ClientConnection : Singleton<ClientConnection> {
         jsonToBeSent += JsonUtility.ToJson("");
         SendJSONMessage(jsonToBeSent);
         _gameCanvas.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Asks the server if there is room for the client to join in.
+    /// </summary>
+    public void verifyOccupancy()
+    {
+        string jsonToBeSent = "6";
+        jsonToBeSent += JsonUtility.ToJson("");
+        SendJSONMessage(jsonToBeSent);
     }
 }

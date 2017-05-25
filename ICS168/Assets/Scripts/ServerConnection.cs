@@ -15,7 +15,8 @@ public enum ServerCommands {
     PlayerInput = 2,
     SetUsername = 3,
     LeaveLobby = 4,
-    LeaveGame = 5
+    LeaveGame = 5,
+    VerifyOccupancy = 6
 }
 
 public class ServerObject {
@@ -195,6 +196,10 @@ public class ServerConnection : Singleton<ServerConnection> {
                         SceneManager.LoadScene("Server Game Version");
                     }
                 }
+                else if (prefix == (int)ServerCommands.VerifyOccupancy)
+                {
+                    sendOccupancy(incomingSocketID, incomingConnectionID, incomingChannelID);
+                }
                 break;
 
             case NetworkEventType.DisconnectEvent:
@@ -242,6 +247,35 @@ public class ServerConnection : Singleton<ServerConnection> {
         foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
             NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
         }
+    }
+
+    /// <summary>
+    /// Sends the JSON message to one specific client.
+    /// </summary>
+    /// <param name="JSONobject"></param>
+    /// <param name="socketID"></param>
+    /// <param name="connectionID"></param>
+    /// <param name="channelID"></param>
+    public void SendOneJSONMessage(string JSONobject, int socketID, int connectionID, int channelID)
+    {
+        byte error = 0;
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
+        NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
+    }
+    /// <summary>
+    /// Sends to the client whether or not there is room for them to join in.
+    /// </summary>
+    /// <param name="socketID"></param>
+    /// <param name="connectionID"></param>
+    /// <param name="channelID"></param>
+    public void sendOccupancy(int socketID, int connectionID, int channelID)
+    {
+        string jsonToBeSent;
+        if (_numberOfConnections == 4)
+            jsonToBeSent = "12";
+        else
+            jsonToBeSent = "11";
+        SendOneJSONMessage(jsonToBeSent, socketID, connectionID, channelID);
     }
 
     void CaptureFrame() {
