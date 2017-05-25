@@ -127,7 +127,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
         Debug.Log("Port: " + (_socketPort + portDelta));
 
-        
+        Application.runInBackground = true;
     }
 
     void Update() {
@@ -222,7 +222,7 @@ public class ServerConnection : Singleton<ServerConnection> {
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("server: remote client event disconnected");
-                _notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
+                //_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
                 GameManager.Instance.LeaveGame(incomingConnectionID);
                 _clientSocketIDs.Remove(incomingConnectionID);
 

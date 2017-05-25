@@ -78,6 +78,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
+        Application.runInBackground = true;
         Connect();
 	}
 
@@ -86,7 +87,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error;
 
         //_slowConnectTimer += Time.deltaTime;
-        if (_connectionID != -1) {
+        if (_connectionID != -1 && _socketID == 0) {
             _currentRTT = NetworkTransport.GetCurrentRTT(_socketID, _connectionID, out error);
             Debug.Log( _currentRTT );
         }

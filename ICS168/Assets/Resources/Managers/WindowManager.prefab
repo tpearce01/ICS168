@@ -1432,7 +1432,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1696628702513276
 GameObject:
   m_ObjectHideFlags: 1
@@ -5545,7 +5545,7 @@ MonoBehaviour:
   _timeoutDisplay: {fileID: 114064727408163294}
   _defaultTimeout: 10
   _gameStartsInDefault: 5
-  _minPlayers: 2
+  _minPlayers: 3
   _players:
   - {fileID: 1536735708245602}
   - {fileID: 1450762180813502}

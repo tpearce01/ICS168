@@ -55,7 +55,7 @@ MonoBehaviour:
   _cam: {fileID: 0}
   apachePort: 80
   _incomingBufferSize: 1024
-  _maxConnections: 1
+  _maxConnections: 4
   _socketPort: 8888
   _numberOfConnections: 0
   _inGamePlayers: 0
