@@ -10,8 +10,8 @@ public class VictoryWindow : GenericWindow {
         redirectingSeconds -= Time.deltaTime;
         
         if(redirectingSeconds <= 0.0f) {
-            ServerConnection.Instance.InGamePlayers = 0;
-            ServerConnection.Instance.SendJSONMessage("10");
+            GameServerManager.Instance.InGamePlayers = 0;
+            GameServerManager.Instance.SendJSONMessage("10");
             ToggleWindows(WindowIDs.Victory, WindowIDs.None);
         }else {
             GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";

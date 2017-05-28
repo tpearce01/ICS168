@@ -37,7 +37,7 @@ public class LobbyWindow : GenericWindow {
     }
 
     private void Update() {
-        if (ServerConnection.Instance.InGamePlayers >= _minPlayers && ServerConnection.Instance.InGamePlayers < ServerConnection.Instance.MaxConnections) {
+        if (GameServerManager.Instance.InGamePlayers >= _minPlayers && GameServerManager.Instance.InGamePlayers < GameServerManager.Instance.MaxConnections) {
             if (_timeout > 0.0f) {
                 _timeout -= Time.deltaTime;
                 _timeoutDisplay.text = "Waiting for players: " + (int)_timeout;
@@ -45,7 +45,7 @@ public class LobbyWindow : GenericWindow {
             else if (_timeout <= 0.0f) {
 
                 if (!_messageSent) {
-                    ServerConnection.Instance.PreventDisconnects();
+                    GameServerManager.Instance.PreventDisconnects();
                     _messageSent = true;
                 }
 
@@ -53,17 +53,17 @@ public class LobbyWindow : GenericWindow {
                 _gameStartsIn -= Time.deltaTime;
 
                 if (_gameStartsIn <= 0.0f) {
-                    ServerConnection.Instance.EnableClientControls();
+                    GameServerManager.Instance.EnableClientControls();
                     MapGenerator.Instance.GenerateMap();
                     GameManager.Instance.StartGame();
                     ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
                 }
             }
         }
-        else if (ServerConnection.Instance.InGamePlayers == ServerConnection.Instance.MaxConnections) {
+        else if (GameServerManager.Instance.InGamePlayers == GameServerManager.Instance.MaxConnections) {
 
             if (!_messageSent) {
-                ServerConnection.Instance.PreventDisconnects();
+                GameServerManager.Instance.PreventDisconnects();
                 _messageSent = true;
             }
 
@@ -71,18 +71,18 @@ public class LobbyWindow : GenericWindow {
             _gameStartsIn -= Time.deltaTime;
 
             if (_gameStartsIn <= 0.0f) {
-                ServerConnection.Instance.EnableClientControls();
+                GameServerManager.Instance.EnableClientControls();
                 MapGenerator.Instance.GenerateMap();
                 GameManager.Instance.StartGame();
                 ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
             }
         }
-        else if (ServerConnection.Instance.InGamePlayers < _minPlayers) {
+        else if (GameServerManager.Instance.InGamePlayers < _minPlayers) {
             _timeoutDisplay.text = "Waiting for players...";
             _gameStartsIn = _gameStartsInDefault;
             _timeout = _defaultTimeout;
         }
-        else if (ServerConnection.Instance.InGamePlayers <= 0) {
+        else if (GameServerManager.Instance.InGamePlayers <= 0) {
             ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
         }
     }
