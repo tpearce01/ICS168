@@ -21,6 +21,7 @@ TagManager:
   - DontDestroyOnLoad
   - Bomb
   - Explosion
+  - MasterServerManager
   layers:
   - Default
   - TransparentFX
