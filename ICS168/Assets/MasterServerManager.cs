@@ -146,7 +146,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             //WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
 
             byte error;
-            string jsonToBeSent = "0";
+            string jsonToBeSent = "2";
             jsonToBeSent += JsonUtility.ToJson(verify.text);
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
