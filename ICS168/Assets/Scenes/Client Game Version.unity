@@ -1022,9 +1022,9 @@ MonoBehaviour:
   _gameCanvas: {fileID: 688920990}
   serverIP: 192.168.1.120
   _bufferSize: 15000
-  _connectionID: -1
-  _socketID: -1
-  _socketPort: 8888
+  MS_connectionID: -1
+  MS_socketID: -1
+  MS_socketPort: 8888
   _renderTo: {fileID: 1960068527}
   _statusWindow: {fileID: 2000040230}
   _clientLobby: {fileID: 426532396}

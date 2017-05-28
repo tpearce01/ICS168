@@ -134,7 +134,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
 
                 // If connected to the master server, register as a client
-                if (incomingSocketID == 1) {
+                if (incomingConnectionID == 1) {
                     string jsonToBeSent = "3";
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
                     NetworkTransport.Send(MS_socketID, MS_connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
@@ -215,9 +215,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     ConnectionConfig GSconnectionConfig = new ConnectionConfig();
                     GS_TCP_ChannelID = GSconnectionConfig.AddChannel(QosType.Reliable);
-                    HostTopology hostTopology = new HostTopology(GSconnectionConfig, _maxConnections);
+                    HostTopology topology = new HostTopology(GSconnectionConfig, _maxConnections);
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
-                    GS_socketID = NetworkTransport.AddHost(hostTopology, GS_socketPort);
+                    GS_socketID = NetworkTransport.AddHost(topology, GS_socketPort);
 
                     Application.runInBackground = true;
                     ConnectToGame();
@@ -313,7 +313,7 @@ public class ClientConnection : Singleton<ClientConnection> {
     public void ConnectToGameServer(string serverName) {
         string jsonToBeSent = "7";
         jsonToBeSent += JsonUtility.ToJson(serverName);
-        SendJSONMessageToGame(jsonToBeSent);
+        SendJSONMessageToMaster(jsonToBeSent);
     }
 
     public void LeaveLobby() {
