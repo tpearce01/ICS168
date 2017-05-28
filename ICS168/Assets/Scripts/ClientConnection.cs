@@ -47,7 +47,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	private int _maxConnections = 1;	                //Maximum umber of connection
 
-	private int UDP_ChannelIDFrag = -1;					//UDP communication channel for large messages
+	//private int TCP_Frag_ChannelID = -1;					//UDP communication channel for large messages
+    private int MS_TCP_ChannelID = -1;
 	[SerializeField] private int _connectionID = -1;						//Connection ID
 
 	[SerializeField] private int _socketID = -1;		//Socket ID
@@ -61,11 +62,15 @@ public class ClientConnection : Singleton<ClientConnection> {
     [SerializeField] private OnlineStatusWindow _statusWindow;
     [SerializeField] private ClientLobbyWindow _clientLobby;
 
+    [Space]
+    [Header("Timeout Settings")]
     // Latency Thresholds
-    [SerializeField] private int _RTT_Threshold;
-    [SerializeField] private float _timeThreshold;
+    [SerializeField] private int _updateRate = 0;
+    [SerializeField] private int _RTT_Threshold = 0;
+    [SerializeField] private float _timeThreshold = 0;
     private float _disconnectTimer = 0.0f;
     private int _currentRTT = -1;
+    private float _currentRate = 0.0f;
 
 
 	private void Start() {
@@ -74,7 +79,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         NetworkTransport.Init();
         ConnectionConfig connectionConfig = new ConnectionConfig();
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        //TCP_Frag_ChannelID = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        MS_TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
@@ -87,9 +93,13 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error;
 
         //_slowConnectTimer += Time.deltaTime;
-        if (_connectionID != -1 && _socketID == 0) {
+        if (_connectionID != -1) {
             _currentRTT = NetworkTransport.GetCurrentRTT(_socketID, _connectionID, out error);
-            Debug.Log( _currentRTT );
+
+            if (Time.time - _currentRate > _updateRate) {
+                Debug.Log(_currentRTT);
+                _currentRate = Time.time;
+            }
         }
 
 		int incomingSocketID = 0;
@@ -152,7 +162,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                     }
                 }
                 else if(prefix == (int)ClientCommands.GoToGameSelect) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.GameSelect);
+                    WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.GameSelect);
                     _clientIO.gameInSession = true;
                 }
                 else if (prefix == (int)ClientCommands.AccountCreated) {
@@ -235,7 +245,7 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(_socketID, _connectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
+        NetworkTransport.Send(_socketID, _connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     //Login

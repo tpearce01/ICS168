@@ -1020,7 +1020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameCanvas: {fileID: 688920990}
-  serverIP: 169.234.53.183
+  serverIP: 192.168.1.120
   _bufferSize: 15000
   _connectionID: -1
   _socketID: -1
@@ -1028,6 +1028,7 @@ MonoBehaviour:
   _renderTo: {fileID: 1960068527}
   _statusWindow: {fileID: 2000040230}
   _clientLobby: {fileID: 426532396}
+  _updateRate: 2
   _RTT_Threshold: 5000
   _timeThreshold: 15
 --- !u!114 &817306908
