@@ -108,6 +108,7 @@ public class ClientConnection : Singleton<ClientConnection> {
 			    break;
 
 		    case NetworkEventType.ConnectEvent:
+                
 			    Debug.Log("client incoming connection event received");
                 _connected = true;
                 _statusWindow.UpdateOnlineStatus(true);
@@ -265,7 +266,7 @@ public class ClientConnection : Singleton<ClientConnection> {
     }
 
     public void LeaveLobby() {
-        string jsonToBeSent = "4";
+        string jsonToBeSent = ((int)GameServerCommands.LeaveLobby).ToString();
         jsonToBeSent += JsonUtility.ToJson("");
         SendJSONMessage(jsonToBeSent);
         _gameCanvas.gameObject.SetActive(false);

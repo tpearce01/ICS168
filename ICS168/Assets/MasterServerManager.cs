@@ -5,6 +5,14 @@ using System.Collections;
 using System.Text;
 using System;
 
+public enum MasterServerCommands {
+    C_VerifyLogin = 0,
+    C_CreateAccount = 1,
+    VerifyOccupancy = 6,
+    C_SelectGameInstance = 7,
+    S_GameInstanceInfo = 8
+}
+
 public class GameInstanceStats {
 
     public GameInstanceStats(string name) {
@@ -32,12 +40,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     [Header("Server Stats")]
     [SerializeField] private int _numberOfConnections = 0;
     [SerializeField] private int _numberOfGameInstances = 0;
-
-    /*** Apache Variables ***/
-    /// <summary>
-    /// The port of the authentication server, defaults to 80
-    /// </summary>
-    public string apachePort;
 
     /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
@@ -96,19 +98,19 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                 string newMessage = message.Substring(1);
 
                 //process login info
-                if (prefix == (int)ServerCommands.VerifyLogin) {
+                if (prefix == (int)MasterServerCommands.C_VerifyLogin) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
                     StartCoroutine(verifyLogin(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
                 }
 
                 //process create account info
-                else if (prefix == (int)ServerCommands.CreateAccount) {
+                else if (prefix == (int)MasterServerCommands.C_CreateAccount) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
                     StartCoroutine(CreateUser(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
                 }
                 
                 // Process game connection requests
-                else if (prefix == (int)ServerCommands.SelectGameInstance) {
+                else if (prefix == (int)MasterServerCommands.C_SelectGameInstance) {
 
                     string serverName = JsonUtility.FromJson<string>(newMessage);
 
@@ -119,7 +121,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         // Create an instace of a game and have the client connect.
                         _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
                         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                        startInfo.FileName = "D:/Github/ICS168/ICS168/Builds/BombermanServer.exe";
+                        startInfo.FileName = "C:/Users/danie/Documents/GitKraken/ICS168/ICS168/Builds/BombermanServer.exe";
                         System.Diagnostics.Process.Start(startInfo);
                     }
                 }
