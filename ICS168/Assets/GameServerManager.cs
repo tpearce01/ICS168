@@ -71,12 +71,12 @@ public class GameServerManager : Singleton<GameServerManager> {
         get { return _maxConnections; }
     }
 
-    private int _MS_connectionID = -1;
-    private int UDP_ChannelIDFrag = -1;                         // This channel should be reserved for larger messages
-    private int TCP_MS_ChannelID = -1;
+    private int MS_connectionID = -1;
+    //private int MS_TCP_Frag_ChannelID = -1;                         // This channel should be reserved for larger messages
+    private int MS_TCP_ChannelID = -1;
     private int _socketID = -1;
     private int _connectionID = -1;
-    [SerializeField] private int _socketPort = 8888;
+    [SerializeField] private int _socketPort = 8889;
     [SerializeField] private int _numberOfConnections = 0;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
@@ -103,34 +103,34 @@ public class GameServerManager : Singleton<GameServerManager> {
 
         // Setup Master Server Connection Channel
         ConnectionConfig MSconnectionConfig = new ConnectionConfig();
-        TCP_MS_ChannelID = MSconnectionConfig.AddChannel(QosType.Reliable);
+        MS_TCP_ChannelID = MSconnectionConfig.AddChannel(QosType.Reliable);
         HostTopology hostTopology = new HostTopology(MSconnectionConfig, 1);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
         Connect();
 
 
-        // Setup Client Connection Channel
-        ConnectionConfig connectionConfig = new ConnectionConfig();
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
-        hostTopology = new HostTopology(connectionConfig, _maxConnections);
+        //// Setup Client Connection Channel
+        //ConnectionConfig connectionConfig = new ConnectionConfig();
+        //TCP_Frag_ChannelID = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        //hostTopology = new HostTopology(connectionConfig, _maxConnections);
 
-        int socketPort = _socketPort + 1;
-        int portDelta = 0;
-        while (portDelta < 10) {
-            try {
-                _socketID = NetworkTransport.AddHost(hostTopology, socketPort + portDelta);
-                if (_socketID < 0)
-                    throw new Exception();
-                else
-                    break;
-            }
-            catch (Exception e) {
-                portDelta++;
-            }
-        }
+        //int socketPort = _socketPort + 1;
+        //int portDelta = 0;
+        //while (portDelta < 10) {
+        //    try {
+        //        _socketID = NetworkTransport.AddHost(hostTopology, socketPort + portDelta);
+        //        if (_socketID < 0)
+        //            throw new Exception();
+        //        else
+        //            break;
+        //    }
+        //    catch (Exception e) {
+        //        portDelta++;
+        //    }
+        //}
 
-        _socketPort = socketPort + portDelta;
-        Debug.Log("Port: " + _socketPort);
+        //_socketPort = socketPort + portDelta;
+        //Debug.Log("Port: " + _socketPort);
     }
 
     void Update() {
@@ -155,7 +155,7 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                 }
                 else {
-                    string jsonToBeSent = ((int)MasterServerCommands.S_GameInstanceInfo).ToString();
+                    string jsonToBeSent = "8";
                     jsonToBeSent += JsonUtility.ToJson(_socketPort);
                     SendJSONMessage(jsonToBeSent);
                 }
@@ -219,46 +219,47 @@ public class GameServerManager : Singleton<GameServerManager> {
                 break;
 
             case NetworkEventType.DisconnectEvent:
-                Debug.Log("server: remote client event disconnected");
-                //_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
-                GameManager.Instance.LeaveGame(incomingConnectionID);
-                _clientSocketIDs.Remove(incomingConnectionID);
+                //Debug.Log("server: remote client event disconnected");
+                ////_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
+                //GameManager.Instance.LeaveGame(incomingConnectionID);
+                //_clientSocketIDs.Remove(incomingConnectionID);
 
-                // Decrement the number of players and remove the player from the hashmap.
-                _inGamePlayers--;
-                if (_inGamePlayers < 0) { _inGamePlayers = 0; }
-                _numberOfConnections--;
-                if (_numberOfConnections < 0) { _numberOfConnections = 0; }
+                //// Decrement the number of players and remove the player from the hashmap.
+                //_inGamePlayers--;
+                //if (_inGamePlayers < 0) { _inGamePlayers = 0; }
+                //_numberOfConnections--;
+                //if (_numberOfConnections < 0) { _numberOfConnections = 0; }
 
-                // If the lobby is currently showing, make sure to update the information.
-                if (_lobby.gameObject.activeInHierarchy == true) {
-                    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
-                }
+                //// If the lobby is currently showing, make sure to update the information.
+                //if (_lobby.gameObject.activeInHierarchy == true) {
+                //    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
+                //}
 
-                ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
+                //ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
 
-                foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
-                    if (client.Value.ConnectionID == incomingConnectionID) {
-                        clientToDelete = client.Value;
-                    }
-                }
+                //foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
+                //    if (client.Value.ConnectionID == incomingConnectionID) {
+                //        clientToDelete = client.Value;
+                //    }
+                //}
 
-                if (clientToDelete.socketID != -1) {
-                    _clientSocketIDs.Remove(clientToDelete.ConnectionID);
-                }
+                //if (clientToDelete.socketID != -1) {
+                //    _clientSocketIDs.Remove(clientToDelete.ConnectionID);
+                //}
 
-                if (_inGamePlayers < 1) {
-                    GameManager.Instance.ResetGameManager();
-                    SceneManager.LoadScene("Server Game Version");
-                }
+                //if (_inGamePlayers < 1) {
+                //    GameManager.Instance.ResetGameManager();
+                //    SceneManager.LoadScene("Server Game Version");
+                //}
                 break;
         }
     }
 
+    // This is used to connect to the master server
     public void Connect() {
 
         byte error = 0;
-        _MS_connectionID = NetworkTransport.Connect(_socketID, "127.0.0.1", _socketPort, 0, out error);
+        MS_connectionID = NetworkTransport.Connect(_socketID, "127.0.0.1", _socketPort, 0, out error);
     }
 
     public void SendJSONMessage(string JSONobject) {

@@ -17,11 +17,11 @@ TagManager:
   - PowerUp
   - WallPowerUp
   - ClientConnection
-  - ServerConnection
   - DontDestroyOnLoad
   - Bomb
   - Explosion
   - MasterServerManager
+  - GameServerManager
   layers:
   - Default
   - TransparentFX

@@ -15,43 +15,25 @@ Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\Bombe
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.021 seconds
+- Completed reload, in  0.017 seconds
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 0.947794 ms
+UnloadTime: 0.998693 ms
 Socket: bind failed, error: Only one usage of each socket address (protocol/network address/port) is normally permitted.
 Cannot open socket on ip {*} and port {8888}; check please your network, most probably port has been already occupied
  
 (Filename:  Line: 569)
 
-GOTCHA BITCH. The exception was: System.Exception: Exception of type 'System.Exception' was thrown.
-  at ServerConnection.Start () [0x00000] in <filename unknown>:0 
+host id out of bound id {-1} max id should be greater 0 and less than {0}
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Port: 8889
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Win32Exception: The system cannot find the drive specified.
-
-  at System.Diagnostics.Process.Start_shell (System.Diagnostics.ProcessStartInfo startInfo, System.Diagnostics.Process process) [0x00000] in <filename unknown>:0 
-  at System.Diagnostics.Process.Start_common (System.Diagnostics.ProcessStartInfo startInfo, System.Diagnostics.Process process) [0x00000] in <filename unknown>:0 
-  at System.Diagnostics.Process.Start (System.Diagnostics.ProcessStartInfo startInfo) [0x00000] in <filename unknown>:0 
-  at ToiletPaper.Start () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-Application has been suspended, all multiplayer features will re-init
- 
-(Filename:  Line: 206)
+(Filename:  Line: 536)
 
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 27a4 -> priority: 1 
-  Thread -> id: 4190 -> priority: 1 
-  Thread -> id: 3a4c -> priority: 1 
-  Thread -> id: 309c -> priority: 1 
+  Thread -> id: 48f0 -> priority: 1 
+  Thread -> id: 4440 -> priority: 1 
+  Thread -> id: 40c8 -> priority: 1 
+  Thread -> id: 41e4 -> priority: 1 

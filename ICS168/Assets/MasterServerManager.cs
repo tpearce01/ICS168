@@ -32,6 +32,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     [SerializeField] private int _maxGameInstances = 0;
 
     private int UDP_ChannelIDFrag = -1;                         // This channel should be reserved for larger messages
+    private int TCP_ChannelID = -1;
     private int _socketID = -1;
     private int _connectionID = -1;
     private int _maxConnections = 0;
@@ -56,7 +57,8 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         NetworkTransport.Init();
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
-        UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        //UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
+        TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
 
         _maxConnections = _maxGameInstances * 4;
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);

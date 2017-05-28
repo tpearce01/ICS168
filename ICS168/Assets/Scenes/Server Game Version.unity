@@ -366,7 +366,16 @@ Prefab:
       propertyPath: _notifArea
       value: 
       objectReference: {fileID: 529199089}
-    m_RemovedComponents: []
+    - target: {fileID: 1846088944346640, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
+      propertyPath: m_Name
+      value: GameServerManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846088944346640, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
+      propertyPath: m_TagString
+      value: GameServerManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114923107057970152, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: fac128cd2e3c37840857f1c190f0494c, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &893940370 stripped
@@ -385,6 +394,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a513598a660f244d84891a915cf283a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
+  _cam: {fileID: 1974672584}
+  apachePort: 
+  _incomingBufferSize: 3000
+  _maxConnections: 4
+  _socketPort: 8888
+  _numberOfConnections: 0
+  _inGamePlayers: 0
+  _lobby: {fileID: 937385007}
+  _notifArea: {fileID: 529199089}
 --- !u!1001 &907826739
 Prefab:
   m_ObjectHideFlags: 0
