@@ -30,7 +30,7 @@ public class OnlineStatusWindow : GenericWindow {
                 if (!_message.gameObject.activeInHierarchy) { _message.gameObject.SetActive(true); }
             }
             else {
-                ClientConnection.Instance.Connect();
+                ClientConnection.Instance.ConnectToMaster();
                 _timer = _defaultTimer;
             }
         }

@@ -10,7 +10,8 @@ public enum MasterServerCommands {
     C_CreateAccount = 1,
     VerifyOccupancy = 6,
     C_SelectGameInstance = 7,
-    S_GameInstanceInfo = 8
+    RegisterGameServer = 2,
+    RegisterClient = 3
 }
 
 public class GameInstanceStats {
@@ -22,6 +23,24 @@ public class GameInstanceStats {
     public string serverName = "";
     public int serverID = 0;
     public int inGamePlayers = 0;
+}
+
+/*** CLIENT VARIABLES ***/
+// Encapsulated client info
+public class ClientInfo {
+    public ClientInfo() { }
+    public ClientInfo(int socket, int connection, int channel) {
+        socketID = socket;
+        ConnectionID = connection;
+        ChannelID = channel;
+    }
+
+    public int gameServerID = -1;
+    public int socketID = -1;
+    public int ConnectionID = -1;
+    public int ChannelID = -1;
+    public string username = "";
+    public int playerNum = -1;
 }
 
 public class MasterServerManager : Singleton<MasterServerManager> {
@@ -50,7 +69,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     private Dictionary<string, GameInstanceStats> _gameInstances = new Dictionary<string, GameInstanceStats>();
 
     // Maps connectionID with ClientInfo
-    private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
+    private Dictionary<int, ClientInfo> _clients = new Dictionary<int, ClientInfo>();
 
     // Use this for initialization
     void Start () {
@@ -92,15 +111,42 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
             case NetworkEventType.DataEvent:
 
-                //Test Code
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
-                //End Test Code
+                int prefix = 0;
+                int index;
+                string newMessage = "";
 
-                int prefix = Convert.ToInt32(message.Substring(0, 1));
-                string newMessage = message.Substring(1);
+                // New parser now allows client commands to be > 1 digit
+                for (index = 0; index < message.Length; ++index) {
+                    if (message[index] == '{')
+                        break;
+                }
+
+                prefix = Convert.ToInt32(message.Substring(0, index));
+                newMessage = message.Substring(index);
+
+                // Have game servers register themselves.
+                if (prefix == (int)MasterServerCommands.RegisterGameServer) {
+                    // A new game has been requested and created. A game server is not sending its port#
+                    // and is requesting an ID/Name. Go through the list of games and see which ones aren't assigned.
+                    foreach (KeyValuePair<string, GameInstanceStats> instance in _gameInstances) {
+                        if (instance.Value.serverID == 0) {
+                            instance.Value.serverID = JsonUtility.FromJson<int>(newMessage);
+                            //StartCoroutine(ForwardPlayerToGame(instance.Value.serverID, ));
+                        }
+                    }
+                }
+                
+                else if (prefix == (int)MasterServerCommands.RegisterClient) {
+
+                    if (!_clients.ContainsKey(incomingConnectionID)) {
+                        ClientInfo clientInfo = new ClientInfo(incomingSocketID, incomingConnectionID, incomingChannelID);
+                        _clients.Add(incomingConnectionID, clientInfo);
+                    }
+                }
 
                 //process login info
-                if (prefix == (int)MasterServerCommands.C_VerifyLogin) {
+                else if (prefix == (int)MasterServerCommands.C_VerifyLogin) {
                     LoginInfo info = JsonUtility.FromJson<LoginInfo>(newMessage);
                     StartCoroutine(verifyLogin(info.username, info.password, incomingSocketID, incomingConnectionID, incomingChannelID));
                 }
@@ -125,6 +171,8 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                         startInfo.FileName = "C:/Users/danie/Documents/GitKraken/ICS168/ICS168/Builds/BombermanServer.exe";
                         System.Diagnostics.Process.Start(startInfo);
+
+                        StartCoroutine(ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]));
                     }
                 }
 
@@ -212,5 +260,19 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
         }
+    }
+
+    private IEnumerator ForwardPlayerToGame(string serverName, ClientInfo client) {
+
+        while (_gameInstances[serverName].serverID == 0) {
+            yield return 0;
+        }
+
+        // When the instance has finally been created and setup, forward the player to the new game server.
+        byte error = 0;
+        string jsonToBeSent = "14";
+        jsonToBeSent += JsonUtility.ToJson(_gameInstances[serverName].serverID);
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 }

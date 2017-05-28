@@ -399,7 +399,7 @@ MonoBehaviour:
   apachePort: 
   _incomingBufferSize: 3000
   _maxConnections: 4
-  _socketPort: 8888
+  _socketPort: 8889
   _numberOfConnections: 0
   _inGamePlayers: 0
   _lobby: {fileID: 937385007}

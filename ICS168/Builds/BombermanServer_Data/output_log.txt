@@ -22,18 +22,13 @@ Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\Bombe
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 0.998693 ms
-Socket: bind failed, error: Only one usage of each socket address (protocol/network address/port) is normally permitted.
-Cannot open socket on ip {*} and port {8888}; check please your network, most probably port has been already occupied
+UnloadTime: 0.974298 ms
+GameServer: New Connection
  
-(Filename:  Line: 569)
-
-host id out of bound id {-1} max id should be greater 0 and less than {0}
- 
-(Filename:  Line: 536)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 48f0 -> priority: 1 
-  Thread -> id: 4440 -> priority: 1 
-  Thread -> id: 40c8 -> priority: 1 
-  Thread -> id: 41e4 -> priority: 1 
+  Thread -> id: 2efc -> priority: 1 
+  Thread -> id: 4f28 -> priority: 1 
+  Thread -> id: 2040 -> priority: 1 
+  Thread -> id: 26b4 -> priority: 1 
