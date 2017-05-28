@@ -16,7 +16,8 @@ public enum ServerCommands {
     SetUsername = 3,
     LeaveLobby = 4,
     LeaveGame = 5,
-    VerifyOccupancy = 6
+    VerifyOccupancy = 6,
+    SelectGameInstance = 7
 }
 
 public class ServerObject {
@@ -27,6 +28,23 @@ public class ServerObject {
 
     public int frameNum;
     public string texture;
+}
+
+/*** CLIENT VARIABLES ***/
+// Encapsulated client info
+public class ClientInfo {
+    public ClientInfo() { }
+    public ClientInfo(int socket, int connection, int channel) {
+        socketID = socket;
+        ConnectionID = connection;
+        ChannelID = channel;
+    }
+
+    public int socketID = -1;
+    public int ConnectionID = -1;
+    public int ChannelID = -1;
+    public string username = "";
+    public int playerNum = -1;
 }
 
 public class ServerConnection : Singleton<ServerConnection> {
@@ -43,23 +61,6 @@ public class ServerConnection : Singleton<ServerConnection> {
     /*** PHP VARIABLES ***/
     private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
-
-    /*** CLIENT VARIABLES ***/
-    // Encapsulated client info
-    private class ClientInfo {
-        public ClientInfo() { }
-        public ClientInfo(int socket, int connection, int channel) {
-            socketID = socket;
-            ConnectionID = connection;
-            ChannelID = channel;
-        }
-
-        public int socketID = -1;
-        public int ConnectionID = -1;
-        public int ChannelID = -1;
-        public string username = "";
-        public int playerNum = -1;
-    }
 
     // Maps connectionID with ClientInfo
     private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
@@ -99,8 +100,7 @@ public class ServerConnection : Singleton<ServerConnection> {
     void Start() {
         NetworkTransport.Init();
 
-        if (apachePort != "80" || apachePort != "")
-        {
+        if (apachePort != "80" || apachePort != "") {
             _LoginURL = "http://localhost:" + apachePort + "/teamnewport/LoginManager.php";
             _CreateAccountURL = "http://localhost:" + apachePort + "/teamnewport/CreateAccount.php";
         }

@@ -13,7 +13,7 @@ using System.Net.Sockets;
 public enum ClientCommands {
     StartStream = 0,
     RenderGame = 1,
-    SetGameInSession = 2,
+    GoToGameSelect = 2,
     CloseDisconnects = 3,
     AccountCreated = 6,
     PreExistingUser = 7,
@@ -150,8 +150,8 @@ public class ClientConnection : Singleton<ClientConnection> {
                         //_slowConnectTimer = 0.0f;
                     }
                 }
-                else if(prefix == (int)ClientCommands.SetGameInSession) {
-                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.None);
+                else if(prefix == (int)ClientCommands.GoToGameSelect) {
+                    WindowManager.Instance.ToggleWindows(WindowIDs.ClientLobby, WindowIDs.GameSelect);
                     _clientIO.gameInSession = true;
                 }
                 else if (prefix == (int)ClientCommands.AccountCreated) {
@@ -255,6 +255,12 @@ public class ClientConnection : Singleton<ClientConnection> {
     public void SendMessage(PlayerIO command) {
         string jsonToBeSent = "2";
         jsonToBeSent += JsonUtility.ToJson(command);
+        SendJSONMessage(jsonToBeSent);
+    }
+
+    public void ConnectToGameServer(string serverName) {
+        string jsonToBeSent = "7";
+        jsonToBeSent += JsonUtility.ToJson(serverName);
         SendJSONMessage(jsonToBeSent);
     }
 
