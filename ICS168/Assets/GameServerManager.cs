@@ -27,6 +27,13 @@ public class ServerObject {
     public string texture;
 }
 
+public class PortID {
+    public PortID(int ID) {
+        portID = ID;
+    }
+    public int portID = 0;
+}
+
 public class GameServerManager : Singleton<GameServerManager> {
     /*** RENDER VARIABLES ***/
     [SerializeField] private RenderTexture rt;  //Target render texture
@@ -137,14 +144,15 @@ public class GameServerManager : Singleton<GameServerManager> {
                 Debug.Log("GameServer: New Connection");
 
                 // If the incoming connection event is NOT the master server.
-                if (incomingSocketID != 0) {
+                if (incomingConnectionID != 1) {
 
                 }
                 else {
 
                     // Register with the master server as a game server.
                     string jsonToBeSent = "2";
-                    jsonToBeSent += JsonUtility.ToJson(GS_Port);
+                    PortID portID = new PortID(GS_Port);
+                    jsonToBeSent += JsonUtility.ToJson(portID);
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
                     NetworkTransport.Send(MS_socketID, MS_connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
                 }

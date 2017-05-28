@@ -15,20 +15,25 @@ Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\Bombe
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.017 seconds
+- Completed reload, in  0.024 seconds
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 0.974298 ms
+UnloadTime: 1.007427 ms
 GameServer: New Connection
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:8888}
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 2efc -> priority: 1 
-  Thread -> id: 4f28 -> priority: 1 
-  Thread -> id: 2040 -> priority: 1 
-  Thread -> id: 26b4 -> priority: 1 
+  Thread -> id: 5fe0 -> priority: 1 
+  Thread -> id: 60d8 -> priority: 1 
+  Thread -> id: 6138 -> priority: 1 
+  Thread -> id: 5f30 -> priority: 1 

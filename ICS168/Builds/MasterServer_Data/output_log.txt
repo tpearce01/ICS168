@@ -15,14 +15,14 @@ Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\Maste
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.072 seconds
+- Completed reload, in  0.021 seconds
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 1.008029 ms
+UnloadTime: 1.089346 ms
 Master Server: new client connected
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -30,8 +30,10 @@ Master Server: new client connected
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
+reactor filed to acomplish request with code {1234}, bytesReceived {0}
+Log: connection {1} has been disconnected by timeout; address {::ffff:127.0.0.1:8889}
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 4b84 -> priority: 1 
-  Thread -> id: 3340 -> priority: 1 
-  Thread -> id: 55e8 -> priority: 1 
-  Thread -> id: 505c -> priority: 1 
+  Thread -> id: 5bf8 -> priority: 1 
+  Thread -> id: 62e4 -> priority: 1 
+  Thread -> id: 62fc -> priority: 1 
+  Thread -> id: 6300 -> priority: 1 

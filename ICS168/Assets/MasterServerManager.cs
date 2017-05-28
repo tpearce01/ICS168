@@ -127,12 +127,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
                 // Have game servers register themselves.
                 if (prefix == (int)MasterServerCommands.RegisterGameServer) {
-                    // A new game has been requested and created. A game server is not sending its port#
-                    // and is requesting an ID/Name. Go through the list of games and see which ones aren't assigned.
+                    
                     foreach (KeyValuePair<string, GameInstanceStats> instance in _gameInstances) {
                         if (instance.Value.serverID == 0) {
-                            instance.Value.serverID = JsonUtility.FromJson<int>(newMessage);
-                            //StartCoroutine(ForwardPlayerToGame(instance.Value.serverID, ));
+                            Debug.Log(JsonUtility.FromJson<PortID>(newMessage).portID);
+                            instance.Value.serverID = JsonUtility.FromJson<PortID>(newMessage).portID;
+                            break;
                         }
                     }
                 }
@@ -173,6 +173,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         System.Diagnostics.Process.Start(startInfo);
 
                         StartCoroutine(ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]));
+
                     }
                 }
 
@@ -268,10 +269,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             yield return 0;
         }
 
+        Debug.Log("this has finally been called");
+
         // When the instance has finally been created and setup, forward the player to the new game server.
         byte error = 0;
         string jsonToBeSent = "14";
-        jsonToBeSent += JsonUtility.ToJson(_gameInstances[serverName].serverID);
+        jsonToBeSent += JsonUtility.ToJson(new PortID( _gameInstances[serverName].serverID));
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
