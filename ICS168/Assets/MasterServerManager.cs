@@ -73,17 +73,17 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
     // Use this for initialization
     void Start () {
+
+        Application.runInBackground = true;
         NetworkTransport.Init();
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
-        //UDP_ChannelIDFrag = connectionConfig.AddChannel(QosType.ReliableFragmented);
         TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
 
         _maxConnections = _maxGameInstances * 4;
         HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
-        Application.runInBackground = true;
     }
 	
 	// Update is called once per frame
@@ -127,6 +127,8 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
                 // Have game servers register themselves.
                 if (prefix == (int)MasterServerCommands.RegisterGameServer) {
+
+                    Debug.Log("register a server");
                     
                     foreach (KeyValuePair<string, GameInstanceStats> instance in _gameInstances) {
                         if (instance.Value.serverID == 0) {

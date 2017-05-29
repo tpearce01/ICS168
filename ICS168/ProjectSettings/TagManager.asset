@@ -22,6 +22,8 @@ TagManager:
   - Explosion
   - MasterServerManager
   - GameServerManager
+  - ServerConnection
+  - ServerMiddleMan
   layers:
   - Default
   - TransparentFX
