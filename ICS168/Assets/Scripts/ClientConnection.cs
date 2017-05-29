@@ -93,6 +93,11 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         NetworkTransport.Init();
 
+        ConnectionConfig config = new ConnectionConfig();
+        TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        hostTopology = new HostTopology(config, _maxConnections);
+        MS_socketID = NetworkTransport.AddHost(hostTopology, MS_socketPort);
+
         ConnectToMaster();
 	}
 
@@ -260,11 +265,6 @@ public class ClientConnection : Singleton<ClientConnection> {
 	}
 
 	public void ConnectToMaster() {
-
-        ConnectionConfig config = new ConnectionConfig();
-        TCP_ChannelID = config.AddChannel(QosType.Reliable);
-        hostTopology = new HostTopology(config, _maxConnections);
-        MS_socketID = NetworkTransport.AddHost(hostTopology, MS_socketPort);
 
         byte error = 0;
 		MS_connectionID = NetworkTransport.Connect(MS_socketID, serverIP, MS_socketPort, 0, out error);

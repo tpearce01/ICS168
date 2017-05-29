@@ -1023,8 +1023,11 @@ MonoBehaviour:
   serverIP: 192.168.1.120
   _bufferSize: 15000
   MS_connectionID: -1
+  GS_connectionID: -1
   MS_socketID: -1
-  MS_socketPort: 8888
+  GS_socketID: -1
+  MS_socketPort: 7779
+  GS_socketPort: -1
   _renderTo: {fileID: 1960068527}
   _statusWindow: {fileID: 2000040230}
   _clientLobby: {fileID: 426532396}
