@@ -98,7 +98,7 @@ public class GameServerManager : Singleton<GameServerManager> {
         // Setup Master Server Connection Channel
         ConnectionConfig config = new ConnectionConfig();
         TCP_ChannelID = config.AddChannel(QosType.Reliable);
-        HostTopology hostTopology = new HostTopology(config, 1);
+        HostTopology hostTopology = new HostTopology(config, _maxConnections);
 
         // Setup Client Connection Channel
 
@@ -121,7 +121,7 @@ public class GameServerManager : Singleton<GameServerManager> {
         GS_Port = socketPort + portDelta;
 
         // Give the middle man the port number so it can tell the Master server.
-        GetComponent<ServerMiddleMan>().StartMiddleMan(GS_Port);
+        ServerMiddleMan.Instance.StartMiddleMan(GS_Port);
     }
 
     void Update() {
@@ -142,7 +142,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                 break;
 
             case NetworkEventType.ConnectEvent:
-                Debug.Log("GameServer: New Connection");
+                Debug.Log("GameServer: ConnectEvent");
 
                 // If the incoming connection event is NOT the master server.
                 if (incomingConnectionID != 1) {

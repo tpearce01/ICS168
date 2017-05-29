@@ -150,6 +150,52 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5024d8d78153e4f6bba6da4e78cc1a05, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &158825278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 158825280}
+  - component: {fileID: 158825279}
+  m_Layer: 0
+  m_Name: MiddleMan
+  m_TagString: ServerMiddleMan
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &158825279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158825278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277504ed5f34bc5449745eaf3142d351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bufferSize: 3000
+  MS_connectionID: -1
+  MS_socketPort: 8888
+  GS_socketPort: -1
+  To_MS_socketPort: -1
+  MS_socketID: -1
+--- !u!4 &158825280
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 158825278}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 199.93672, y: 100.56861, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &529199089 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114828111841697342, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
@@ -243,7 +289,7 @@ RectTransform:
   m_Children:
   - {fileID: 1960068526}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -398,30 +444,12 @@ MonoBehaviour:
   _cam: {fileID: 1974672584}
   apachePort: 
   _incomingBufferSize: 3000
-  _maxConnections: 5
+  _maxConnections: 16
   GS_Port: 8889
   _numberOfConnections: 0
   _inGamePlayers: 0
   _lobby: {fileID: 937385007}
   _notifArea: {fileID: 529199089}
---- !u!114 &893940373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 893940370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277504ed5f34bc5449745eaf3142d351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _bufferSize: 3000
-  GS_connectionID: -1
-  MS_connectionID: -1
-  MS_socketPort: 8888
-  GS_socketPort: -1
-  GS_socketID: -1
-  MS_socketID: -1
 --- !u!1001 &907826739
 Prefab:
   m_ObjectHideFlags: 0
@@ -643,7 +671,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1960068525
 GameObject:
