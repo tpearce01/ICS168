@@ -62,16 +62,15 @@ public class GameServerManager : Singleton<GameServerManager> {
     }
 
     // MASTER SERVER CONNECTION INFO
-    private int MS_connectionID = -1;
-    //private int MS_TCP_Frag_ChannelID = -1;                         // This channel should be reserved for larger messages
-    private int MS_TCP_ChannelID = -1;
-    private int MS_socketID = -1;
-    private int MS_Port = 8888;
-
-
-    // GAME SERVER CONNECTION INFO
+    private int TCP_ChannelID = -1;
+    private int _socketID = -1;
     private int GS_connectionID = -1;
     [SerializeField] private int GS_Port = 8889;
+    public int PortNumber {
+        get { return GS_Port; }
+    }
+
+
     [SerializeField] private int _numberOfConnections = 0;
     public int NumberOfConnections {
         get { return _numberOfConnections; }
@@ -97,9 +96,9 @@ public class GameServerManager : Singleton<GameServerManager> {
         NetworkTransport.Init();
 
         // Setup Master Server Connection Channel
-        ConnectionConfig MSconnectionConfig = new ConnectionConfig();
-        MS_TCP_ChannelID = MSconnectionConfig.AddChannel(QosType.Reliable);
-        HostTopology hostTopology = new HostTopology(MSconnectionConfig, 1);
+        ConnectionConfig config = new ConnectionConfig();
+        TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        HostTopology hostTopology = new HostTopology(config, 1);
 
         // Setup Client Connection Channel
 
@@ -108,8 +107,8 @@ public class GameServerManager : Singleton<GameServerManager> {
         int portDelta = 0;
         while (portDelta < 10) {
             try {
-                MS_socketID = NetworkTransport.AddHost(hostTopology, socketPort + portDelta);
-                if (MS_socketID < 0)
+                _socketID = NetworkTransport.AddHost(hostTopology, socketPort + portDelta);
+                if (_socketID < 0)
                     throw new Exception();
                 else
                     break;
@@ -120,7 +119,9 @@ public class GameServerManager : Singleton<GameServerManager> {
         }
 
         GS_Port = socketPort + portDelta;
-        Connect();
+
+        // Give the middle man the port number so it can tell the Master server.
+        GetComponent<ServerMiddleMan>().StartMiddleMan(GS_Port);
     }
 
     void Update() {
@@ -154,7 +155,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                     PortID portID = new PortID(GS_Port);
                     jsonToBeSent += JsonUtility.ToJson(portID);
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-                    NetworkTransport.Send(MS_socketID, MS_connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+                    //NetworkTransport.Send(_socketID, MS_connectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
                 }
 
                 //Debug.Log("server: new client connected");
@@ -256,16 +257,6 @@ public class GameServerManager : Singleton<GameServerManager> {
                 //}
                 break;
         }
-    }
-
-    // This is used to connect to the master server
-    public void Connect() {
-
-        byte error = 0;
-        
-        // THIS IS HARDCODED FOR NOW BECAUSE A GAME INSTANCE SHOULD NEVER BE ON
-        // ANOTHER MACHINE BESIDES THE SAME ONE AS THE MASTER SERVER.
-        MS_connectionID = NetworkTransport.Connect(MS_socketID, "127.0.0.1", MS_Port, 0, out error);
     }
 
     public void SendJSONMessage(string JSONobject) {

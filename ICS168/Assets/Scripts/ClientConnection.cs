@@ -48,18 +48,23 @@ public class ClientConnection : Singleton<ClientConnection> {
 	[SerializeField] private int _bufferSize = 3000;	//Maximum size of receiving buffer
 	private int _maxConnections = 1;	                //Maximum umber of connection
 
-    // MASTER SERVER CONNECTION INFO
-	//private int TCP_Frag_ChannelID = -1;					//UDP communication channel for large messages
-    private int MS_TCP_ChannelID = -1;
-	[SerializeField] private int MS_connectionID = -1;						//Connection ID
-	[SerializeField] private int MS_socketID = -1;		//Socket ID
-	[SerializeField] private int MS_socketPort = 8888;	//Port number
+    HostTopology hostTopology;
+    private int TCP_ChannelID = -1;
 
-    // GAME SERVER CONNECTION INFO
-    private int GS_TCP_ChannelID = -1;
-    private int GS_connectionID = -1;
-    private int GS_socketID = -1;
-    private int GS_socketPort = -1;
+    [Space]
+    [Header("Connection IDs")]
+	[SerializeField] private int MS_connectionID = -1;                      //Connection ID
+    [SerializeField] private int GS_connectionID = -1;
+
+    [Space]
+    [Header("Socket IDs")]
+    [SerializeField] private int MS_socketID = -1;      //Socket ID
+    [SerializeField] private int GS_socketID = -1;
+
+    [Space]
+    [Header("Port Numbers")]
+    [SerializeField] private int MS_socketPort = 8888;	//Port number
+    [SerializeField] private int GS_socketPort = -1;
 
 	[SerializeField] private Image _renderTo;								//Image to render to
     private int _currentFrame = -1;
@@ -81,17 +86,13 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 
 	private void Start() {
+        Application.runInBackground = true;
+
         _clientIO = GetComponent<ClientIO>();
         _currentFrame = -1;
 
         NetworkTransport.Init();
-        ConnectionConfig MSconnectionConfig = new ConnectionConfig();
-        //TCP_Frag_ChannelID = connectionConfig.AddChannel(QosType.ReliableFragmented);
-        MS_TCP_ChannelID = MSconnectionConfig.AddChannel(QosType.Reliable);
-        HostTopology hostTopology = new HostTopology(MSconnectionConfig, _maxConnections);
-        MS_socketID = NetworkTransport.AddHost(hostTopology, MS_socketPort);
 
-        Application.runInBackground = true;
         ConnectToMaster();
 	}
 
@@ -137,7 +138,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 if (incomingConnectionID == 1) {
                     string jsonToBeSent = "3";
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-                    NetworkTransport.Send(MS_socketID, MS_connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+                    NetworkTransport.Send(MS_socketID, MS_connectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
                 }
 
                 break;
@@ -213,13 +214,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.ForwardToGame) {
 
-                    ConnectionConfig GSconnectionConfig = new ConnectionConfig();
-                    GS_TCP_ChannelID = GSconnectionConfig.AddChannel(QosType.Reliable);
-                    HostTopology topology = new HostTopology(GSconnectionConfig, _maxConnections);
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
-                    GS_socketID = NetworkTransport.AddHost(topology, GS_socketPort);
-
-                    Application.runInBackground = true;
                     ConnectToGame();
                 }
                 break;
@@ -266,11 +261,19 @@ public class ClientConnection : Singleton<ClientConnection> {
 
 	public void ConnectToMaster() {
 
+        ConnectionConfig config = new ConnectionConfig();
+        TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        hostTopology = new HostTopology(config, _maxConnections);
+        MS_socketID = NetworkTransport.AddHost(hostTopology, MS_socketPort);
+
         byte error = 0;
 		MS_connectionID = NetworkTransport.Connect(MS_socketID, serverIP, MS_socketPort, 0, out error);
     }
 
     public void ConnectToGame() {
+
+        GS_socketID = NetworkTransport.AddHost(hostTopology, GS_socketPort);
+
         byte error = 0;
         GS_connectionID = NetworkTransport.Connect(GS_socketID, serverIP, GS_socketPort, 0, out error);
     }
@@ -279,14 +282,14 @@ public class ClientConnection : Singleton<ClientConnection> {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(MS_socketID, MS_connectionID, MS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+        NetworkTransport.Send(MS_socketID, MS_connectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     private void SendJSONMessageToGame(string JSONobject) {
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        NetworkTransport.Send(GS_socketID, GS_connectionID, GS_TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+        NetworkTransport.Send(GS_socketID, GS_connectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     //Login

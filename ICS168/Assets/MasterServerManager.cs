@@ -130,7 +130,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     
                     foreach (KeyValuePair<string, GameInstanceStats> instance in _gameInstances) {
                         if (instance.Value.serverID == 0) {
-                            Debug.Log(JsonUtility.FromJson<PortID>(newMessage).portID);
                             instance.Value.serverID = JsonUtility.FromJson<PortID>(newMessage).portID;
                             break;
                         }

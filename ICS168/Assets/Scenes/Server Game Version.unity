@@ -398,12 +398,30 @@ MonoBehaviour:
   _cam: {fileID: 1974672584}
   apachePort: 
   _incomingBufferSize: 3000
-  _maxConnections: 4
-  _socketPort: 8889
+  _maxConnections: 5
+  GS_Port: 8889
   _numberOfConnections: 0
   _inGamePlayers: 0
   _lobby: {fileID: 937385007}
   _notifArea: {fileID: 529199089}
+--- !u!114 &893940373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 893940370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277504ed5f34bc5449745eaf3142d351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bufferSize: 3000
+  GS_connectionID: -1
+  MS_connectionID: -1
+  MS_socketPort: 8888
+  GS_socketPort: -1
+  GS_socketID: -1
+  MS_socketID: -1
 --- !u!1001 &907826739
 Prefab:
   m_ObjectHideFlags: 0
