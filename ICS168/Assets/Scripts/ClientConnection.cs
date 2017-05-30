@@ -23,7 +23,8 @@ public enum ClientCommands {
     GoBackToMain = 10,
     Occupancy = 11,
     NoOccupancy = 12,
-    ForwardToGame = 14
+    ForwardToGame = 14,
+    ActiveUser = 15
 }
 
 public class PlayerIO {
@@ -73,9 +74,6 @@ public class ClientConnection : Singleton<ClientConnection> {
     [SerializeField] private int GS_socketPort = -1;
 
 	[SerializeField] private Image _renderTo;								//Image to render to
-    private int _currentFrame = -1;
-
-    private ClientIO _clientIO;
 
     [SerializeField] private OnlineStatusWindow _statusWindow;
     [SerializeField] private ClientLobbyWindow _clientLobby;
@@ -86,6 +84,9 @@ public class ClientConnection : Singleton<ClientConnection> {
     [SerializeField] private int _updateRate = 0;
     [SerializeField] private int _RTT_Threshold = 0;
     [SerializeField] private float _timeThreshold = 0;
+
+    private int _currentFrame = -1;
+    private ClientIO _clientIO;
     private float _disconnectTimer = 0.0f;
     private int _currentRTT = -1;
     private float _currentRate = 0.0f;
@@ -217,6 +218,9 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.DoesNotExist) {
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
+                }
+                else if (prefix == (int)ClientCommands.ActiveUser) {
+                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username is already logged in.";
                 }
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
                     _clientLobby.CannotDisconnect();

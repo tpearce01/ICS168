@@ -76,6 +76,9 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     // Maps connectionID with ClientInfo
     private Dictionary<int, ClientInfo> _clients = new Dictionary<int, ClientInfo>();
 
+    // Keep track of usernames used.
+    private List<string> _activeusernames = new List<string>();
+
     // Use this for initialization
     void Start () {
 
@@ -213,7 +216,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         WWW verify = new WWW(_LoginURL, form);
         yield return verify;
 
-        if (verify.text == "valid") {
+        if (verify.text == "valid" && !_activeusernames.Contains(username)) {
 
             // ALL THIS SHOULD HAPPEN WHEN THE CLIENT CONNECTS TO THE ACTUAL GAME SERVER
             //WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
@@ -224,6 +227,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
+            _activeusernames.Add(username);
             //_clientSocketIDs[connectionID].username = username;
             //_clientSocketIDs[connectionID].playerNum = connectionID - 1; // decremented so the range starts with 0 and not 1
 
@@ -248,6 +252,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
             byte error;
             string jsonToBeSent = "9";
+            jsonToBeSent += JsonUtility.ToJson(verify.text);
+            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+            NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
+        }
+        else if (verify.text == "valid" && _activeusernames.Contains(username)) {
+            byte error;
+            string jsonToBeSent = "15";
             jsonToBeSent += JsonUtility.ToJson(verify.text);
             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
