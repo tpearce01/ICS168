@@ -6,16 +6,22 @@ using UnityEngine.Networking;
 
 public class VictoryWindow : GenericWindow {
     float redirectingSeconds = 10.0f;
+    private float _timer = 0.0f;
+
+    private void OnEnable() {
+        _timer = redirectingSeconds;
+    }
 
     private void Update() {
-        redirectingSeconds -= Time.deltaTime;
+        _timer -= Time.deltaTime;
         
-        if(redirectingSeconds <= 0.0f) {
+        if(_timer <= 0.0f) {
             GameServerManager.Instance.InGamePlayers = 0;
             GameServerManager.Instance.SendJSONMessageToAll("10", QosType.Reliable);
             ToggleWindows(WindowIDs.Victory, WindowIDs.None);
+
         }else {
-            GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";
+            GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)_timer + " seconds...";
         }
     }
 

@@ -161,7 +161,6 @@ GameObject:
   - component: {fileID: 96855707}
   - component: {fileID: 96855706}
   - component: {fileID: 96855705}
-  - component: {fileID: 96855704}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -169,13 +168,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &96855704
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 96855703}
-  m_Enabled: 1
 --- !u!92 &96855705
 Behaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +225,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 96855703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 8.13, y: 3.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -703,6 +695,11 @@ Prefab:
         type: 2}
       propertyPath: currentWindow
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114754843428965262, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
+        type: 2}
+      propertyPath: _minPlayers
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}
