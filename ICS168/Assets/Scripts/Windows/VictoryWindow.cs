@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class VictoryWindow : GenericWindow {
     float redirectingSeconds = 10.0f;
@@ -11,7 +12,7 @@ public class VictoryWindow : GenericWindow {
         
         if(redirectingSeconds <= 0.0f) {
             GameServerManager.Instance.InGamePlayers = 0;
-            GameServerManager.Instance.SendJSONMessage("10");
+            GameServerManager.Instance.SendJSONMessageToAll("10", QosType.Reliable);
             ToggleWindows(WindowIDs.Victory, WindowIDs.None);
         }else {
             GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)redirectingSeconds + " seconds...";

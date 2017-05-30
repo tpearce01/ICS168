@@ -9,7 +9,10 @@ public class ServerMiddleMan : Singleton<ServerMiddleMan> {
     [SerializeField] private int _bufferSize = 3000;    //Maximum size of receiving buffer
     private int _maxConnections = 4;                    //Maximum umber of connection
 
-    private int TCP_ChannelID = -1;                 //UDP communication channel for large messages
+    private int UDP_ChannelIDSeq = -1;
+    private int UDP_ChannelIDFrag = -1;
+    private int UDP_ChannelID = -1;
+    private int TCP_ChannelID = -1;
     HostTopology hostTopology;
 
     [Space]
@@ -45,8 +48,15 @@ public class ServerMiddleMan : Singleton<ServerMiddleMan> {
                 break;
 
             case NetworkEventType.ConnectEvent:
-                Debug.Log(incomingConnectionID);
-                if (incomingConnectionID == 1) {
+                Debug.Log("Middleware connect event");
+                
+                // The master server will always have a socketID of 1
+                // All others will be other players.
+                if (incomingSocketID > 1) {
+
+                }
+                else if (incomingSocketID == 1) {
+
                     // Send the port number of this game instance to the Master Server
                     string jsonToBeSent = "2";
                     jsonToBeSent += JsonUtility.ToJson(new PortID(GS_socketPort));
@@ -80,8 +90,6 @@ public class ServerMiddleMan : Singleton<ServerMiddleMan> {
 
     public void StartMiddleMan(int portNumber) {
 
-        NetworkTransport.Init();
-
         GS_socketPort = portNumber;
         Outgoing_socketPort = GS_socketPort - 1110;
         Connect();
@@ -89,11 +97,16 @@ public class ServerMiddleMan : Singleton<ServerMiddleMan> {
 
     private void Connect() {
 
-        ConnectionConfig connectionConfig = new ConnectionConfig();
-        TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
-        hostTopology = new HostTopology(connectionConfig, _maxConnections);
+        ConnectionConfig config = new ConnectionConfig();
+
+        TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        UDP_ChannelIDSeq = config.AddChannel(QosType.UnreliableSequenced);
+        UDP_ChannelIDFrag = config.AddChannel(QosType.UnreliableFragmented);
+        UDP_ChannelID = config.AddChannel(QosType.Unreliable);
+
+        hostTopology = new HostTopology(config, _maxConnections);
         //GS_socketID = NetworkTransport.AddHost(hostTopology, To_GS_SocketPort);
-        MS_socketID = NetworkTransport.AddHost(hostTopology, Outgoing_socketPort);
+        MS_socketID = NetworkTransport.AddHost(hostTopology, 7779);
 
         byte error = 0;
         //GS_connectionID = NetworkTransport.Connect(GS_socketID, "127.0.0.1", GS_socketPort, 0, out error);

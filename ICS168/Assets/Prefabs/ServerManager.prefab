@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4764510083236430}
-  - component: {fileID: 114923107057970152}
   m_Layer: 0
   m_Name: ServerManager
   m_TagString: ServerConnection
@@ -40,24 +39,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114923107057970152
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1846088944346640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c8d5ac773fd9844881c821e499214f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rt: {fileID: 8400000, guid: cd2d995490860f741b0c1910559576d6, type: 2}
-  _cam: {fileID: 0}
-  apachePort: 80
-  _incomingBufferSize: 1024
-  _maxConnections: 4
-  _socketPort: 8888
-  _numberOfConnections: 0
-  _inGamePlayers: 0
-  _lobby: {fileID: 0}
-  _notifArea: {fileID: 0}
