@@ -58,7 +58,7 @@ public class ClientIO : MonoBehaviour {
             }
 
             if (_buttonPressed) {
-                //ClientConnection.Instance.SendMessage(_playerIO);
+                ClientConnection.Instance.SendMessage(_playerIO);
                 _buttonPressed = false;
             }
         }

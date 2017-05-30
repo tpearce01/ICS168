@@ -156,6 +156,8 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                     // Tell the Master Server to Inform the Client of the connection info
                     string jsonToBeSent = "2";
+
+                    // NEED TO CHANGE THIS TO VARIABLE
                     jsonToBeSent += JsonUtility.ToJson(new PortID(8889));
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
                     NetworkTransport.Send(_socketID, test, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);

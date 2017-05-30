@@ -15,6 +15,7 @@ public enum ClientCommands {
     RenderGame = 1,
     GoToGameSelect = 2,
     CloseDisconnects = 3,
+    EnableControls = 4,
     AccountCreated = 6,
     PreExistingUser = 7,
     InvalidLogin = 8,
@@ -204,7 +205,6 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if(prefix == (int)ClientCommands.GoToGameSelect) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.Login, WindowIDs.GameSelect);
-                    _clientIO.gameInSession = true;
                 }
                 else if (prefix == (int)ClientCommands.AccountCreated) {
                     WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
@@ -225,6 +225,9 @@ public class ClientConnection : Singleton<ClientConnection> {
                     Debug.Log("Go back to main damn it!");
                     _gameCanvas.gameObject.SetActive(false);
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
+
+                    byte e = 0;
+                    NetworkTransport.Disconnect(GS_socketID, GS_connectionID, out e);
                 }
                 else if (prefix == (int)ClientCommands.Occupancy)
                 {
@@ -239,6 +242,10 @@ public class ClientConnection : Singleton<ClientConnection> {
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
                     Debug.Log("GS_socketPort" + GS_socketPort);
                     ConnectToGame();
+                }
+                else if (prefix == (int)ClientCommands.EnableControls) {
+                    _clientIO.gameInSession = true;
+                    WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
                 }
                 break;
 
@@ -262,7 +269,9 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (incomingSocketID == 1) {
                     Debug.Log("client: disconnect from game server");
 
+                    WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.GameSelect);
                     NetworkTransport.RemoveHost(GS_socketID);
+                    _clientIO.gameInSession = false;
                     GS_socketID = -1;
                     GS_connectionID = -1;
                 }
@@ -380,11 +389,11 @@ public class ClientConnection : Singleton<ClientConnection> {
     }
 
     //Player IO
-    //public void SendMessage(PlayerIO command) {
-    //    string jsonToBeSent = "2";
-    //    jsonToBeSent += JsonUtility.ToJson(command);
-    //    SendJSONMessageToGame(jsonToBeSent);
-    //}
+    public void SendMessage(PlayerIO command) {
+        string jsonToBeSent = "2";
+        jsonToBeSent += JsonUtility.ToJson(command);
+        SendJSONMessageToGame(jsonToBeSent, QosType.Unreliable);
+    }
 
     public void ConnectToGameServer(string serverName) {
         string jsonToBeSent = "7";
