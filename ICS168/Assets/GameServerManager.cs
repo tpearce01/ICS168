@@ -15,6 +15,7 @@ public enum GameServerCommands {
     LeaveLobby = 4,
     LeaveGame = 5,
     VerifyOccupancy = 6,
+    AssignName = 7
 }
 
 public class ServerObject {
@@ -32,6 +33,17 @@ public class PortID {
         portID = ID;
     }
     public int portID = 0;
+}
+
+public class GameServerInfo {
+
+    public GameServerInfo(int numOfPlayers, string name) {
+        inGamePlayers = numOfPlayers;
+        serverName = name;
+    }
+
+    public int inGamePlayers = 0;
+    public string serverName = "";
 }
 
 public class GameServerManager : Singleton<GameServerManager> {
@@ -88,7 +100,9 @@ public class GameServerManager : Singleton<GameServerManager> {
     }
 
 
-    private int test = -1;
+    private int MS_ConnectionID = -1;
+
+    private string _serverName = "";
 
     // Initialization
     void Start() {
@@ -128,7 +142,7 @@ public class GameServerManager : Singleton<GameServerManager> {
 
         // Give the middle man the port number so it can tell the Master server.
         byte error;
-        test = NetworkTransport.Connect(_socketID, "127.0.0.1", 8888, 0, out error);
+        MS_ConnectionID = NetworkTransport.Connect(_socketID, "127.0.0.1", 8888, 0, out error);
         //ServerMiddleMan.Instance.StartMiddleMan(GS_Port);
     }
 
@@ -157,10 +171,9 @@ public class GameServerManager : Singleton<GameServerManager> {
                     // Tell the Master Server to Inform the Client of the connection info
                     string jsonToBeSent = "2";
 
-                    // NEED TO CHANGE THIS TO VARIABLE
-                    jsonToBeSent += JsonUtility.ToJson(new PortID(8889));
+                    jsonToBeSent += JsonUtility.ToJson(new PortID(GS_Port));
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-                    NetworkTransport.Send(_socketID, test, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+                    NetworkTransport.Send(_socketID, MS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
                 }
                 // Client Connections
                 else if (incomingConnectionID > 1) {
@@ -172,6 +185,11 @@ public class GameServerManager : Singleton<GameServerManager> {
                     _clients.Add(incomingConnectionID, clientInfo);
 
                     _inGamePlayers = _clients.Count;
+
+                    // Need to inform master server of current connections
+                    string jsonToBeSend = "6";
+                    jsonToBeSend += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));
+                    SendJSONMessageToMaster(jsonToBeSend);
                 }
 
                 break;
@@ -244,6 +262,10 @@ public class GameServerManager : Singleton<GameServerManager> {
                 else if (prefix == (int)GameServerCommands.VerifyOccupancy) {
                     sendOccupancy(incomingSocketID, incomingConnectionID, incomingChannelID);
                 }
+                else if (prefix == (int)GameServerCommands.AssignName) {
+                    _serverName = JsonUtility.FromJson<string>(newMessage);
+                }
+
                 break;
 
             case NetworkEventType.DisconnectEvent:
@@ -258,6 +280,11 @@ public class GameServerManager : Singleton<GameServerManager> {
                     Debug.Log("Removed " + _clients[incomingConnectionID].username + " from the game.");
 
                     _clients.Remove(incomingConnectionID);
+
+                    // Need to inform master server of current connections
+                    string jsonToBeSend = "6";
+                    jsonToBeSend += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));
+                    SendJSONMessageToMaster(jsonToBeSend);
 
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
@@ -298,6 +325,12 @@ public class GameServerManager : Singleton<GameServerManager> {
                 //}
                 break;
         }
+    }
+
+    public void SendJSONMessageToMaster(string JSONObject) {
+        byte error = 0;
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONObject);
+        NetworkTransport.Send(_socketID, MS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     public void SendJSONMessage(string JSONobject, ClientInfo client, QosType type) {

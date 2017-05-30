@@ -86,14 +86,14 @@ public class MapGenerator : Singleton<MapGenerator>
 
     // Gets called when players are logging into lobby
     public void AddPlayerToMap(int playerNum, string username) {
-        Debug.Log("Adding " + username + "(" + (playerNum+5) + ") to map");
-        playerArray.Add(playerNum + 5, username);
+        Debug.Log("Adding " + username + "(" + (playerNum+6) + ") to map");
+        playerArray.Add(playerNum + 6, username);
     }
 
     // Gets called when player leaves lobby
     public void RemovePlayerFromMap(int playerNum) {
         Debug.Log("Removing player from map");
-        playerArray.Remove(playerNum+5);
+        playerArray.Remove(playerNum+6);
     }
     
     void RandomizeWalls(string fileName) {

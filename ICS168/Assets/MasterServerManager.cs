@@ -45,6 +45,9 @@ public class ClientInfo {
 
 public class MasterServerManager : Singleton<MasterServerManager> {
 
+    [Header("Game Path")]
+    [SerializeField] private string _GameInstancePath = "";
+
     [Header("Server Settings")]
     [SerializeField] private int _incomingBufferSize = 1024;    // max buffer size
     [SerializeField] private int _socketPort = 8888;
@@ -172,18 +175,26 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         // Connect client to an already existing game server.
 
                         Debug.Log("Forwarding player to already established game: " + serverName);
-                        ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
+                        if (_gameInstances[serverName.ToLower()].serverID != 0) {
+                            ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
+                        }
                     }
                     else {
                         // Create an instace of a game and have the client connect.
                         _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
                         System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                        startInfo.FileName = "C:/Users/danie/Documents/GitKraken/ICS168/ICS168/Builds/BombermanServer.exe";
+                        startInfo.FileName = _GameInstancePath;
                         System.Diagnostics.Process.Start(startInfo);
 
-                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
+                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID],
+                            incomingSocketID, incomingConnectionID));
 
                     }
+                }
+                else if(prefix == (int)MasterServerCommands.VerifyOccupancy) {
+                    int inGamePlayers = JsonUtility.FromJson<GameServerInfo>(newMessage).inGamePlayers;
+                    string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
+                    _gameInstances[serverName].inGamePlayers = inGamePlayers;
                 }
 
                 break;
@@ -272,7 +283,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         }
     }
 
-    private IEnumerator ForwardPlayerToGameWithDelay(string serverName, ClientInfo client) {
+    private IEnumerator ForwardPlayerToGameWithDelay(string serverName, ClientInfo client, int GS_SocketID, int GS_ConnectionID) {
 
         while (_gameInstances[serverName].serverID == 0) {
             yield return 0;
@@ -284,6 +295,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         jsonToBeSent += JsonUtility.ToJson(new PortID( _gameInstances[serverName].serverID));
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
+
+        // Inform the server of its name.
+        jsonToBeSent = "7";
+        jsonToBeSent += JsonUtility.ToJson(serverName);
+        messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(GS_SocketID, GS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     private void ForwardPlayerToGame(string serverName, ClientInfo client) {
