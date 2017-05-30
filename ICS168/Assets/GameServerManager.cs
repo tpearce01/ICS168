@@ -50,7 +50,7 @@ public class GameServerManager : Singleton<GameServerManager> {
     private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
 
     // Maps connectionID with ClientInfo
-    private Dictionary<int, ClientInfo> _clientSocketIDs = new Dictionary<int, ClientInfo>();
+    private Dictionary<int, ClientInfo> _clients = new Dictionary<int, ClientInfo>();
 
     /*** SERVER VARIABLES ***/
     [SerializeField] private int _incomingBufferSize = 3000;    // max buffer size
@@ -62,18 +62,16 @@ public class GameServerManager : Singleton<GameServerManager> {
     }
 
     // MASTER SERVER CONNECTION INFO
+    private int UDP_ChannelIDSeq = -1;
+    private int UDP_ChannelIDFrag = -1;
+    private int UDP_ChannelID = -1;
     private int TCP_ChannelID = -1;
+
     private int _socketID = -1;
     private int GS_connectionID = -1;
     [SerializeField] private int GS_Port = 8889;
     public int PortNumber {
         get { return GS_Port; }
-    }
-
-
-    [SerializeField] private int _numberOfConnections = 0;
-    public int NumberOfConnections {
-        get { return _numberOfConnections; }
     }
 
     /*** PLAYER VARIABLES ***/
@@ -89,6 +87,9 @@ public class GameServerManager : Singleton<GameServerManager> {
         _cam = Camera.main;
     }
 
+
+    private int test = -1;
+
     // Initialization
     void Start() {
         Application.runInBackground = true;
@@ -97,7 +98,12 @@ public class GameServerManager : Singleton<GameServerManager> {
 
         // Setup Master Server Connection Channel
         ConnectionConfig config = new ConnectionConfig();
+
         TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        UDP_ChannelIDSeq = config.AddChannel(QosType.UnreliableSequenced);
+        UDP_ChannelIDFrag = config.AddChannel(QosType.UnreliableFragmented);
+        UDP_ChannelID = config.AddChannel(QosType.Unreliable);
+
         HostTopology hostTopology = new HostTopology(config, _maxConnections);
 
         // Setup Client Connection Channel
@@ -121,7 +127,9 @@ public class GameServerManager : Singleton<GameServerManager> {
         GS_Port = socketPort + portDelta;
 
         // Give the middle man the port number so it can tell the Master server.
-        ServerMiddleMan.Instance.StartMiddleMan(GS_Port);
+        byte error;
+        test = NetworkTransport.Connect(_socketID, "127.0.0.1", 8888, 0, out error);
+        //ServerMiddleMan.Instance.StartMiddleMan(GS_Port);
     }
 
     void Update() {
@@ -143,32 +151,32 @@ public class GameServerManager : Singleton<GameServerManager> {
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("GameServer: ConnectEvent");
+                // Master Server Connection
+                if (incomingConnectionID == 1) {
 
-                // If the incoming connection event is NOT the master server.
-                if (incomingConnectionID != 1) {
-
-                }
-                else {
-
-                    // Register with the master server as a game server.
+                    // Tell the Master Server to Inform the Client of the connection info
                     string jsonToBeSent = "2";
-                    PortID portID = new PortID(GS_Port);
-                    jsonToBeSent += JsonUtility.ToJson(portID);
+                    jsonToBeSent += JsonUtility.ToJson(new PortID(8889));
                     byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-                    //NetworkTransport.Send(_socketID, MS_connectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+                    NetworkTransport.Send(_socketID, test, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+                }
+                // Client Connections
+                else if (incomingConnectionID > 1) {
+
+                    ClientInfo clientInfo = new ClientInfo();
+                    clientInfo.socketID = incomingSocketID;
+                    clientInfo.ConnectionID = incomingConnectionID;
+                    clientInfo.ChannelID = incomingChannelID;
+                    _clients.Add(incomingConnectionID, clientInfo);
+
+                    _inGamePlayers = _clients.Count;
                 }
 
-                //Debug.Log("server: new client connected");
-                //ClientInfo clientInfo = new ClientInfo();
-                //clientInfo.socketID = incomingSocketID;
-                //clientInfo.ConnectionID = incomingConnectionID;
-                //clientInfo.ChannelID = incomingChannelID;
-                //_clientSocketIDs.Add(incomingConnectionID, clientInfo);
-
-                //_numberOfConnections = _clientSocketIDs.Count;
                 break;
 
             case NetworkEventType.DataEvent:
+                Debug.Log("Game Server: Data Event");
+
                 string message = Encoding.UTF8.GetString(incomingMessageBuffer);
                 int prefix = 0;
                 int index;
@@ -183,6 +191,8 @@ public class GameServerManager : Singleton<GameServerManager> {
                 prefix = Convert.ToInt32(message.Substring(0, index));
                 newMessage = message.Substring(index);
 
+                Debug.Log("Prefix: " + prefix);
+
                 //process user game input
                 if (prefix == (int)GameServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
@@ -191,20 +201,31 @@ public class GameServerManager : Singleton<GameServerManager> {
                 }
 
                 else if (prefix == (int)GameServerCommands.SetUsername) {
-                    _clientSocketIDs[incomingConnectionID].username = message;
-                    _notifArea.playerEntered(message);
+                    _clients[incomingConnectionID].username = JsonUtility.FromJson<LoginInfo>(newMessage).username;
+                    _clients[incomingConnectionID].playerNum = incomingConnectionID - 1; // decremented so the range starts with 0 and not 1
+
+                    _notifArea.playerEntered(JsonUtility.FromJson<LoginInfo>(newMessage).username);
+
+                    string jsonToBeSent = "0";
+                    SendJSONMessage(jsonToBeSent, _clients[incomingConnectionID], QosType.Reliable);
+
+                    // IF the lobby is not loaded, load it.
+                    if (WindowManager.Instance.currentWindow == WindowIDs.None) {
+                        WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
+                    }
+
+                    if (_lobby.gameObject.activeInHierarchy == true) {
+                        _lobby.AddPlayerToLobby(_clients[incomingConnectionID].username, _clients[incomingConnectionID].playerNum);
+                    }
                 }
                 else if (prefix == (int)GameServerCommands.LeaveLobby) {
 
-                    _inGamePlayers--;
-                    if (_inGamePlayers < 0) { _inGamePlayers = 0; }
-                    if (_lobby.gameObject.activeInHierarchy == true) {
-                        _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
-                    }
+                    Debug.Log("Leave Lobby Command");
 
-                    if (_inGamePlayers < 1) {
-                        GameManager.Instance.ResetGameManager();
-                        SceneManager.LoadScene("Server Game Version");
+                    _inGamePlayers = --_inGamePlayers < 0 ? 0 : _inGamePlayers;
+
+                    if (_lobby.gameObject.activeInHierarchy == true) {
+                        _lobby.RemovePlayerFromLobby(_clients[incomingConnectionID].playerNum);
                     }
                 }
                 else if (prefix == (int)GameServerCommands.LeaveGame) {
@@ -223,6 +244,23 @@ public class GameServerManager : Singleton<GameServerManager> {
                 break;
 
             case NetworkEventType.DisconnectEvent:
+
+                if (incomingConnectionID > 1) {
+                    _inGamePlayers = --_inGamePlayers < 0 ? 0 : _inGamePlayers;
+
+                    if (_lobby.gameObject.activeInHierarchy == true) {
+                        _lobby.RemovePlayerFromLobby(_clients[incomingConnectionID].playerNum);
+                    }
+
+                    Debug.Log("Removed " + _clients[incomingConnectionID].username + " from the game.");
+
+                    _clients.Remove(incomingConnectionID);
+
+                    if (_inGamePlayers < 1) {
+                        GameManager.Instance.ResetGameManager();
+                        SceneManager.LoadScene("Server Game Version");
+                    }
+                }
                 //Debug.Log("server: remote client event disconnected");
                 ////_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
                 //GameManager.Instance.LeaveGame(incomingConnectionID);
@@ -259,13 +297,43 @@ public class GameServerManager : Singleton<GameServerManager> {
         }
     }
 
-    public void SendJSONMessage(string JSONobject) {
+    public void SendJSONMessage(string JSONobject, ClientInfo client, QosType type) {
+        byte error = 0;
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
+
+        if (type == QosType.Reliable) {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+        }
+        else if (type == QosType.Unreliable) {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, UDP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+        }
+        else if (type == QosType.UnreliableFragmented) {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
+        }
+        else if (type == QosType.UnreliableSequenced) {
+            NetworkTransport.Send(client.socketID, client.ConnectionID, UDP_ChannelIDSeq, messageBuffer, messageBuffer.Length, out error);
+        }
+    }
+
+    public void SendJSONMessageToAll(string JSONobject, QosType type) {
 
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         //Debug.Log("Sending message of length " + messageBuffer.Length);
-        foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
-            NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, client.Value.ChannelID, messageBuffer, messageBuffer.Length, out error);
+        foreach (KeyValuePair<int, ClientInfo> client in _clients) {
+
+            if (type == QosType.Reliable) {
+                NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+            }
+            else if (type == QosType.Unreliable) {
+                NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, UDP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+            }
+            else if (type == QosType.UnreliableFragmented) {
+                NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, UDP_ChannelIDFrag, messageBuffer, messageBuffer.Length, out error);
+            }
+            else if (type == QosType.UnreliableSequenced) {
+                NetworkTransport.Send(client.Value.socketID, client.Value.ConnectionID, UDP_ChannelIDSeq, messageBuffer, messageBuffer.Length, out error);
+            }
         }
     }
 
@@ -289,10 +357,12 @@ public class GameServerManager : Singleton<GameServerManager> {
     /// <param name="channelID"></param>
     public void sendOccupancy(int socketID, int connectionID, int channelID) {
         string jsonToBeSent;
-        if (_numberOfConnections == _maxConnections)
+        if (_inGamePlayers == _maxConnections) {
             jsonToBeSent = "12";
-        else
+        }
+        else {
             jsonToBeSent = "11";
+        }
         SendOneJSONMessage(jsonToBeSent, socketID, connectionID, channelID);
     }
 
@@ -314,18 +384,18 @@ public class GameServerManager : Singleton<GameServerManager> {
 
         // Once we have at least 1 successfully logged in player, we should begin to transmit the lobby/game.
         if (_inGamePlayers > 0) {
-            SendJSONMessage(jsonToBeSent);
+            SendJSONMessageToAll(jsonToBeSent, QosType.UnreliableFragmented);
         }
     }
 
     public void EnableClientControls() {
         string toBeSent = "2";
-        SendJSONMessage(toBeSent);
+        SendJSONMessageToAll(toBeSent, QosType.Reliable);
     }
 
     public void PreventDisconnects() {
         string toBeSent = "3";
-        SendJSONMessage(toBeSent);
+        SendJSONMessageToAll(toBeSent, QosType.Reliable);
     }
 }
 

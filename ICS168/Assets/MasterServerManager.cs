@@ -50,7 +50,9 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     [SerializeField] private int _socketPort = 8888;
     [SerializeField] private int _maxGameInstances = 0;
 
-    private int UDP_ChannelIDFrag = -1;                         // This channel should be reserved for larger messages
+    private int UDP_ChannelIDSeq = -1;
+    private int UDP_ChannelIDFrag = -1;
+    private int UDP_ChannelID = -1;
     private int TCP_ChannelID = -1;
     private int _socketID = -1;
     private int _connectionID = -1;
@@ -77,11 +79,14 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         Application.runInBackground = true;
         NetworkTransport.Init();
 
-        ConnectionConfig connectionConfig = new ConnectionConfig();
-        TCP_ChannelID = connectionConfig.AddChannel(QosType.Reliable);
+        ConnectionConfig config = new ConnectionConfig();
+        TCP_ChannelID = config.AddChannel(QosType.Reliable);
+        UDP_ChannelIDSeq = config.AddChannel(QosType.UnreliableSequenced);
+        UDP_ChannelIDFrag = config.AddChannel(QosType.UnreliableFragmented);
+        UDP_ChannelID = config.AddChannel(QosType.Unreliable);
 
         _maxConnections = _maxGameInstances * 4;
-        HostTopology hostTopology = new HostTopology(connectionConfig, _maxConnections);
+        HostTopology hostTopology = new HostTopology(config, _maxConnections);
         _socketID = NetworkTransport.AddHost(hostTopology, _socketPort);
 
     }
@@ -161,10 +166,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                 // Process game connection requests
                 else if (prefix == (int)MasterServerCommands.C_SelectGameInstance) {
 
-                    string serverName = JsonUtility.FromJson<string>(newMessage);
+                    string serverName = JsonUtility.FromJson<LoginInfo>(newMessage).username;
 
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
-                        // Connect client to the server.
+                        // Connect client to an already existing game server.
+
+                        Debug.Log("Forwarding player to already established game: " + serverName);
+                        ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
                     }
                     else {
                         // Create an instace of a game and have the client connect.
@@ -173,7 +181,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         startInfo.FileName = "C:/Users/danie/Documents/GitKraken/ICS168/ICS168/Builds/BombermanServer.exe";
                         System.Diagnostics.Process.Start(startInfo);
 
-                        StartCoroutine(ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]));
+                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
 
                     }
                 }
@@ -264,18 +272,26 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         }
     }
 
-    private IEnumerator ForwardPlayerToGame(string serverName, ClientInfo client) {
+    private IEnumerator ForwardPlayerToGameWithDelay(string serverName, ClientInfo client) {
 
         while (_gameInstances[serverName].serverID == 0) {
             yield return 0;
         }
 
-        Debug.Log("this has finally been called");
-
         // When the instance has finally been created and setup, forward the player to the new game server.
         byte error = 0;
         string jsonToBeSent = "14";
         jsonToBeSent += JsonUtility.ToJson(new PortID( _gameInstances[serverName].serverID));
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
+    }
+
+    private void ForwardPlayerToGame(string serverName, ClientInfo client) {
+
+        // When the instance has finally been created and setup, forward the player to the new game server.
+        byte error = 0;
+        string jsonToBeSent = "14";
+        jsonToBeSent += JsonUtility.ToJson(new PortID(_gameInstances[serverName].serverID));
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
