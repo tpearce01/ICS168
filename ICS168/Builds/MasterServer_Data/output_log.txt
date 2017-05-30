@@ -15,14 +15,18 @@ Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\Maste
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.076 seconds
+- Completed reload, in  0.017 seconds
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 3600x1080 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 1.037243 ms
+UnloadTime: 0.965865 ms
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
 Master Server: new client connected
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -35,12 +39,33 @@ register a server
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-this has finally been called
+Forwarding player to already established game: da
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
+Forwarding player to already established game: da
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: da
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: da
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: da
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: da
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {2} has been disconnected by timeout; address {::ffff:192.168.1.111:8888}
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 8e08 -> priority: 1 
-  Thread -> id: 7afc -> priority: 1 
-  Thread -> id: 9454 -> priority: 1 
-  Thread -> id: 8f0c -> priority: 1 
+  Thread -> id: 8d4c -> priority: 1 
+  Thread -> id: 8e8c -> priority: 1 
+  Thread -> id: a788 -> priority: 1 
+  Thread -> id: 94bc -> priority: 1 

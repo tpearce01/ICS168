@@ -75,17 +75,17 @@ public class GameManager : Singleton<GameManager> {
 
     // Called by ServerConnection when a client sends in move commands
     public void PlayerActions(int playerID, PlayerIO command) {
-        if (playerReferences[playerID-1] != null) {
-            playerReferences[playerID - 1].GetComponent<PlayerActions>().RequestAction(command);
+        if (playerReferences[playerID-2] != null) {
+            playerReferences[playerID - 2].GetComponent<PlayerActions>().RequestAction(command);
         }
     }
 
     // Called by ServerConnection when the client disconnects from an ongoing game
     public void LeaveGame(int playerID) {
         decAlivePlayers();
-        if (playerReferences[playerID - 1] != null)
+        if (playerReferences[playerID - 2] != null)
         {
-            playerReferences[playerID - 1].GetComponent<PlayerActions>().LeaveGame();
+            playerReferences[playerID - 2].GetComponent<PlayerActions>().LeaveGame();
         }
     }
 
@@ -147,5 +147,7 @@ public class GameManager : Singleton<GameManager> {
             Destroy(allPowerups[i]);
         for (int i = 0; i < allRemainingPlayers.Length; ++i)
             Destroy(allRemainingPlayers[i]);
+
+        playerReferences.Clear();
     }
 }

@@ -198,7 +198,8 @@ public class GameServerManager : Singleton<GameServerManager> {
                 //process user game input
                 if (prefix == (int)GameServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
-                    Debug.Log(incomingConnectionID + " is moving " + input.button);
+                    //Debug.Log(incomingConnectionID + " is moving " + input.button);
+                    Debug.Log("ConnectionID: " + incomingConnectionID);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
                 }
 
@@ -391,7 +392,7 @@ public class GameServerManager : Singleton<GameServerManager> {
     }
 
     public void EnableClientControls() {
-        string toBeSent = "2";
+        string toBeSent = "4";
         SendJSONMessageToAll(toBeSent, QosType.Reliable);
     }
 
