@@ -14,7 +14,7 @@ public class ClientLobbyWindow : GenericWindow {
 
     public void OnCanel() {
         ClientConnection.Instance.LeaveLobby();
-        ToggleWindows(WindowIDs.ClientLobby, WindowIDs.Login);
+        ToggleWindows(WindowIDs.ClientLobby, WindowIDs.GameSelect);
     }
 
     public void CannotDisconnect() {

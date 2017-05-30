@@ -10,9 +10,10 @@ public class GameSelectWindow : GenericWindow {
     }
 
     public void OnJoinGame() {
-        Text input = gameObject.GetComponentInChildren<Text>();
-        string serverName = input.text;
+        Text[] input = gameObject.GetComponentsInChildren<Text>();
+        string serverName = input[3].text;
 
+        Debug.Log("Trying to connect to: " + serverName);
         ClientConnection.Instance.ConnectToGameServer(serverName);
     }
 }
