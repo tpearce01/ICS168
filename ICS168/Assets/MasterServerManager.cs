@@ -8,10 +8,10 @@ using System;
 public enum MasterServerCommands {
     C_VerifyLogin = 0,
     C_CreateAccount = 1,
-    VerifyOccupancy = 6,
-    C_SelectGameInstance = 7,
     RegisterGameServer = 2,
-    RegisterClient = 3
+    RegisterClient = 3,
+    VerifyOccupancy = 6,
+    C_SelectGameInstance = 7
 }
 
 public class GameInstanceStats {
@@ -161,6 +161,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     if (!_clients.ContainsKey(incomingConnectionID)) {
                         ClientInfo clientInfo = new ClientInfo(incomingSocketID, incomingConnectionID, incomingChannelID);
                         _clients.Add(incomingConnectionID, clientInfo);
+                        Debug.Log(incomingConnectionID + " added to _clients");
                     }
                 }
 
@@ -206,11 +207,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
                     _gameInstances[serverName].inGamePlayers = inGamePlayers;
                 }
-
+               
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 _numberOfConnections = --_numberOfConnections < 0 ? 0 : _numberOfConnections;
+                _activeusernames.Remove(_clients[incomingConnectionID].username);
                 break;
         }
     }
@@ -224,6 +226,8 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         yield return verify;
 
         if (verify.text == "valid" && !_activeusernames.Contains(username)) {
+            // Set _clients' username
+            _clients[connectionID].username = username;
 
             // ALL THIS SHOULD HAPPEN WHEN THE CLIENT CONNECTS TO THE ACTUAL GAME SERVER
             //WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);

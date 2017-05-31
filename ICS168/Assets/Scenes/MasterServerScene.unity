@@ -139,7 +139,7 @@ MonoBehaviour:
   _incomingBufferSize: 1024
   _socketPort: 8888
   _maxGameInstances: 5
-  _apachePortNumber: 29920
+  _apachePortNumber: 80
   _numberOfConnections: 0
   _numberOfGameInstances: 0
 --- !u!4 &1719873157

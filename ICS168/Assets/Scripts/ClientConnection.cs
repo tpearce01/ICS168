@@ -228,7 +228,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.GoBackToMain) {
                     Debug.Log("Go back to main damn it!");
                     _gameCanvas.gameObject.SetActive(false);
-                    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.StartWindow);
+                    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.GameSelect);
 
                     byte e = 0;
                     NetworkTransport.Disconnect(GS_socketID, GS_connectionID, out e);
