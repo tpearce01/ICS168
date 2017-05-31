@@ -223,7 +223,7 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                 else if (prefix == (int)GameServerCommands.SetUsername) {
                     _clients[incomingConnectionID].username = JsonUtility.FromJson<LoginInfo>(newMessage).username;
-                    _clients[incomingConnectionID].playerNum = incomingConnectionID - 1; // decremented so the range starts with 0 and not 1
+                    _clients[incomingConnectionID].playerNum = incomingConnectionID - 2; // decremented so the range starts with 0 and not 1
 
                     _notifArea.playerEntered(JsonUtility.FromJson<LoginInfo>(newMessage).username);
 
@@ -278,7 +278,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                     }
 
                     Debug.Log("Removed " + _clients[incomingConnectionID].username + " from the game.");
-
+                    GameManager.Instance.LeaveGame(incomingConnectionID);
                     _clients.Remove(incomingConnectionID);
 
                     // Need to inform master server of current connections
@@ -288,12 +288,12 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
+                        WindowManager.Instance.ToggleWindows(WindowIDs.PlayerInfo, WindowIDs.None);
                         SceneManager.LoadScene("Server Game Version");
                     }
                 }
                 //Debug.Log("server: remote client event disconnected");
                 ////_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
-                //GameManager.Instance.LeaveGame(incomingConnectionID);
                 //_clientSocketIDs.Remove(incomingConnectionID);
 
                 //// Decrement the number of players and remove the player from the hashmap.

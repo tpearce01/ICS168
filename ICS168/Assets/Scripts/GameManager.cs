@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager> {
         if (_isGameInSession) {
             _currTime -= Time.deltaTime;
 
-            if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
+            if (_currTime <= 0.0f || _numOfAlivePlayers <= 0) {
                 findWinner();
                 DestroyEverything();
                 _isGameInSession = false;

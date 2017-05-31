@@ -15,14 +15,27 @@ Platform assembly: D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\Unit
 Loading D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.106 seconds
+- Completed reload, in  0.015 seconds
 Platform assembly: D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Github\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 0.844859 ms
+UnloadTime: 1.156092 ms
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+register a server
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {2} has been disconnected by timeout; address {::ffff:192.168.1.12:8888}
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 7abc -> priority: 1 
-  Thread -> id: 3d74 -> priority: 1 
+  Thread -> id: 89fc -> priority: 1 
+  Thread -> id: 1cf0 -> priority: 1 

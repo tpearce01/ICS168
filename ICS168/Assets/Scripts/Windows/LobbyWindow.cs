@@ -55,8 +55,9 @@ public class LobbyWindow : GenericWindow {
                 if (_gameStartsIn <= 0.0f) {
                     GameServerManager.Instance.EnableClientControls();
                     MapGenerator.Instance.GenerateMap();
-                    GameManager.Instance.StartGame();
+                    Debug.Log("I generated a map 1");
                     ToggleWindows(WindowIDs.Lobby, WindowIDs.PlayerInfo);
+                    GameManager.Instance.StartGame();
                 }
             }
         }
@@ -73,8 +74,9 @@ public class LobbyWindow : GenericWindow {
             if (_gameStartsIn <= 0.0f) {
                 GameServerManager.Instance.EnableClientControls();
                 MapGenerator.Instance.GenerateMap();
+                Debug.Log("I generated a map 2");
+                ToggleWindows(WindowIDs.Lobby, WindowIDs.PlayerInfo);
                 GameManager.Instance.StartGame();
-                ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
             }
         }
         else if (GameServerManager.Instance.InGamePlayers < _minPlayers) {
