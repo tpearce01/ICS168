@@ -686,20 +686,10 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114328171415652144, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
+    - target: {fileID: 114959665988361714, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
         type: 2}
-      propertyPath: _defaultWindow
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114328171415652144, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
-        type: 2}
-      propertyPath: currentWindow
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114754843428965262, guid: c7231e0aab1cffa4f9049fb2a03d88f0,
-        type: 2}
-      propertyPath: _minPlayers
-      value: 2
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c7231e0aab1cffa4f9049fb2a03d88f0, type: 2}

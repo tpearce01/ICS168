@@ -17,9 +17,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Client Game Version.unity
     guid: 2311dbea81b181640a94eec5e6fb9b9b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Server Game Version.unity
     guid: 655b6962dfb150c4496ed275f3c2c328
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MasterServerScene.unity
     guid: b5e0cae132d159c47aad4b6b82f94a63

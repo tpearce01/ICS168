@@ -52,6 +52,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     [SerializeField] private int _incomingBufferSize = 1024;    // max buffer size
     [SerializeField] private int _socketPort = 8888;
     [SerializeField] private int _maxGameInstances = 0;
+    [SerializeField] private string _apachePortNumber = "80";
 
     private int UDP_ChannelIDSeq = -1;
     private int UDP_ChannelIDFrag = -1;
@@ -84,6 +85,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
         Application.runInBackground = true;
         NetworkTransport.Init();
+
+        if (_apachePortNumber != "80" || _apachePortNumber != "")
+        {
+            _LoginURL = "http://localhost:" + _apachePortNumber + "/teamnewport/LoginManager.php";
+            _CreateAccountURL = "http://localhost:" + _apachePortNumber + "/teamnewport/CreateAccount.php";
+        }
 
         ConnectionConfig config = new ConnectionConfig();
         TCP_ChannelID = config.AddChannel(QosType.Reliable);
@@ -185,9 +192,9 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     else {
                         // Create an instace of a game and have the client connect.
                         _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
-                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                        startInfo.FileName = _GameInstancePath;
-                        System.Diagnostics.Process.Start(startInfo);
+                        //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                        //startInfo.FileName = _GameInstancePath;
+                        //System.Diagnostics.Process.Start(startInfo);
 
                         StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID],
                             incomingSocketID, incomingConnectionID));

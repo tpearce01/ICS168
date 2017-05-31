@@ -17,10 +17,10 @@ public class PlayerInfo : GenericWindow {
     /// <param name="playerNumber">The number of the player that is to be set.</param>
     public void setPlayerText(string playerName, int playerNumber)
     {
-        if (playerNumber == 1) _p1text.text = playerName;
-        else if (playerNumber == 2) _p2text.text = playerName;
-        else if (playerNumber == 3) _p3text.text = playerName;
-        else if (playerNumber == 4) _p4text.text = playerName;
+        if (playerNumber == 0) _p1text.text = playerName;
+        else if (playerNumber == 1) _p2text.text = playerName;
+        else if (playerNumber == 2) _p3text.text = playerName;
+        else if (playerNumber == 3) _p4text.text = playerName;
     }
 
     /// <summary>
@@ -30,10 +30,10 @@ public class PlayerInfo : GenericWindow {
     /// <param name="toggle">Set to true to enable, set to false to disable.</param>
     public void togglePlayerInfo(int playerNumber, bool toggle)
     {
-        if (playerNumber == 1) _p1text.enabled = toggle;
-        else if (playerNumber == 2) _p2text.enabled = toggle;
-        else if (playerNumber == 3) _p3text.enabled = toggle;
-        else if (playerNumber == 4) _p4text.enabled = toggle;
+        if (playerNumber == 0) _p1text.enabled = toggle;
+        else if (playerNumber == 1) _p2text.enabled = toggle;
+        else if (playerNumber == 2) _p3text.enabled = toggle;
+        else if (playerNumber == 3) _p4text.enabled = toggle;
     }
 
 }

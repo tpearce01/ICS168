@@ -48,6 +48,13 @@ public class GameManager : Singleton<GameManager> {
     // Initialization
     public void StartGame() {
         _numOfAlivePlayers = playerReferences.Count;
+        foreach (GameObject playerObject in playerReferences)
+        {
+            string playerName = playerObject.GetComponent<PlayerActions>().playerName;
+            int playerNumber = playerObject.GetComponent<PlayerActions>().PlayerNumber;
+            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(playerName, playerNumber);
+            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(playerNumber, true);
+        }
         _currTime = _roundTime;
         _isGameOver = false;
         _isGameInSession = true;
@@ -85,6 +92,10 @@ public class GameManager : Singleton<GameManager> {
         decAlivePlayers();
         if (playerReferences[playerID - 2] != null)
         {
+            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(
+                "", playerReferences[playerID-2].GetComponent<PlayerActions>().PlayerNumber);
+            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(
+                playerReferences[playerID - 2].GetComponent<PlayerActions>().PlayerNumber, false);
             playerReferences[playerID - 2].GetComponent<PlayerActions>().LeaveGame();
         }
     }
@@ -116,11 +127,11 @@ public class GameManager : Singleton<GameManager> {
             Debug.Log("Wasted");         
         }
 
-        WindowManager.Instance.ToggleWindows(WindowIDs.Game, WindowIDs.Victory);
+        WindowManager.Instance.ToggleWindows(WindowIDs.PlayerInfo, WindowIDs.Victory);
         DestroyEverything();
     }
 
-    // Destroys all the tiles in the map, called once game ends and winner is found ^
+    // Destroys all the tiles in the map, called once game ends and winner is found
     private void DestroyEverything() {
         GameObject[] allBombs               = GameObject.FindGameObjectsWithTag("Bomb");
         GameObject[] allExplosions          = GameObject.FindGameObjectsWithTag("Explosion");

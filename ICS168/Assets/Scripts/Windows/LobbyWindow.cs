@@ -56,7 +56,7 @@ public class LobbyWindow : GenericWindow {
                     GameServerManager.Instance.EnableClientControls();
                     MapGenerator.Instance.GenerateMap();
                     GameManager.Instance.StartGame();
-                    ToggleWindows(WindowIDs.Lobby, WindowIDs.None);
+                    ToggleWindows(WindowIDs.Lobby, WindowIDs.PlayerInfo);
                 }
             }
         }

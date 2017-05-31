@@ -18,8 +18,8 @@ public enum WindowIDs {
     ClientLobby = 10,
     DisconnectWindow = 11,
     NotificationArea = 12,
-    //PlayerInfo = 13,
     GameSelect = 13,
+    PlayerInfo = 14,
     None = -1
 }
 
