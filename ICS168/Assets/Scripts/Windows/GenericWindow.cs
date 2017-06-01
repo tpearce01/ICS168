@@ -20,6 +20,7 @@ public enum WindowIDs {
     NotificationArea = 12,
     GameSelect = 13,
     PlayerInfo = 14,
+    FullLobby = 15,
     None = -1
 }
 

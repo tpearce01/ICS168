@@ -37,6 +37,11 @@ public class LoginInfo {
     public string password;
 }
 
+public class ServerInfo
+{
+    public string servername;
+}
+
 public class ClientConnection : Singleton<ClientConnection> {
 
     [SerializeField] private Canvas _gameCanvas;
@@ -235,7 +240,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.Occupancy)
                 {
-
+                    //Do nothing... should connect
                 }
                 else if (prefix == (int)ClientCommands.NoOccupancy)
                 {
@@ -244,7 +249,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.ForwardToGame) {
 
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
-                    Debug.Log("GS_socketPort" + GS_socketPort);
+                    Debug.Log("GS_socketPort: " + GS_socketPort);
                     ConnectToGame();
                 }
                 else if (prefix == (int)ClientCommands.EnableControls) {
@@ -401,10 +406,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
     public void ConnectToGameServer(string serverName) {
         string jsonToBeSent = "7";
-
-        // I should probably create a new class, but I just want this to work NOW! :D
-        LoginInfo info = new LoginInfo();
-        info.username = serverName;
+        ServerInfo info = new ServerInfo();
+        info.servername = serverName;
         jsonToBeSent += JsonUtility.ToJson(info);
         SendJSONMessageToMaster(jsonToBeSent, QosType.Reliable);
     }

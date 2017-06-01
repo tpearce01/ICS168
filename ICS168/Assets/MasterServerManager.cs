@@ -180,7 +180,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                 // Process game connection requests
                 else if (prefix == (int)MasterServerCommands.C_SelectGameInstance) {
 
-                    string serverName = JsonUtility.FromJson<LoginInfo>(newMessage).username;
+                    string serverName = JsonUtility.FromJson<ServerInfo>(newMessage).servername;
 
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
