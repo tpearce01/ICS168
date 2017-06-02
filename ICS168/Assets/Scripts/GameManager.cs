@@ -48,10 +48,10 @@ public class GameManager : Singleton<GameManager> {
     // Initialization
     public void StartGame() {
         _numOfAlivePlayers = playerReferences.Count;
-        foreach (GameObject playerObject in playerReferences)
-        {
+        foreach (GameObject playerObject in playerReferences) {
             string playerName = playerObject.GetComponent<PlayerActions>().playerName;
             int playerNumber = playerObject.GetComponent<PlayerActions>().PlayerNumber;
+            Debug.Log("Player Number: " + playerNumber);
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(playerName, playerNumber);
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(playerNumber, true);
         }
@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager> {
         if (_isGameInSession) {
             _currTime -= Time.deltaTime;
 
-            if (_currTime <= 0.0f || _numOfAlivePlayers <= 0) {
+            if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
                 findWinner();
                 DestroyEverything();
                 _isGameInSession = false;

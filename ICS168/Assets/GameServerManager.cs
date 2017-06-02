@@ -185,7 +185,8 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                     _inGamePlayers = _clients.Count;
 
-                    // Need to inform master server of current connections
+
+                    // Need to inform master server of current connections every time a new client connects
                     string jsonToBeSend = "6";
                     jsonToBeSend += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));
                     SendJSONMessageToMaster(jsonToBeSend);
@@ -381,22 +382,22 @@ public class GameServerManager : Singleton<GameServerManager> {
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
     }
-    /// <summary>
-    /// Sends to the client whether or not there is room for them to join in.
-    /// </summary>
-    /// <param name="socketID"></param>
-    /// <param name="connectionID"></param>
-    /// <param name="channelID"></param>
-    public void sendOccupancy(int socketID, int connectionID, int channelID) {
-        string jsonToBeSent;
-        if (_inGamePlayers == _maxConnections) {
-            jsonToBeSent = "12";
-        }
-        else {
-            jsonToBeSent = "11";
-        }
-        SendOneJSONMessage(jsonToBeSent, socketID, connectionID, channelID);
-    }
+    ///// <summary>
+    ///// Sends to the client whether or not there is room for them to join in.
+    ///// </summary>
+    ///// <param name="socketID"></param>
+    ///// <param name="connectionID"></param>
+    ///// <param name="channelID"></param>
+    //public void sendOccupancy(int socketID, int connectionID, int channelID) {
+    //    string jsonToBeSent;
+    //    if (_inGamePlayers == _maxConnections) {
+    //        jsonToBeSent = "12";
+    //    }
+    //    else {
+    //        jsonToBeSent = "11";
+    //    }
+    //    SendOneJSONMessage(jsonToBeSent, socketID, connectionID, channelID);
+    //}
 
     void CaptureFrame() {
         RenderTexture.active = rt;

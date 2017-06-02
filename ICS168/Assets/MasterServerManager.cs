@@ -23,6 +23,9 @@ public class GameInstanceStats {
     public string serverName = "";
     public int serverID = 0;
     public int inGamePlayers = 0;
+    public int socketID = -1;
+    public int connectionID = -1;
+    public int channelID = -1;
 }
 
 /*** CLIENT VARIABLES ***/
@@ -151,6 +154,9 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     foreach (KeyValuePair<string, GameInstanceStats> instance in _gameInstances) {
                         if (instance.Value.serverID == 0) {
                             instance.Value.serverID = JsonUtility.FromJson<PortID>(newMessage).portID;
+                            instance.Value.socketID = incomingSocketID;
+                            instance.Value.connectionID = incomingConnectionID;
+                            instance.Value.channelID = incomingChannelID;
                             break;
                         }
                     }
@@ -191,6 +197,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                                 ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
                             }
                         }else {
+                            Debug.Log("In Game Players: " + _gameInstances[serverName].inGamePlayers);
                             string jsonToBeSent = "12";
                             jsonToBeSent += JsonUtility.ToJson("");
                             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
@@ -205,14 +212,14 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                         startInfo.FileName = _GameInstancePath;
                         System.Diagnostics.Process.Start(startInfo);
 
-                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID],
-                            incomingSocketID, incomingConnectionID));
+                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
 
                     }
                 }
                 else if(prefix == (int)MasterServerCommands.VerifyOccupancy) {
                     int inGamePlayers = JsonUtility.FromJson<GameServerInfo>(newMessage).inGamePlayers;
                     string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
+                    Debug.Log("Verify Occupancy: " + serverName);
                     _gameInstances[serverName].inGamePlayers = inGamePlayers;
                 }
                
@@ -313,24 +320,24 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         }
     }
 
-    private IEnumerator ForwardPlayerToGameWithDelay(string serverName, ClientInfo client, int GS_SocketID, int GS_ConnectionID) {
+    private IEnumerator ForwardPlayerToGameWithDelay(string serverName, ClientInfo client) {
 
         while (_gameInstances[serverName].serverID == 0) {
             yield return 0;
         }
 
-        // When the instance has finally been created and setup, forward the player to the new game server.
-        byte error = 0;
-        string jsonToBeSent = "14";
-        jsonToBeSent += JsonUtility.ToJson(new PortID( _gameInstances[serverName].serverID));
-        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
-
         // Inform the server of its name.
-        jsonToBeSent = "7";
+        byte error = 0;
+        string jsonToBeSent = "7";
         jsonToBeSent += JsonUtility.ToJson(serverName);
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(_gameInstances[serverName].socketID, _gameInstances[serverName].connectionID, _gameInstances[serverName].channelID, messageBuffer, messageBuffer.Length, out error);
+
+        // When the instance has finally been created and setup, forward the player to the new game server.
+        jsonToBeSent = "14";
+        jsonToBeSent += JsonUtility.ToJson(new PortID( _gameInstances[serverName].serverID));
         messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
-        NetworkTransport.Send(GS_SocketID, GS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
+        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
     private void ForwardPlayerToGame(string serverName, ClientInfo client) {

@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8006b21ad9a7ef5458b70c268b6b93ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _GameInstancePath: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds
+  _GameInstancePath: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/BombermanServer.exe
   _incomingBufferSize: 1024
   _socketPort: 8888
   _maxGameInstances: 5
