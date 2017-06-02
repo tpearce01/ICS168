@@ -14,7 +14,6 @@ public enum GameServerCommands {
     SetUsername = 3,
     LeaveLobby = 4,
     LeaveGame = 5,
-    VerifyOccupancy = 6,
     AssignName = 7
 }
 
@@ -258,9 +257,6 @@ public class GameServerManager : Singleton<GameServerManager> {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
                     }
-                }
-                else if (prefix == (int)GameServerCommands.VerifyOccupancy) {
-                    sendOccupancy(incomingSocketID, incomingConnectionID, incomingChannelID);
                 }
                 else if (prefix == (int)GameServerCommands.AssignName) {
                     _serverName = JsonUtility.FromJson<string>(newMessage);

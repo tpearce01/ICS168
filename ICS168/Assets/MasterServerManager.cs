@@ -185,17 +185,25 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
 
-                        Debug.Log("Forwarding player to already established game: " + serverName);
-                        if (_gameInstances[serverName.ToLower()].serverID != 0) {
-                            ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
+                        if(_gameInstances[serverName].inGamePlayers < 4) {
+                            Debug.Log("Forwarding player to already established game: " + serverName);
+                            if (_gameInstances[serverName.ToLower()].serverID != 0) {
+                                ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
+                            }
+                        }else {
+                            string jsonToBeSent = "12";
+                            jsonToBeSent += JsonUtility.ToJson("");
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+                            NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
                         }
+                        
                     }
                     else {
                         // Create an instace of a game and have the client connect.
                         _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
-                        //System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                        //startInfo.FileName = _GameInstancePath;
-                        //System.Diagnostics.Process.Start(startInfo);
+                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.FileName = _GameInstancePath;
+                        System.Diagnostics.Process.Start(startInfo);
 
                         StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID],
                             incomingSocketID, incomingConnectionID));

@@ -244,7 +244,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                 }
                 else if (prefix == (int)ClientCommands.NoOccupancy)
                 {
-
+                    WindowManager.Instance.ToggleWindows(WindowIDs.GameSelect, WindowIDs.FullLobby);
                 }
                 else if (prefix == (int)ClientCommands.ForwardToGame) {
 
