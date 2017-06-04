@@ -24,6 +24,7 @@ public enum ClientCommands {
     GoBackToMain = 10,
     Occupancy = 11,
     NoOccupancy = 12,
+    GameBeingCreated = 13,
     ForwardToGame = 14,
     ActiveUser = 15
 }
@@ -272,6 +273,9 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
                     GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + serverNames;
+                }
+                else if (prefix == (int)ClientCommands.GameBeingCreated) {
+                    GameObject.Find("PleaseWait").GetComponent<Text>().text = "Game is being loaded. Please wait a moment...";
                 }
                 break;
 

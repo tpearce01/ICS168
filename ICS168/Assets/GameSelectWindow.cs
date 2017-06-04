@@ -23,6 +23,7 @@ public class GameSelectWindow : GenericWindow {
         // Reset max instance error messages
         GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
         GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
+        GameObject.Find("PleaseWait").GetComponent<Text>().text = "";
 
         // Connect the player to game server and disable the join button
         Text[] input = gameObject.GetComponentsInChildren<Text>();

@@ -191,6 +191,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
                         if(_gameInstances[serverName].inGamePlayers < 4) {
+
+                            // Tells client that game is being created
+                            string jsonToBeSent = "13";
+                            jsonToBeSent += JsonUtility.ToJson("");
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+                            NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
+
                             Debug.Log("Forwarding player to already established game: " + serverName);
                             if (_gameInstances[serverName.ToLower()].serverID != 0) {
                                 ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
@@ -225,6 +232,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             startInfo.FileName = _GameInstancePath;
                             System.Diagnostics.Process.Start(startInfo);
 
+                            // Tells client that game is being created
+                            string jsonToBeSent = "13";
+                            jsonToBeSent += JsonUtility.ToJson("");
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+                            NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
+
+                            // Forwards player to game
                             StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
                         }
                     }
