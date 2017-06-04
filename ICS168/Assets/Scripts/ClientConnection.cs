@@ -16,6 +16,7 @@ public enum ClientCommands {
     GoToGameSelect = 2,
     CloseDisconnects = 3,
     EnableControls = 4,
+    MaxInstances = 5,
     AccountCreated = 6,
     PreExistingUser = 7,
     InvalidLogin = 8,
@@ -264,6 +265,19 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.EnableControls) {
                     _clientIO.gameInSession = true;
                     WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
+                } 
+                else if (prefix == (int)ClientCommands.MaxInstances) {
+                    GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
+
+                    List<string> serverNames = JsonUtility.FromJson<List<string>>(newMessage);
+                    string allServerNames = "";
+                    for (int i=0; i<serverNames.Count; ++i) {
+                        allServerNames += (serverNames[i]);
+                        if(!(i == serverNames.Count - 1)) {
+                            allServerNames += ", ";
+                        }
+                    }
+                    GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + allServerNames;
                 }
                 break;
 

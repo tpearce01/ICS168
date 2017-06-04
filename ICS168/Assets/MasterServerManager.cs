@@ -209,6 +209,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     else {
                         if(_numberOfGameInstances == _maxGameInstances) {
                             Debug.Log("Maximum game instances reached.");
+                            
+                            // Get a list of all available server names and send to client
+                            List<string> serverNames = new List<string>();
+                            foreach (string key in _gameInstances.Keys) {
+                                serverNames.Add(key);
+                            }
+                            MaximumInstancesReached(serverNames, _clients[incomingConnectionID]);
                         }else {
                             // Create an instace of a game and have the client connect.
                             _numberOfGameInstances++;
@@ -351,6 +358,15 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         byte error = 0;
         string jsonToBeSent = "14";
         jsonToBeSent += JsonUtility.ToJson(new PortID(_gameInstances[serverName].serverID));
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
+    }
+
+    // Tell client to display why user can't create a game instance
+    private void MaximumInstancesReached(List<string> serverNames, ClientInfo client) {
+        byte error = 0;
+        string jsonToBeSent = "5";
+        jsonToBeSent += JsonUtility.ToJson(serverNames);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }

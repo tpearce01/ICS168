@@ -20,6 +20,11 @@ public class GameSelectWindow : GenericWindow {
 
     //If network drops the message, client can't connect.
     public void OnJoinGame() {
+        // Reset max instance error messages
+        GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
+        GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
+
+        // Connect the player to game server and disable the join button
         Text[] input = gameObject.GetComponentsInChildren<Text>();
         string serverName = input[3].text;
 
