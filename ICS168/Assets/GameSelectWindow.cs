@@ -20,7 +20,7 @@ public class GameSelectWindow : GenericWindow {
 
     //If network drops the message, client can't connect.
     public void OnJoinGame() {
-        // Reset max instance error messages
+        // Reset window's error messages
         GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
         GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
         GameObject.Find("PleaseWait").GetComponent<Text>().text = "";
@@ -32,6 +32,11 @@ public class GameSelectWindow : GenericWindow {
         Debug.Log("Trying to connect to: " + serverName);
         ClientConnection.Instance.ConnectToGameServer(serverName);
 
-        _joinButton.interactable = false;
+        if(ClientConnection.Instance.CanConnectToGame == true) {
+            _joinButton.interactable = false;
+        }else {
+            _joinButton.interactable = true;
+        }
+        
     }
 }
