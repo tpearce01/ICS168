@@ -36,6 +36,9 @@ public class GameManager : Singleton<GameManager> {
 
     // Used to track if the game is over or not.
     private bool _isGameOver;
+    public bool IsGameOver {
+        get { return _isGameOver; }
+    }
 
     // Used to track if game is in session
     private bool _isGameInSession = false;

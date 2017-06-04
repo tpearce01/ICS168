@@ -185,7 +185,6 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                     _inGamePlayers = _clients.Count;
 
-
                     // Need to inform master server of current connections every time a new client connects
                     string jsonToBeSend = "6";
                     jsonToBeSend += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));

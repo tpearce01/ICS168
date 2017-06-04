@@ -13,6 +13,9 @@ public class LobbyWindow : GenericWindow {
 
     [SerializeField] private GameObject[] _players;
     [SerializeField] private Text[] _usernames;
+    public Text[] Usernames {
+        get { return _usernames; }
+    }
 
     private float _timeout = -1.0f;
     private float _gameStartsIn = -1.0f;

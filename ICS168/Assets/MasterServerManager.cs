@@ -190,7 +190,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
-
                         if(_gameInstances[serverName].inGamePlayers < 4) {
                             Debug.Log("Forwarding player to already established game: " + serverName);
                             if (_gameInstances[serverName.ToLower()].serverID != 0) {
@@ -203,24 +202,30 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
                             NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
                         }
-                        
+
+                        //if game instance has an ongoing game, prevent any connections to it
+                        // < placeholder >
                     }
                     else {
-                        // Create an instace of a game and have the client connect.
-                        _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
-                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                        startInfo.FileName = _GameInstancePath;
-                        System.Diagnostics.Process.Start(startInfo);
+                        if(_numberOfGameInstances == _maxGameInstances) {
+                            Debug.Log("Maximum game instances reached.");
+                        }else {
+                            // Create an instace of a game and have the client connect.
+                            _numberOfGameInstances++;
+                            _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
+                            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                            startInfo.FileName = _GameInstancePath;
+                            System.Diagnostics.Process.Start(startInfo);
 
-                        StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
-
+                            StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
+                        }
                     }
                 }
                 else if(prefix == (int)MasterServerCommands.VerifyOccupancy) {
                     int inGamePlayers = JsonUtility.FromJson<GameServerInfo>(newMessage).inGamePlayers;
                     string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
                     Debug.Log("Verify Occupancy: " + serverName);
-                    _gameInstances[serverName].inGamePlayers = inGamePlayers;
+                    _gameInstances[serverName.ToLower()].inGamePlayers = inGamePlayers;
                 }
                
                 break;

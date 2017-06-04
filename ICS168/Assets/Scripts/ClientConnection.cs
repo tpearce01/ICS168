@@ -66,11 +66,17 @@ public class ClientConnection : Singleton<ClientConnection> {
     [Space]
     [Header("Connection IDs")]
 	[SerializeField] private int MS_connectionID = -1;                      //Connection ID
+    public int MSConnectionID {
+        get { return MS_connectionID; }
+    }
     [SerializeField] private int GS_connectionID = -1;
 
     [Space]
     [Header("Socket IDs")]
     [SerializeField] private int MS_socketID = -1;      //Socket ID
+    public int MSSocketID {
+        get { return MS_socketID; }
+    }
     [SerializeField] private int GS_socketID = -1;
 
     [Space]
@@ -216,22 +222,25 @@ public class ClientConnection : Singleton<ClientConnection> {
                     WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
                 }
                 else if (prefix == (int)ClientCommands.PreExistingUser) {
+                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
                 }
                 else if (prefix == (int)ClientCommands.InvalidLogin) {
+                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
                 }
                 else if (prefix == (int)ClientCommands.DoesNotExist) {
+                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
                 }
                 else if (prefix == (int)ClientCommands.ActiveUser) {
+                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username is already logged in.";
                 }
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
                     _clientLobby.CannotDisconnect();
                 }
                 else if (prefix == (int)ClientCommands.GoBackToMain) {
-                    Debug.Log("Go back to main damn it!");
                     _gameCanvas.gameObject.SetActive(false);
                     WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.GameSelect);
 

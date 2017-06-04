@@ -15,14 +15,14 @@ Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\Bo
 Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.059 seconds
+- Completed reload, in  0.046 seconds
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 3.213936 ms
+UnloadTime: 2.696553 ms
 GameServer: ConnectEvent
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -47,66 +47,19 @@ Prefix: 3
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Adding ty(6) to map
+Adding fads(6) to map
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Initialize engine version: 5.6.0f3 (497a0f351392)
-GfxDevice: creating device client; threaded=1
-Direct3D:
-    Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce 940M (ID=0x1347)
-    Vendor:   NVIDIA
-    VRAM:     2014 MB
-    Driver:   22.21.13.8205
-Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.060 seconds
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.dll (this message is harmless)
-<RI> Initializing input.
-<RI> Input initialized.
-desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
-<RI> Initialized touch support.
-UnloadTime: 2.437628 ms
-Socket: bind failed, error: Only one usage of each socket address (protocol/network address/port) is normally permitted.
-Cannot open socket on ip {*} and port {8889}; check please your network, most probably port has been already occupied
- 
-(Filename:  Line: 569)
-
-GameServer: ConnectEvent
+I generated a map 1
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Game Server: Data Event
+Player Number: 0
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Prefix: 7
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Log: connection {2} has been disconnected by timeout; address {::ffff:68.231.201.45:48805}
-Attempt to send to not connected connection {2}
- 
-(Filename:  Line: 359)
-
-Attempt to send to not connected connection {2}
- 
-(Filename:  Line: 359)
-
-Removing player from map
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Removed ty from the game.
+Removed fads from the game.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -119,8 +72,5 @@ Parameter name: index
 (Filename:  Line: -1)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 33f0 -> priority: 1 
-  Thread -> id: cf0 -> priority: 1 
-Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2ea8 -> priority: 1 
-  Thread -> id: 1f88 -> priority: 1 
+  Thread -> id: 1f54 -> priority: 1 
+  Thread -> id: 1c0 -> priority: 1 

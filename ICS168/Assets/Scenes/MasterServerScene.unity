@@ -138,7 +138,7 @@ MonoBehaviour:
   _GameInstancePath: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/BombermanServer.exe
   _incomingBufferSize: 1024
   _socketPort: 8888
-  _maxGameInstances: 5
+  _maxGameInstances: 1
   _apachePortNumber: 80
   _numberOfConnections: 0
   _numberOfGameInstances: 0
