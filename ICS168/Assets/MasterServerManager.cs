@@ -218,7 +218,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             Debug.Log("Maximum game instances reached.");
                             MaximumInstancesReached(_gameInstances, _clients[incomingConnectionID]);
                         }else {
-                            // Create an instace of a game and have the client connect.
+                            // Create an instance of a game and have the client connect.
                             _numberOfGameInstances++;
                             _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
                             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -372,6 +372,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
     // Tell client to display why user can't create a game instance
     private void MaximumInstancesReached(Dictionary<string, GameInstanceStats> serverNames, ClientInfo client) {
+        Debug.Log(_gameInstances["a"].serverName + "(" + _gameInstances["a"].inGamePlayers + ")");
         byte error = 0;
         string jsonToBeSent = "5";
         jsonToBeSent += JsonUtility.ToJson(serverNames);

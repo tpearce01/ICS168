@@ -275,21 +275,28 @@ public class ClientConnection : Singleton<ClientConnection> {
                     // reset other error messages
                     GameObject.Find("PleaseWait").GetComponent<Text>().text = "";
 
+                    // display error
+                    GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
+
                     // used for disabling "Join Game" button
                     _canConnectToGame = false;
 
-                    Debug.Log("Printing newMessage: " + newMessage);
-                    Dictionary<string,GameInstanceStats> serverNames = JsonUtility.FromJson<Dictionary<string, GameInstanceStats>>(newMessage);
+                    //Debug.Log("Printing newMessage: " + newMessage);
+                    //Dictionary<string,GameInstanceStats> serverNames = JsonUtility.FromJson<Dictionary<string, GameInstanceStats>>(newMessage);
 
-                    string allServerNames = "";
-                    foreach (string key in serverNames.Keys) {
-                        allServerNames += (key + "(" + serverNames[key].inGamePlayers + ") ");
-                    }
+                    //string allServerNames = "";
+                    //foreach (string key in serverNames.Keys) {
+                    //    allServerNames += (key + "(" + serverNames[key].inGamePlayers + ") ");
+                    //}
 
-                    GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
-                    GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + allServerNames;
+                    //Debug.Log(allServerNames);
+                    
+                    //GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + allServerNames;
                 }
                 else if (prefix == (int)ClientCommands.GameBeingCreated) {
+                    // used for disabling "Join Game" button
+                    _canConnectToGame = true;
+
                     // reset other error messages
                     GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
                     GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
@@ -462,15 +469,5 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         byte error;
         NetworkTransport.Disconnect(GS_socketID, GS_connectionID, out error);
-    }
-
-    /// <summary>
-    /// Asks the server if there is room for the client to join in.
-    /// </summary>
-    public void verifyOccupancy()
-    {
-        string jsonToBeSent = "6";
-        jsonToBeSent += JsonUtility.ToJson("");
-        //SendJSONMessage(jsonToBeSent);
     }
 }

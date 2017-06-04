@@ -56,10 +56,6 @@ public class GameServerManager : Singleton<GameServerManager> {
     /// </summary>
     public string apachePort;
 
-    /*** PHP VARIABLES ***/
-    private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
-    private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
-
     // Maps connectionID with ClientInfo
     private Dictionary<int, ClientInfo> _clients = new Dictionary<int, ClientInfo>();
 
@@ -79,7 +75,7 @@ public class GameServerManager : Singleton<GameServerManager> {
     private int TCP_ChannelID = -1;
 
     private int _socketID = -1;
-    private int GS_connectionID = -1;
+    //private int GS_connectionID = -1;
     [SerializeField] private int GS_Port = 8889;
     public int PortNumber {
         get { return GS_Port; }
@@ -132,7 +128,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                 else
                     break;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 portDelta++;
             }
         }
@@ -288,37 +284,6 @@ public class GameServerManager : Singleton<GameServerManager> {
                         SceneManager.LoadScene("Server Game Version");
                     }
                 }
-                //Debug.Log("server: remote client event disconnected");
-                ////_notifArea.playerLeft(_clientSocketIDs[_connectionID].username);
-                //_clientSocketIDs.Remove(incomingConnectionID);
-
-                //// Decrement the number of players and remove the player from the hashmap.
-                //_inGamePlayers--;
-                //if (_inGamePlayers < 0) { _inGamePlayers = 0; }
-                //_numberOfConnections--;
-                //if (_numberOfConnections < 0) { _numberOfConnections = 0; }
-
-                //// If the lobby is currently showing, make sure to update the information.
-                //if (_lobby.gameObject.activeInHierarchy == true) {
-                //    _lobby.RemovePlayerFromLobby(_clientSocketIDs[incomingConnectionID].playerNum);
-                //}
-
-                //ClientInfo clientToDelete = new ClientInfo(-1, -1, -1);
-
-                //foreach (KeyValuePair<int, ClientInfo> client in _clientSocketIDs) {
-                //    if (client.Value.ConnectionID == incomingConnectionID) {
-                //        clientToDelete = client.Value;
-                //    }
-                //}
-
-                //if (clientToDelete.socketID != -1) {
-                //    _clientSocketIDs.Remove(clientToDelete.ConnectionID);
-                //}
-
-                //if (_inGamePlayers < 1) {
-                //    GameManager.Instance.ResetGameManager();
-                //    SceneManager.LoadScene("Server Game Version");
-                //}
                 break;
         }
     }
@@ -381,22 +346,6 @@ public class GameServerManager : Singleton<GameServerManager> {
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONobject);
         NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
     }
-    ///// <summary>
-    ///// Sends to the client whether or not there is room for them to join in.
-    ///// </summary>
-    ///// <param name="socketID"></param>
-    ///// <param name="connectionID"></param>
-    ///// <param name="channelID"></param>
-    //public void sendOccupancy(int socketID, int connectionID, int channelID) {
-    //    string jsonToBeSent;
-    //    if (_inGamePlayers == _maxConnections) {
-    //        jsonToBeSent = "12";
-    //    }
-    //    else {
-    //        jsonToBeSent = "11";
-    //    }
-    //    SendOneJSONMessage(jsonToBeSent, socketID, connectionID, channelID);
-    //}
 
     void CaptureFrame() {
         RenderTexture.active = rt;
