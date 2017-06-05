@@ -51,12 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a0171376fdaf14dbfbcc95ce7afaa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numOfPlayers: 4
   _roundTime: 60
-  _players:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _victoryText: {fileID: 0}
-  _timeToShowVictory: 0
+  _numberOfPlayersToEndRound: 1
+  _numOfAlivePlayers: 0

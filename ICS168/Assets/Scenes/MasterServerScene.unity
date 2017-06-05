@@ -140,6 +140,7 @@ MonoBehaviour:
   _socketPort: 8888
   _maxGameInstances: 1
   _apachePortNumber: 80
+  _enableAutomaticServerInstanceExecute: 1
   _numberOfConnections: 0
   _numberOfGameInstances: 0
 --- !u!4 &1719873157
