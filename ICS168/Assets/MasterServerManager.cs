@@ -56,6 +56,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
     [SerializeField] private int _socketPort = 8888;
     [SerializeField] private int _maxGameInstances = 0;
     [SerializeField] private string _apachePortNumber = "80";
+    [SerializeField] private bool _enableAutomaticServerInstanceExecute = true;
 
     private int UDP_ChannelIDSeq = -1;
     private int UDP_ChannelIDFrag = -1;
@@ -221,9 +222,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             // Create an instance of a game and have the client connect.
                             _numberOfGameInstances++;
                             _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
-                            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                            startInfo.FileName = _GameInstancePath;
-                            System.Diagnostics.Process.Start(startInfo);
+                            if (_enableAutomaticServerInstanceExecute)
+                            {
+                                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                                startInfo.FileName = _GameInstancePath;
+                                System.Diagnostics.Process.Start(startInfo);
+                            }
 
                             // Tells client that game is being created
                             string jsonToBeSent = "13";

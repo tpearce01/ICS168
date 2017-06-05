@@ -11,11 +11,16 @@ public class GameManager : Singleton<GameManager> {
 
     /*** TIME TRACKING ATTRIBUTES ***/
     // Signifies the maximum time for the round.
+    [Header("Game Settings")]
     [SerializeField] private float _roundTime;
     public float RoundTime {
         get { return _roundTime; }
     }
-
+    /// <summary>
+    /// When the number of alive players is at this number, the round will end and a winner will be determined.
+    /// Defaults to 1.
+    /// </summary>
+    [SerializeField] private int _numberOfPlayersToEndRound = 1;
     // Signifies the current time
     private float _currTime;
     public float CurrentTime {
@@ -26,9 +31,10 @@ public class GameManager : Singleton<GameManager> {
     // Stores references to all the player game objects in the game
     private List<GameObject> playerReferences = new List<GameObject>();
 
+    [Space]
+    [Header("Tracking Variables")]
     // Used to track the number of players that are still alive internally.
-    [SerializeField]
-    private int _numOfAlivePlayers;
+    [SerializeField] private int _numOfAlivePlayers;
     public int NumOfAlivePlayers {
         get { return _numOfAlivePlayers; }
         set { _numOfAlivePlayers = value; }
@@ -75,7 +81,7 @@ public class GameManager : Singleton<GameManager> {
         if (_isGameInSession) {
             _currTime -= Time.deltaTime;
 
-            if (_currTime <= 0.0f || _numOfAlivePlayers <= 1) {
+            if (_currTime <= 0.0f || _numOfAlivePlayers <= _numberOfPlayersToEndRound) {
                 findWinner();
                 DestroyEverything();
                 _isGameInSession = false;
