@@ -191,6 +191,13 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
                         if(_gameInstances[serverName].inGamePlayers < 4) {
+
+                            // Tells client that game is being created
+                            string jsonToBeSent = "13";
+                            jsonToBeSent += JsonUtility.ToJson("");
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+                            NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
+
                             Debug.Log("Forwarding player to already established game: " + serverName);
                             if (_gameInstances[serverName.ToLower()].serverID != 0) {
                                 ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
@@ -209,14 +216,22 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     else {
                         if(_numberOfGameInstances == _maxGameInstances) {
                             Debug.Log("Maximum game instances reached.");
+                            MaximumInstancesReached(_gameInstances, _clients[incomingConnectionID]);
                         }else {
-                            // Create an instace of a game and have the client connect.
+                            // Create an instance of a game and have the client connect.
                             _numberOfGameInstances++;
                             _gameInstances.Add(serverName.ToLower(), new GameInstanceStats(serverName.ToLower()));
                             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                             startInfo.FileName = _GameInstancePath;
                             System.Diagnostics.Process.Start(startInfo);
 
+                            // Tells client that game is being created
+                            string jsonToBeSent = "13";
+                            jsonToBeSent += JsonUtility.ToJson("");
+                            byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+                            NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
+
+                            // Forwards player to game
                             StartCoroutine(ForwardPlayerToGameWithDelay(serverName.ToLower(), _clients[incomingConnectionID]));
                         }
                     }
@@ -351,6 +366,18 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         byte error = 0;
         string jsonToBeSent = "14";
         jsonToBeSent += JsonUtility.ToJson(new PortID(_gameInstances[serverName].serverID));
+        byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
+        NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
+    }
+
+    // Tell client to display why user can't create a game instance
+    private void MaximumInstancesReached(Dictionary<string, GameInstanceStats> serverNames, ClientInfo client) {
+        Debug.Log(_gameInstances["a"].serverName + "(" + _gameInstances["a"].inGamePlayers + ")");
+        byte error = 0;
+        string jsonToBeSent = "5";
+        jsonToBeSent += JsonUtility.ToJson(serverNames);
+        Debug.Log("JsonToBeSent: " + jsonToBeSent);
+
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }

@@ -15,14 +15,14 @@ Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\Bo
 Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.046 seconds
+- Completed reload, in  0.036 seconds
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\BombermanServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 2.696553 ms
+UnloadTime: 1.401461 ms
 GameServer: ConnectEvent
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
@@ -47,7 +47,7 @@ Prefix: 3
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Adding fads(6) to map
+Adding admin(6) to map
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -59,7 +59,7 @@ Player Number: 0
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Removed fads from the game.
+Removed admin from the game.
  
 (Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
@@ -72,5 +72,5 @@ Parameter name: index
 (Filename:  Line: -1)
 
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 1f54 -> priority: 1 
-  Thread -> id: 1c0 -> priority: 1 
+  Thread -> id: 338 -> priority: 1 
+  Thread -> id: 2a28 -> priority: 1 

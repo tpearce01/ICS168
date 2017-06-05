@@ -16,6 +16,7 @@ public enum ClientCommands {
     GoToGameSelect = 2,
     CloseDisconnects = 3,
     EnableControls = 4,
+    MaxInstances = 5,
     AccountCreated = 6,
     PreExistingUser = 7,
     InvalidLogin = 8,
@@ -23,6 +24,7 @@ public enum ClientCommands {
     GoBackToMain = 10,
     Occupancy = 11,
     NoOccupancy = 12,
+    GameBeingCreated = 13,
     ForwardToGame = 14,
     ActiveUser = 15
 }
@@ -105,6 +107,10 @@ public class ClientConnection : Singleton<ClientConnection> {
     private bool _connectToMaster = false;
     private bool _connectedToGame = false;
 
+    private bool _canConnectToGame = false;
+    public bool CanConnectToGame {
+        get { return _canConnectToGame; }
+    }
 
 	private void Start() {
         Application.runInBackground = true;
@@ -256,7 +262,7 @@ public class ClientConnection : Singleton<ClientConnection> {
                     WindowManager.Instance.ToggleWindows(WindowIDs.GameSelect, WindowIDs.FullLobby);
                 }
                 else if (prefix == (int)ClientCommands.ForwardToGame) {
-
+                    _canConnectToGame = true; //used for disabling "Join Game" button
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
                     Debug.Log("GS_socketPort: " + GS_socketPort);
                     ConnectToGame();
@@ -264,6 +270,38 @@ public class ClientConnection : Singleton<ClientConnection> {
                 else if (prefix == (int)ClientCommands.EnableControls) {
                     _clientIO.gameInSession = true;
                     WindowManager.Instance.ToggleWindows(WindowManager.Instance.currentWindow, WindowIDs.None);
+                } 
+                else if (prefix == (int)ClientCommands.MaxInstances) {
+                    // reset other error messages
+                    GameObject.Find("PleaseWait").GetComponent<Text>().text = "";
+
+                    // display error
+                    GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
+
+                    // used for disabling "Join Game" button
+                    _canConnectToGame = false;
+
+                    //Debug.Log("Printing newMessage: " + newMessage);
+                    //Dictionary<string,GameInstanceStats> serverNames = JsonUtility.FromJson<Dictionary<string, GameInstanceStats>>(newMessage);
+
+                    //string allServerNames = "";
+                    //foreach (string key in serverNames.Keys) {
+                    //    allServerNames += (key + "(" + serverNames[key].inGamePlayers + ") ");
+                    //}
+
+                    //Debug.Log(allServerNames);
+                    
+                    //GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + allServerNames;
+                }
+                else if (prefix == (int)ClientCommands.GameBeingCreated) {
+                    // used for disabling "Join Game" button
+                    _canConnectToGame = true;
+
+                    // reset other error messages
+                    GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
+                    GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
+
+                    GameObject.Find("PleaseWait").GetComponent<Text>().text = "Game is being loaded. Please wait a moment...";
                 }
                 break;
 
@@ -431,15 +469,5 @@ public class ClientConnection : Singleton<ClientConnection> {
 
         byte error;
         NetworkTransport.Disconnect(GS_socketID, GS_connectionID, out error);
-    }
-
-    /// <summary>
-    /// Asks the server if there is room for the client to join in.
-    /// </summary>
-    public void verifyOccupancy()
-    {
-        string jsonToBeSent = "6";
-        jsonToBeSent += JsonUtility.ToJson("");
-        //SendJSONMessage(jsonToBeSent);
     }
 }
