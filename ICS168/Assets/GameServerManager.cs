@@ -7,6 +7,7 @@ using System.IO;
 using UnityEngine.UI;
 using System;
 using System.Text;
+using NUnit.Framework;
 using UnityEngine.SceneManagement;
 
 public enum GameServerCommands {
@@ -252,6 +253,11 @@ public class GameServerManager : Singleton<GameServerManager> {
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
+
+                        string toBeSent = MasterServerCommands.GS_openToConnections.ToString(); /*UNTESTED - Should be 8*/
+                        //Debug.Log("Testing line 257 of GameServerManager: " + Assert.Equals("8", MasterServerCommands.GS_openToConnections.ToString()));
+                        toBeSent += JsonUtility.ToJson(_serverName);
+                        SendJSONMessageToMaster(toBeSent);
                     }
                 }
                 else if (prefix == (int)GameServerCommands.AssignName) {
@@ -377,6 +383,11 @@ public class GameServerManager : Singleton<GameServerManager> {
     public void PreventDisconnects() {
         string toBeSent = "3";
         SendJSONMessageToAll(toBeSent, QosType.Reliable);
+
+        toBeSent = MasterServerCommands.GS_closedToConnecions.ToString();   /*UNTESTED - Should return "9"*/
+                                                                            //Debug.Log("Test line 384 of GameServerManager: " + Assert.Equals("9", MasterServerCommands.GS_closedToConnecions.ToString()));
+        toBeSent += JsonUtility.ToJson(_serverName);
+        SendJSONMessageToMaster(toBeSent);
     }
 }
 
