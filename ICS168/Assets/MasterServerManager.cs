@@ -13,7 +13,7 @@ public enum MasterServerCommands {
     VerifyOccupancy = 6,
     C_SelectGameInstance = 7,
     GS_openToConnections = 8, /*Allows new connections to game server*/
-    GS_closedToConnecions = 9 /*Prevent new connections to game server*/
+    GS_closedToConnections = 9 /*Prevent new connections to game server*/
 }
 
 public class GameInstanceStats {
@@ -251,7 +251,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     Debug.Log("Verify Occupancy: " + serverName);
                     _gameInstances[serverName.ToLower()].inGamePlayers = inGamePlayers;
                 }
-                else if (prefix == (int) MasterServerCommands.GS_closedToConnecions)
+			else if (prefix == (int) MasterServerCommands.GS_closedToConnections)
                 {
                     string serverName = JsonUtility.FromJson<string>(newMessage);
                     _gameInstances[serverName.ToLower()].openToConnections = false;

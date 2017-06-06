@@ -254,7 +254,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                         GameManager.Instance.ResetGameManager();
                         SceneManager.LoadScene("Server Game Version");
 
-                        string toBeSent = MasterServerCommands.GS_openToConnections.ToString(); /*UNTESTED - Should be 8*/
+                        string toBeSent = "8"/*MasterServerCommands.GS_openToConnections.ToString()*/; /*UNTESTED - Should be 8*/
                         //Debug.Log("Testing line 257 of GameServerManager: " + Assert.Equals("8", MasterServerCommands.GS_openToConnections.ToString()));
                         toBeSent += JsonUtility.ToJson(_serverName);
                         SendJSONMessageToMaster(toBeSent);
@@ -384,7 +384,7 @@ public class GameServerManager : Singleton<GameServerManager> {
         string toBeSent = "3";
         SendJSONMessageToAll(toBeSent, QosType.Reliable);
 
-        toBeSent = MasterServerCommands.GS_closedToConnecions.ToString();   /*UNTESTED - Should return "9"*/
+		toBeSent = "9"/*MasterServerCommands.GS_closedToConnections.ToString()*/;   /*UNTESTED - Should return "9"*/
                                                                             //Debug.Log("Test line 384 of GameServerManager: " + Assert.Equals("9", MasterServerCommands.GS_closedToConnecions.ToString()));
         toBeSent += JsonUtility.ToJson(_serverName);
         SendJSONMessageToMaster(toBeSent);
