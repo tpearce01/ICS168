@@ -9,6 +9,10 @@ public class LoginWindow : GenericWindow {
     //private string _LoginURL = "http://localhost/teamnewport/LoginManager.php";
     private LoginInfo _loginInfo = new LoginInfo();
 
+    public void OnEnable() {
+        GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "";
+    }
+
     public void NewAccount() {
         ToggleWindows(WindowIDs.Login, WindowIDs.NewAccount);
     }
