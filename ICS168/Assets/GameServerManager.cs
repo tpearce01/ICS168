@@ -7,7 +7,7 @@ using System.IO;
 using UnityEngine.UI;
 using System;
 using System.Text;
-using NUnit.Framework;
+//using NUnit.Framework;
 using UnityEngine.SceneManagement;
 
 public enum GameServerCommands {
@@ -99,6 +99,9 @@ public class GameServerManager : Singleton<GameServerManager> {
     private int MS_ConnectionID = -1;
 
     private string _serverName = "";
+    public string ServerName {
+        get { return _serverName; }
+    }
 
     // Initialization
     void Start() {
@@ -198,6 +201,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                 int index;
                 string newMessage = "";
 
+                Debug.Log("GS: " + message);
                 // New parser now allows client commands to be > 1 digit
                 for (index = 0; index < message.Length; ++index) {
                     if (message[index] == '{')
@@ -256,12 +260,15 @@ public class GameServerManager : Singleton<GameServerManager> {
 
                         string toBeSent = "8"/*MasterServerCommands.GS_openToConnections.ToString()*/; /*UNTESTED - Should be 8*/
                         //Debug.Log("Testing line 257 of GameServerManager: " + Assert.Equals("8", MasterServerCommands.GS_openToConnections.ToString()));
-                        toBeSent += JsonUtility.ToJson(_serverName);
+                        GameInstanceStats gs = new GameInstanceStats(_serverName);
+                        toBeSent += JsonUtility.ToJson(gs);
                         SendJSONMessageToMaster(toBeSent);
                     }
                 }
                 else if (prefix == (int)GameServerCommands.AssignName) {
-                    _serverName = JsonUtility.FromJson<string>(newMessage);
+                    GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
+                    Debug.LogError(gs.serverName);
+                    _serverName = gs.serverName;
                 }
 
                 break;
@@ -295,6 +302,7 @@ public class GameServerManager : Singleton<GameServerManager> {
     }
 
     public void SendJSONMessageToMaster(string JSONObject) {
+        Debug.LogError("Hi" + JSONObject);
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONObject);
         NetworkTransport.Send(_socketID, MS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);
@@ -385,9 +393,14 @@ public class GameServerManager : Singleton<GameServerManager> {
         SendJSONMessageToAll(toBeSent, QosType.Reliable);
 
 		toBeSent = "9"/*MasterServerCommands.GS_closedToConnections.ToString()*/;   /*UNTESTED - Should return "9"*/
-                                                                            //Debug.Log("Test line 384 of GameServerManager: " + Assert.Equals("9", MasterServerCommands.GS_closedToConnecions.ToString()));
-        toBeSent += JsonUtility.ToJson(_serverName);
+        //Debug.Log("Test line 384 of GameServerManager: " + Assert.Equals("9", MasterServerCommands.GS_closedToConnecions.ToString()));
+        GameInstanceStats gs = new GameInstanceStats(_serverName);
+        toBeSent += JsonUtility.ToJson(gs);
         SendJSONMessageToMaster(toBeSent);
+    }
+
+    public void clearClients() {
+        _clients.Clear();
     }
 }
 

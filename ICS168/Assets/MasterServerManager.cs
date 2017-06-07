@@ -250,17 +250,19 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
                     Debug.Log("Verify Occupancy: " + serverName);
                     _gameInstances[serverName.ToLower()].inGamePlayers = inGamePlayers;
-                }
-			else if (prefix == (int) MasterServerCommands.GS_closedToConnections)
+                } 
+                else if (prefix == (int)MasterServerCommands.GS_openToConnections) {
+                    GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
+                    Debug.Log("OpenToConnections message received | " + gs.serverName);
+                    _gameInstances[gs.serverName.ToLower()].openToConnections = true;
+                } 
+                else if (prefix == (int) MasterServerCommands.GS_closedToConnections)
                 {
-                    string serverName = JsonUtility.FromJson<string>(newMessage);
-                    _gameInstances[serverName.ToLower()].openToConnections = false;
+                    GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
+                    Debug.Log("closedToConnections message received | " + gs.serverName);
+                    _gameInstances[gs.serverName.ToLower()].openToConnections = false;
                 }
-                else if (prefix == (int) MasterServerCommands.GS_openToConnections)
-                {
-                    string serverName = JsonUtility.FromJson<string>(newMessage);
-                    _gameInstances[serverName.ToLower()].openToConnections = true;
-                }  
+                
                
                 break;
 
@@ -365,10 +367,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             yield return 0;
         }
 
+        GameInstanceStats gs = new GameInstanceStats(serverName);
+        Debug.Log("MS: " + serverName);
         // Inform the server of its name.
         byte error = 0;
         string jsonToBeSent = "7";
-        jsonToBeSent += JsonUtility.ToJson(serverName);
+        jsonToBeSent += JsonUtility.ToJson(gs);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(_gameInstances[serverName].socketID, _gameInstances[serverName].connectionID, _gameInstances[serverName].channelID, messageBuffer, messageBuffer.Length, out error);
 

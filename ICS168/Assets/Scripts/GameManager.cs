@@ -20,7 +20,7 @@ public class GameManager : Singleton<GameManager> {
     /// When the number of alive players is at this number, the round will end and a winner will be determined.
     /// Defaults to 1.
     /// </summary>
-    [SerializeField] private int _numberOfPlayersToEndRound = 1;
+    [SerializeField] private int _numberOfPlayersToEndRound = 0;
     // Signifies the current time
     private float _currTime;
     public float CurrentTime {
