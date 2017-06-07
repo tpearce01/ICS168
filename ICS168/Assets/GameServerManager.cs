@@ -262,7 +262,7 @@ public class GameServerManager : Singleton<GameServerManager> {
 
             case NetworkEventType.DisconnectEvent:
 
-                if (incomingConnectionID > 1) {
+                //if (incomingConnectionID > 1) {
                     _inGamePlayers = --_inGamePlayers < 0 ? 0 : _inGamePlayers;
 
                     if (_lobby.gameObject.activeInHierarchy == true) {
@@ -274,16 +274,16 @@ public class GameServerManager : Singleton<GameServerManager> {
                     _clients.Remove(incomingConnectionID);
 
                     // Need to inform master server of current connections
-                    string jsonToBeSend = "6";
-                    jsonToBeSend += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));
-                    SendJSONMessageToMaster(jsonToBeSend);
+                    string jsonToBeSent1 = "6";
+                    jsonToBeSent1 += JsonUtility.ToJson(new GameServerInfo(_inGamePlayers, _serverName));
+                    SendJSONMessageToMaster(jsonToBeSent1);
 
                     if (_inGamePlayers < 1) {
                         GameManager.Instance.ResetGameManager();
                         WindowManager.Instance.ToggleWindows(WindowIDs.PlayerInfo, WindowIDs.None);
                         SceneManager.LoadScene("Server Game Version");
                     }
-                }
+               // }
                 break;
         }
     }

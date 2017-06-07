@@ -7,6 +7,11 @@ public class NewAccountWindow : GenericWindow {
     //private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
     private LoginInfo _createAccount = new LoginInfo();
 
+    public void OnEnable() {
+        GameObject.Find("PasswordError").GetComponent<Text>().text = "";
+        GameObject.Find("UsernameError").GetComponent<Text>().text = "";
+    }
+
     public void BackToMain() {
         ToggleWindows(WindowIDs.NewAccount, WindowIDs.StartWindow);
     }

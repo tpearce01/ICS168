@@ -200,9 +200,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
 
                             Debug.Log("Forwarding player to already established game: " + serverName);
-                            if (_gameInstances[serverName.ToLower()].serverID != 0) {
-                                ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]);
-                            }
+                                StartCoroutine( ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]) );
                         }else {
                             Debug.Log("In Game Players: " + _gameInstances[serverName].inGamePlayers);
                             string jsonToBeSent = "12";
@@ -364,8 +362,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
         NetworkTransport.Send(client.socketID, client.ConnectionID, client.ChannelID, messageBuffer, messageBuffer.Length, out error);
     }
 
-    private void ForwardPlayerToGame(string serverName, ClientInfo client) {
+    private IEnumerator ForwardPlayerToGame(string serverName, ClientInfo client) {
 
+        while (_gameInstances[serverName].serverID == 0) {
+            yield return 0;
+        }
+        
         // When the instance has finally been created and setup, forward the player to the new game server.
         byte error = 0;
         string jsonToBeSent = "14";
