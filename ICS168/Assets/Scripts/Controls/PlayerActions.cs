@@ -58,10 +58,10 @@ public class PlayerActions : MonoBehaviour {
         setPlayerColor(_sr);
     }
     
-    private void Update() {
-        Debug.DrawLine(new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f),
-            new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f) + (Vector2.up * _magnitude * _direction.y), Color.yellow);
-    }
+    //private void Update() {
+    //    Debug.DrawLine(new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f),
+    //        new Vector2(transform.position.x + _offSetValue, transform.position.y + 1.0f) + (Vector2.up * _magnitude * _direction.y), Color.yellow);
+    //}
 
     void setPlayerColor(SpriteRenderer sr) {
         switch (_playerNum) {

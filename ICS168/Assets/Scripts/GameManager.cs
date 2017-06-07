@@ -60,7 +60,6 @@ public class GameManager : Singleton<GameManager> {
         foreach (GameObject playerObject in playerReferences) {
             string playerName = playerObject.GetComponent<PlayerActions>().playerName;
             int playerNumber = playerObject.GetComponent<PlayerActions>().PlayerNumber;
-            Debug.Log("Player Number: " + playerNumber);
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(playerName, playerNumber);
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(playerNumber, true);
         }
@@ -99,7 +98,7 @@ public class GameManager : Singleton<GameManager> {
     // Called by ServerConnection when the client disconnects from an ongoing game
     public void LeaveGame(int playerID) {
         decAlivePlayers();
-        if (playerReferences[playerID - 2] != null)
+        if (playerReferences.Count > 0 && playerReferences[playerID - 2] != null)
         {
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(
                 "", playerReferences[playerID-2].GetComponent<PlayerActions>().PlayerNumber);

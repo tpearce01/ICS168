@@ -266,7 +266,10 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
             case NetworkEventType.DisconnectEvent:
                 _numberOfConnections = --_numberOfConnections < 0 ? 0 : _numberOfConnections;
-                _activeusernames.Remove(_clients[incomingConnectionID].username);
+                if (_activeusernames.Contains(_clients[incomingConnectionID].username)) {
+                    _activeusernames.Remove(_clients[incomingConnectionID].username);
+                }
+                
                 break;
         }
     }

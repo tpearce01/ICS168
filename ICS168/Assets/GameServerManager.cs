@@ -200,8 +200,7 @@ public class GameServerManager : Singleton<GameServerManager> {
                 int prefix = 0;
                 int index;
                 string newMessage = "";
-
-                Debug.Log("GS: " + message);
+                
                 // New parser now allows client commands to be > 1 digit
                 for (index = 0; index < message.Length; ++index) {
                     if (message[index] == '{')
@@ -211,13 +210,9 @@ public class GameServerManager : Singleton<GameServerManager> {
                 prefix = Convert.ToInt32(message.Substring(0, index));
                 newMessage = message.Substring(index);
 
-                Debug.Log("Prefix: " + prefix);
-
                 //process user game input
                 if (prefix == (int)GameServerCommands.PlayerInput) {
                     PlayerIO input = JsonUtility.FromJson<PlayerIO>(newMessage);
-                    //Debug.Log(incomingConnectionID + " is moving " + input.button);
-                    Debug.Log("ConnectionID: " + incomingConnectionID);
                     GameManager.Instance.PlayerActions(incomingConnectionID, input);
                 }
 
@@ -267,22 +262,19 @@ public class GameServerManager : Singleton<GameServerManager> {
                 }
                 else if (prefix == (int)GameServerCommands.AssignName) {
                     GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
-                    Debug.LogError(gs.serverName);
                     _serverName = gs.serverName;
                 }
 
                 break;
 
             case NetworkEventType.DisconnectEvent:
-
-                //if (incomingConnectionID > 1) {
+                if (incomingConnectionID > 1) {
                     _inGamePlayers = --_inGamePlayers < 0 ? 0 : _inGamePlayers;
 
                     if (_lobby.gameObject.activeInHierarchy == true) {
                         _lobby.RemovePlayerFromLobby(_clients[incomingConnectionID].playerNum);
                     }
-
-                    Debug.Log("Removed " + _clients[incomingConnectionID].username + " from the game.");
+                    
                     GameManager.Instance.LeaveGame(incomingConnectionID);
                     _clients.Remove(incomingConnectionID);
 
@@ -296,13 +288,12 @@ public class GameServerManager : Singleton<GameServerManager> {
                         WindowManager.Instance.ToggleWindows(WindowIDs.PlayerInfo, WindowIDs.None);
                         SceneManager.LoadScene("Server Game Version");
                     }
-               // }
+               }
                 break;
         }
     }
 
     public void SendJSONMessageToMaster(string JSONObject) {
-        Debug.LogError("Hi" + JSONObject);
         byte error = 0;
         byte[] messageBuffer = Encoding.UTF8.GetBytes(JSONObject);
         NetworkTransport.Send(_socketID, MS_ConnectionID, TCP_ChannelID, messageBuffer, messageBuffer.Length, out error);

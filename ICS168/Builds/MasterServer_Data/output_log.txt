@@ -1,4 +1,12 @@
-Initialize engine version: 5.6.0f3 (497a0f351392)
+Mono path[0] = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Managed'
+Mono path[1] = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Mono'
+Mono config path = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Mono/etc'
+PlayerConnection initialized from C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data (debug = 0)
+PlayerConnection initialized network socket : 0.0.0.0 55412
+Multi-casting "[IP] 192.168.56.1 [Port] 55412 [Flags] 2 [Guid] 3266844194 [EditorId] 2358942989 [Version] 1048832 [Id] WindowsPlayer(NeyCongjuico) [Debug] 0" to [225.0.0.222:54997]...
+Started listening to [0.0.0.0:55412]
+PlayerConnection already initialized - listening to [0.0.0.0:55412]
+Player data archive not found at `C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/data.unity3d`, using local filesystemInitialize engine version: 5.6.0f3 (497a0f351392)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
@@ -22,121 +30,263 @@ Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\Ma
 <RI> Input initialized.
 desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
 <RI> Initialized touch support.
-UnloadTime: 1.662719 ms
+UnloadTime: 1.565213 ms
 Master Server: new client connected
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
 
 1 added to _clients
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
 
 Master Server: new client connected
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
 
 2 added to _clients
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
 
 Master Server: new client connected
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+
+3 added to _clients
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
+
+Master Server: new client connected
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
 
 register a server
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:157)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 157)
 
-Verify Occupancy: 
+MS: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+<ForwardPlayerToGameWithDelay>c__Iterator2:MoveNext() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:372)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at C:\buildslave\unity\build\Runtime\Export\Coroutines.cs:17)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 372)
 
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.String,GameInstanceStats].get_Item (System.String key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
  
-(Filename:  Line: -1)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+
+Forwarding player to already established game: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+
+Forwarding player to already established game: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+
+closedToConnections message received | ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:260)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 260)
+
+Log: connection {1} has been disconnected by timeout; address {::ffff:68.231.201.45:45110}
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+
+OpenToConnections message received | ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:254)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 254)
+
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+ 
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
 
 Master Server: new client connected
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
 
-register a server
+Forwarding player to already established game: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
 
-Forwarding player to already established game: da
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
 
-Verify Occupancy: 
+Forwarding player to already established game: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
 
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.String,GameInstanceStats].get_Item (System.String key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
  
-(Filename:  Line: -1)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
 
-Log: connection {1} has been disconnected by timeout; address {::ffff:174.77.38.59:8888}
-Verify Occupancy: 
+Forwarding player to already established game: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
 
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.String,GameInstanceStats].get_Item (System.String key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
+Verify Occupancy: ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
  
-(Filename:  Line: -1)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
 
-Master Server: new client connected
+closedToConnections message received | ney
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:260)
  
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Forwarding player to already established game: da
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Verify Occupancy: 
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.String,GameInstanceStats].get_Item (System.String key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
-
-Forwarding player to already established game: da
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-Log: connection {1} has been disconnected by timeout; address {::ffff:174.77.38.59:8888}
-Verify Occupancy: 
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.String,GameInstanceStats].get_Item (System.String key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
- 
-(Filename:  Line: -1)
+(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 260)
 
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
-Log: connection {3} has been disconnected by timeout; address {::ffff:127.0.0.1:8889}
+Log: connection {4} has been disconnected by timeout; address {::ffff:127.0.0.1:8889}
 KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.Int32,ClientInfo].get_Item (Int32 key) [0x00000] in <filename unknown>:0 
-  at MasterServerManager.Update () [0x00000] in <filename unknown>:0 
+  at System.Collections.Generic.Dictionary`2[System.Int32,ClientInfo].get_Item (Int32 key) [0x000a8] in /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs:151 
+  at MasterServerManager.Update () [0x005aa] in C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:269 
  
-(Filename:  Line: -1)
+(Filename: /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs Line: 151)
 
-Log: connection {2} has been disconnected by timeout; address {::ffff:68.231.201.45:37605}
-reactor filed to acomplish request with code {1234}, bytesReceived {0}
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: b10 -> priority: 1 
-  Thread -> id: 213c -> priority: 1 
-reactor filed to acomplish request with code {1234}, bytesReceived {0}
+  Thread -> id: 2028 -> priority: 1 
+  Thread -> id: 10a0 -> priority: 1 
