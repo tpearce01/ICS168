@@ -11,7 +11,9 @@ public enum MasterServerCommands {
     RegisterGameServer = 2,
     RegisterClient = 3,
     VerifyOccupancy = 6,
-    C_SelectGameInstance = 7
+    C_SelectGameInstance = 7,
+    GS_openToConnections = 8, /*Allows new connections to game server*/
+    GS_closedToConnections = 9 /*Prevent new connections to game server*/
 }
 
 public class GameInstanceStats {
@@ -26,6 +28,8 @@ public class GameInstanceStats {
     public int socketID = -1;
     public int connectionID = -1;
     public int channelID = -1;
+
+    public bool openToConnections = true;
 }
 
 /*** CLIENT VARIABLES ***/
@@ -191,7 +195,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
 
                     if (_gameInstances.ContainsKey(serverName.ToLower())) {
                         // Connect client to an already existing game server.
-                        if(_gameInstances[serverName].inGamePlayers < 4) {
+                        if(_gameInstances[serverName].inGamePlayers < 4 && _gameInstances[serverName].openToConnections == true) {
 
                             // Tells client that game is being created
                             string jsonToBeSent = "13";
@@ -203,6 +207,7 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                                 StartCoroutine( ForwardPlayerToGame(serverName.ToLower(), _clients[incomingConnectionID]) );
                         }else {
                             Debug.Log("In Game Players: " + _gameInstances[serverName].inGamePlayers);
+                            Debug.Log("Open to new connections? " + _gameInstances[serverName].openToConnections);
                             string jsonToBeSent = "12";
                             jsonToBeSent += JsonUtility.ToJson("");
                             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
@@ -243,7 +248,19 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                     string serverName = JsonUtility.FromJson<GameServerInfo>(newMessage).serverName;
                     Debug.Log("Verify Occupancy: " + serverName);
                     _gameInstances[serverName.ToLower()].inGamePlayers = inGamePlayers;
+                } 
+                else if (prefix == (int)MasterServerCommands.GS_openToConnections) {
+                    GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
+                    Debug.Log("OpenToConnections message received | " + gs.serverName);
+                    _gameInstances[gs.serverName.ToLower()].openToConnections = true;
+                } 
+                else if (prefix == (int) MasterServerCommands.GS_closedToConnections)
+                {
+                    GameInstanceStats gs = JsonUtility.FromJson<GameInstanceStats>(newMessage);
+                    Debug.Log("closedToConnections message received | " + gs.serverName);
+                    _gameInstances[gs.serverName.ToLower()].openToConnections = false;
                 }
+                
                
                 break;
 
@@ -348,10 +365,12 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             yield return 0;
         }
 
+        GameInstanceStats gs = new GameInstanceStats(serverName);
+        Debug.Log("MS: " + serverName);
         // Inform the server of its name.
         byte error = 0;
         string jsonToBeSent = "7";
-        jsonToBeSent += JsonUtility.ToJson(serverName);
+        jsonToBeSent += JsonUtility.ToJson(gs);
         byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
         NetworkTransport.Send(_gameInstances[serverName].socketID, _gameInstances[serverName].connectionID, _gameInstances[serverName].channelID, messageBuffer, messageBuffer.Length, out error);
 

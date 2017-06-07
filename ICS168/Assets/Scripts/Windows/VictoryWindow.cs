@@ -20,7 +20,16 @@ public class VictoryWindow : GenericWindow {
             GameServerManager.Instance.SendJSONMessageToAll("10", QosType.Reliable);
             ToggleWindows(WindowIDs.Victory, WindowIDs.None);
 
-        }else {
+            // Set this game instance to allow connections again
+            string toBeSent = "8";
+            GameInstanceStats gs = new GameInstanceStats(GameServerManager.Instance.ServerName);
+            toBeSent += JsonUtility.ToJson(gs);
+            GameServerManager.Instance.SendJSONMessageToMaster(toBeSent);
+
+            // Clear _clients dictionary inside game server
+            GameServerManager.Instance.clearClients();
+
+        } else {
             GetComponentsInChildren<Text>()[1].text = "Redirecting in " + (int)_timer + " seconds...";
         }
     }
