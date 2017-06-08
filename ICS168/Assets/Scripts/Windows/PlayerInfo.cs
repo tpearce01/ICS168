@@ -10,6 +10,13 @@ public class PlayerInfo : GenericWindow {
     [SerializeField] private Text _p3text;
     [SerializeField] private Text _p4text;
 
+    private void OnEnable() {
+        _p1text.text = "";
+        _p2text.text = "";
+        _p3text.text = "";
+        _p4text.text = "";
+    }
+
     /// <summary>
     /// Sets the player name text in the player info display
     /// </summary>

@@ -29,7 +29,8 @@ public class GameManager : Singleton<GameManager> {
 
     /*** GAME TRACKING ATTRIBUTES ***/
     // Stores references to all the player game objects in the game
-    private List<GameObject> playerReferences = new List<GameObject>();
+    private List<GameObject> findPlayers = new List<GameObject>();
+    private GameObject[] playerReferences = new GameObject[4];
 
     [Space]
     [Header("Tracking Variables")]
@@ -56,16 +57,19 @@ public class GameManager : Singleton<GameManager> {
 
     // Initialization
     public void StartGame() {
-        _numOfAlivePlayers = playerReferences.Count;
-        foreach (GameObject playerObject in playerReferences) {
-            string playerName = playerObject.GetComponent<PlayerActions>().playerName;
-            int playerNumber = playerObject.GetComponent<PlayerActions>().PlayerNumber;
-            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(playerName, playerNumber);
-            WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(playerNumber, true);
+
+        _numOfAlivePlayers = findPlayers.Count;
+        foreach (GameObject playerObject in findPlayers) {
+            if (playerObject != null) {
+                string playerName = playerObject.GetComponent<PlayerActions>().playerName;
+                int playerNumber = playerObject.GetComponent<PlayerActions>().PlayerNumber;
+                WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(playerName, playerNumber);
+                WindowManager.Instance.GetComponentInChildren<PlayerInfo>().togglePlayerInfo(playerNumber, true);
+            }
+            _currTime = _roundTime;
+            _isGameOver = false;
+            _isGameInSession = true;
         }
-        _currTime = _roundTime;
-        _isGameOver = false;
-        _isGameInSession = true;
     }
 
     // Resets game mamager to original state
@@ -98,7 +102,7 @@ public class GameManager : Singleton<GameManager> {
     // Called by ServerConnection when the client disconnects from an ongoing game
     public void LeaveGame(int playerID) {
         decAlivePlayers();
-        if (playerReferences.Count > 0 && playerReferences[playerID - 2] != null)
+        if (playerReferences.Length > 0 && playerReferences[playerID - 2] != null)
         {
             WindowManager.Instance.GetComponentInChildren<PlayerInfo>().setPlayerText(
                 "", playerReferences[playerID-2].GetComponent<PlayerActions>().PlayerNumber);
@@ -110,7 +114,13 @@ public class GameManager : Singleton<GameManager> {
 
     // Called by MapGenerator after map is generated. Gets references to the instantiated players on the map.
     public void getPlayerReferences() {
-        playerReferences.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        findPlayers.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+
+        foreach(GameObject player in findPlayers) {
+            if (player != null) {
+                playerReferences[player.GetComponent<PlayerActions>().PlayerNumber] = player;
+            }
+        }
     }
     
     // Decrements the number of alive players
@@ -167,6 +177,8 @@ public class GameManager : Singleton<GameManager> {
         for (int i = 0; i < allRemainingPlayers.Length; ++i)
             Destroy(allRemainingPlayers[i]);
 
-        playerReferences.Clear();
+        playerReferences = new GameObject[4];
+        findPlayers.Clear();
+        _numOfAlivePlayers = 0;
     }
 }

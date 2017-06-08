@@ -1,292 +1,397 @@
-Mono path[0] = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Managed'
-Mono path[1] = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Mono'
-Mono config path = 'C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/Mono/etc'
-PlayerConnection initialized from C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data (debug = 0)
-PlayerConnection initialized network socket : 0.0.0.0 55412
-Multi-casting "[IP] 192.168.56.1 [Port] 55412 [Flags] 2 [Guid] 3266844194 [EditorId] 2358942989 [Version] 1048832 [Id] WindowsPlayer(NeyCongjuico) [Debug] 0" to [225.0.0.222:54997]...
-Started listening to [0.0.0.0:55412]
-PlayerConnection already initialized - listening to [0.0.0.0:55412]
-Player data archive not found at `C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Builds/MasterServer_Data/data.unity3d`, using local filesystemInitialize engine version: 5.6.0f3 (497a0f351392)
+Initialize engine version: 5.6.0f3 (497a0f351392)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce 940M (ID=0x1347)
+    Renderer: NVIDIA GeForce GTX 660 Ti (ID=0x1183)
     Vendor:   NVIDIA
-    VRAM:     2014 MB
+    VRAM:     2016 MB
     Driver:   22.21.13.8205
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.038 seconds
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.dll (this message is harmless)
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.017 seconds
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\danie\Documents\GitKraken\ICS168\ICS168\Builds\MasterServer_Data\Managed\System.dll (this message is harmless)
 <RI> Initializing input.
 <RI> Input initialized.
-desktop: 1366x768 60Hz; virtual: 1366x768 at 0,0
+desktop: 1920x1080 60Hz; virtual: 3600x1128 at -1680,0
 <RI> Initialized touch support.
-UnloadTime: 1.565213 ms
+UnloadTime: 0.891175 ms
 Master Server: new client connected
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 1 added to _clients
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Master Server: new client connected
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 2 added to _clients
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Master Server: new client connected
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 3 added to _clients
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:175)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 175)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Master Server: new client connected
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+4 added to _clients
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+5 added to _clients
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 register a server
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:157)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 157)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-MS: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-<ForwardPlayerToGameWithDelay>c__Iterator2:MoveNext() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:372)
-UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr) (at C:\buildslave\unity\build\Runtime\Export\Coroutines.cs:17)
+MS: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 372)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+Verify Occupancy: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Forwarding player to already established game: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+Forwarding player to already established game: 2
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+Forwarding player to already established game: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Forwarding player to already established game: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+Verify Occupancy: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
-
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
-
-closedToConnections message received | ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:260)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 260)
-
-Log: connection {1} has been disconnected by timeout; address {::ffff:68.231.201.45:45110}
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
-
-OpenToConnections message received | ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:254)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 254)
-
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
-
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
- 
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
 Master Server: new client connected
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:134)
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 134)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Forwarding player to already established game: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+register a server
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+MS: 2
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Forwarding player to already established game: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+Verify Occupancy: 2
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+Verify Occupancy: 2
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Forwarding player to already established game: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:206)
+Verify Occupancy: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 206)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-Verify Occupancy: ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:249)
+Forwarding player to already established game: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 249)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
-closedToConnections message received | ney
-UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
-UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
-UnityEngine.Logger:Log(LogType, Object)
-UnityEngine.Debug:Log(Object)
-MasterServerManager:Update() (at C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:260)
+Verify Occupancy: 1
  
-(Filename: C:/Users/Nerianne/Desktop/GitProjects/ICS168/ICS168/Assets/MasterServerManager.cs Line: 260)
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
 
+Forwarding player to already established game: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+closedToConnections message received | 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+In Game Players: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Open to new connections? False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {4} has been disconnected by timeout; address {::ffff:169.234.48.102:8888}
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+OpenToConnections message received | 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+closedToConnections message received | 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {5} has been disconnected by timeout; address {::ffff:169.234.40.235:8888}
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+OpenToConnections message received | 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {5} has been disconnected by timeout; address {::ffff:169.234.40.235:8888}
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {2} has been disconnected by timeout; address {::ffff:169.234.23.49:8888}
+Forwarding player to already established game: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+closedToConnections message received | 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+In Game Players: 3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Open to new connections? False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+In Game Players: 3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Open to new connections? False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+In Game Players: 3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Open to new connections? False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Forwarding player to already established game: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+closedToConnections message received | 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+OpenToConnections message received | 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+OpenToConnections message received | 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {3} has been disconnected by timeout; address {::ffff:192.168.1.111:8888}
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Verify Occupancy: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {4} has been disconnected by timeout; address {::ffff:169.234.48.102:8888}
+Log: connection {2} has been disconnected by timeout; address {::ffff:169.234.23.49:8888}
+Master Server: new client connected
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Log: connection {1} has been disconnected by timeout; address {::ffff:174.67.242.151:8888}
+Log: connection {2} has been disconnected by timeout; address {::ffff:169.234.40.235:8888}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
 reactor filed to acomplish request with code {1234}, bytesReceived {0}
-reactor filed to acomplish request with code {1234}, bytesReceived {0}
-reactor filed to acomplish request with code {1234}, bytesReceived {0}
-Log: connection {4} has been disconnected by timeout; address {::ffff:127.0.0.1:8889}
-KeyNotFoundException: The given key was not present in the dictionary.
-  at System.Collections.Generic.Dictionary`2[System.Int32,ClientInfo].get_Item (Int32 key) [0x000a8] in /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs:151 
-  at MasterServerManager.Update () [0x005aa] in C:\Users\Nerianne\Desktop\GitProjects\ICS168\ICS168\Assets\MasterServerManager.cs:269 
- 
-(Filename: /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Collections.Generic/Dictionary.cs Line: 151)
-
-Setting up 2 worker threads for Enlighten.
-  Thread -> id: 2028 -> priority: 1 
-  Thread -> id: 10a0 -> priority: 1 
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 2c80 -> priority: 1 
+  Thread -> id: 47a8 -> priority: 1 
+  Thread -> id: 47ac -> priority: 1 
+  Thread -> id: 47a0 -> priority: 1 
