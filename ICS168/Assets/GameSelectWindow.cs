@@ -31,11 +31,5 @@ public class GameSelectWindow : GenericWindow {
         ClientConnection.Instance.ConnectToGameServer(serverName);
 
         _joinButton.interactable = false;
-        //if(ClientConnection.Instance.CanConnectToGame == true) {
-        //    _joinButton.interactable = false;
-        //}else {
-        //    _joinButton.interactable = true;
-        //}
-        
     }
 }

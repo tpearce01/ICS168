@@ -107,11 +107,6 @@ public class ClientConnection : Singleton<ClientConnection> {
     private bool _connectToMaster = false;
     private bool _connectedToGame = false;
 
-    private bool _canConnectToGame = false;
-    public bool CanConnectToGame {
-        get { return _canConnectToGame; }
-    }
-
 	private void Start() {
         Application.runInBackground = true;
 
@@ -212,7 +207,6 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     ServerObject JSONdata = JsonUtility.FromJson<ServerObject>(newMessage);
 
-                    //Debug.Log(JSONdata.frameNum);
                     // Latency Mitigation at its finest.
                     if (JSONdata.frameNum > _currentFrame) {
                         byte[] textureByteArray = Convert.FromBase64String(JSONdata.texture);
@@ -228,19 +222,16 @@ public class ClientConnection : Singleton<ClientConnection> {
                     WindowManager.Instance.ToggleWindows(WindowIDs.NewAccount, WindowIDs.NewAccountSuccess);
                 }
                 else if (prefix == (int)ClientCommands.PreExistingUser) {
-                    GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "";
+                    GameObject.Find("PasswordError").GetComponent<Text>().text = "";
                     GameObject.Find("UsernameError").GetComponent<Text>().text = "Username already exists. Choose a different username.";
                 }
                 else if (prefix == (int)ClientCommands.InvalidLogin) {
-                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Invalid username or password.";
                 }
                 else if (prefix == (int)ClientCommands.DoesNotExist) {
-                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username does not exist in the database.";
                 }
                 else if (prefix == (int)ClientCommands.ActiveUser) {
-                    GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                     GameObject.Find("LoginUsernameError").GetComponent<Text>().text = "Username is already logged in.";
                 }
                 else if (prefix == (int)ClientCommands.CloseDisconnects) {
@@ -262,7 +253,6 @@ public class ClientConnection : Singleton<ClientConnection> {
                     WindowManager.Instance.ToggleWindows(WindowIDs.GameSelect, WindowIDs.FullLobby);
                 }
                 else if (prefix == (int)ClientCommands.ForwardToGame) {
-                    _canConnectToGame = true; //used for disabling "Join Game" button
                     GS_socketPort = JsonUtility.FromJson<PortID>(newMessage).portID;
                     Debug.Log("GS_socketPort: " + GS_socketPort);
                     ConnectToGame();
@@ -277,26 +267,8 @@ public class ClientConnection : Singleton<ClientConnection> {
 
                     // display error
                     GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "Maximum number of instances created.";
-
-                    // used for disabling "Join Game" button
-                    _canConnectToGame = false;
-
-                    //Debug.Log("Printing newMessage: " + newMessage);
-                    //Dictionary<string,GameInstanceStats> serverNames = JsonUtility.FromJson<Dictionary<string, GameInstanceStats>>(newMessage);
-
-                    //string allServerNames = "";
-                    //foreach (string key in serverNames.Keys) {
-                    //    allServerNames += (key + "(" + serverNames[key].inGamePlayers + ") ");
-                    //}
-
-                    //Debug.Log(allServerNames);
-                    
-                    //GameObject.Find("AvailableInstance").GetComponent<Text>().text = "Available instances: " + allServerNames;
                 }
                 else if (prefix == (int)ClientCommands.GameBeingCreated) {
-                    // used for disabling "Join Game" button
-                    _canConnectToGame = true;
-
                     // reset other error messages
                     GameObject.Find("MaxNumInstance").GetComponent<Text>().text = "";
                     GameObject.Find("AvailableInstance").GetComponent<Text>().text = "";
@@ -464,7 +436,6 @@ public class ClientConnection : Singleton<ClientConnection> {
         jsonToBeSent += JsonUtility.ToJson("na");
 
         // Tell the Game server to remove this client from the players list
-        //SendJSONMessageToGame(jsonToBeSent, QosType.Reliable);
         _gameCanvas.gameObject.SetActive(false);
 
         byte error;

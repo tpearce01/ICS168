@@ -213,9 +213,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
                             byte[] messageBuffer = Encoding.UTF8.GetBytes(jsonToBeSent);
                             NetworkTransport.Send(incomingSocketID, incomingConnectionID, incomingChannelID, messageBuffer, messageBuffer.Length, out error);
                         }
-
-                        //if game instance has an ongoing game, prevent any connections to it
-                        // < placeholder >
                     }
                     else {
                         if(_numberOfGameInstances == _maxGameInstances) {
@@ -286,9 +283,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             // Set _clients' username
             _clients[connectionID].username = username;
 
-            // ALL THIS SHOULD HAPPEN WHEN THE CLIENT CONNECTS TO THE ACTUAL GAME SERVER
-            //WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
-
             byte error;
             string jsonToBeSent = "2";
             jsonToBeSent += JsonUtility.ToJson(verify.text);
@@ -296,16 +290,6 @@ public class MasterServerManager : Singleton<MasterServerManager> {
             NetworkTransport.Send(socketID, connectionID, channelID, messageBuffer, messageBuffer.Length, out error);
 
             _activeusernames.Add(username);
-            //_clientSocketIDs[connectionID].username = username;
-            //_clientSocketIDs[connectionID].playerNum = connectionID - 1; // decremented so the range starts with 0 and not 1
-
-            //Debug.Log(username + " logged in with connection id: " + connectionID);
-            //Debug.Log(username + " playerNum is " + _clientSocketIDs[connectionID].playerNum);
-
-            //// IF the lobby is not loaded, load it.
-            //if (WindowManager.Instance.currentWindow == WindowIDs.None) {
-            //    WindowManager.Instance.ToggleWindows(WindowIDs.None, WindowIDs.Lobby);
-            //}
         }
         else if (verify.text == "invalid") {
 

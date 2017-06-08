@@ -383,8 +383,7 @@ public class GameServerManager : Singleton<GameServerManager> {
         string toBeSent = "3";
         SendJSONMessageToAll(toBeSent, QosType.Reliable);
 
-		toBeSent = "9"/*MasterServerCommands.GS_closedToConnections.ToString()*/;   /*UNTESTED - Should return "9"*/
-        //Debug.Log("Test line 384 of GameServerManager: " + Assert.Equals("9", MasterServerCommands.GS_closedToConnecions.ToString()));
+        toBeSent = "9";
         GameInstanceStats gs = new GameInstanceStats(_serverName);
         toBeSent += JsonUtility.ToJson(gs);
         SendJSONMessageToMaster(toBeSent);

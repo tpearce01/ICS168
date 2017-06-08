@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class NewAccountWindow : GenericWindow {
-    //private string _CreateAccountURL = "http://localhost/teamnewport/CreateAccount.php";
     private LoginInfo _createAccount = new LoginInfo();
 
     public void OnEnable() {
@@ -40,6 +39,7 @@ public class NewAccountWindow : GenericWindow {
                         password = input[i].text;
                         if(password == "")
                         {
+                            GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                             GameObject.Find("PasswordError").GetComponent<Text>().text = "Password is empty, please enter a password.";
                             return;
                         }
@@ -47,7 +47,7 @@ public class NewAccountWindow : GenericWindow {
                     case 2:
                         if (password != input[i].text)
                         {
-                            Debug.Log("Password Mismatch");
+                            GameObject.Find("UsernameError").GetComponent<Text>().text = "";
                             GameObject.Find("PasswordError").GetComponent<Text>().text = "Passwords don't match.";
                             return;
                         }else
